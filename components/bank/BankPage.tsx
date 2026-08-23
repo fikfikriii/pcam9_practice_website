@@ -74,8 +74,8 @@ export default function BankPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <span style={{ fontSize: 12.5, fontWeight: 600, color: '#605d5d' }}>{totalQuestions} questions in bank</span>
-          <Link href="/quiz" style={{ fontSize: 13, fontWeight: 700, color: '#1d4ed8', textDecoration: 'none' }}>
-            ← Assessment
+          <Link href="/" style={{ fontSize: 13, fontWeight: 700, color: '#1d4ed8', textDecoration: 'none' }}>
+            ← Back to Home
           </Link>
         </div>
       </div>
