@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import type { Section, Question, Choice } from '@/lib/types';
+import { useMobile } from '@/lib/useMobile';
 
 // ── Button style helpers ─────────────────────────────────────────────────────
 
@@ -63,6 +64,8 @@ function emptyQuestionForm(): NewQuestionForm {
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
+  const isMobile = useMobile();
+  const px = isMobile ? 16 : 32;
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null);
@@ -268,7 +271,7 @@ export default function AdminPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#f3f2f2' }}>
       {/* Header */}
-      <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
+      <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
           <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
           <span style={{ fontSize: 13, color: '#605d5d' }}>Admin — Question Bank</span>
@@ -285,10 +288,10 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* Two-column body */}
-      <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
-        {/* Left sidebar — Sections */}
-        <div style={{ width: 320, flexShrink: 0, borderRight: '2px solid rgba(32,30,29,0.4)', padding: '28px 20px', overflowY: 'auto' }}>
+      {/* Body */}
+      <div style={{ display: 'flex', flex: 1, minHeight: 0, flexDirection: isMobile ? 'column' : 'row' }}>
+        {/* Sections panel */}
+        <div style={{ width: isMobile ? '100%' : 320, flexShrink: 0, borderRight: isMobile ? 'none' : '2px solid rgba(32,30,29,0.4)', borderBottom: isMobile ? '2px solid rgba(32,30,29,0.4)' : 'none', padding: isMobile ? '20px 16px' : '28px 20px', overflowY: isMobile ? 'visible' : 'auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <span style={{ fontSize: 15, fontWeight: 800 }}>Sections</span>
             <button onClick={() => setShowAddSection(!showAddSection)} style={btnPrimary}>+ Add Section</button>
@@ -352,8 +355,8 @@ export default function AdminPage() {
           ))}
         </div>
 
-        {/* Right panel — Questions */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '28px 32px' }}>
+        {/* Questions panel */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '20px 16px' : '28px 32px' }}>
           {!selectedSection ? (
             <div style={{ color: '#605d5d', fontSize: 15, marginTop: 40, textAlign: 'center' }}>
               Select a section from the left to manage its questions.
