@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Archivo',system-ui,sans-serif;}
+button{font-family:inherit;}
+</style>
+</helmet>
+
+<div style="font-family:'Archivo',system-ui,sans-serif;color:#201e1d;background:#f3f2f2;width:100%;min-height:100vh;">
+
+<sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+  <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-size:14px;color:#605d5d;">Loading question bank…</div>
+</sc-if>
+
+<sc-if value="{{ dataLoaded }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;min-height:100vh;">
+  <header style="height:68px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:2px solid rgba(32,30,29,0.4);background:#f3f2f2;">
+    <div style="display:flex;align-items:baseline;gap:14px;">
+      <span style="font-size:18px;font-weight:800;">PCAM 9 OJK</span>
+      <span style="font-size:13px;color:#605d5d;">Question Bank</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:24px;">
+      <span style="font-size:12.5px;color:#605d5d;font-weight:600;">{{ totalQuestions }} questions in bank</span>
+      <a href="Quiz Practice.dc.html" style="font-size:13px;font-weight:700;color:#1d4ed8;text-decoration:none;">← Assessment</a>
+    </div>
+  </header>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;padding:20px 32px;border-bottom:2px solid rgba(32,30,29,0.4);">
+    <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="4">
+      <button style="{{ tab.style }}" onClick="{{ tab.onClick }}">{{ tab.label }} ({{ tab.count }})</button>
+    </sc-for>
+  </div>
+
+  <div style="flex:1;display:flex;justify-content:center;padding:36px 32px 60px;">
+    <div style="max-width:860px;width:100%;">
+      <sc-for list="{{ visibleSections }}" as="sec" hint-placeholder-count="1">
+        <div style="{{ sec.wrapStyle }}">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;flex-wrap:wrap;gap:6px;">
+            <div style="font-size:15px;font-weight:700;">{{ sec.title }}</div>
+            <div style="font-size:12px;color:#605d5d;">{{ sec.count }} questions in bank · random draw: {{ sec.drawCount }} per session</div>
+          </div>
+          <sc-for list="{{ sec.items }}" as="q" hint-placeholder-count="5">
+            <div style="padding:20px 0;border-bottom:1px solid rgba(32,30,29,0.15);">
+              <div style="font-size:11px;color:#7d7979;margin-bottom:6px;">Question {{ q.number }}</div>
+              <div style="font-size:16px;font-weight:600;margin-bottom:14px;line-height:1.45;">{{ q.text }}</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <sc-for list="{{ q.options }}" as="opt" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="{{ opt.markerStyle }}"></span>
+                    <span style="{{ opt.textStyle }}">{{ opt.text }}</span>
+                    <sc-if value="{{ opt.showTag }}" hint-placeholder-val="{{ false }}"><span style="{{ opt.tagStyle }}">Correct</span></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showCorrectAnswers&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Display&quot;,&quot;label&quot;:&quot;Show correct answers&quot;},&quot;drawPerSection&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:10,&quot;min&quot;:3,&quot;max&quot;:14,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Display&quot;,&quot;label&quot;:&quot;Random draw per session (demo, per section)&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.sectionsData = [];
+    this.state = { activeFilter: 'all', dataLoaded: false };
+  }
+
+  componentDidMount() {
+    import('./quiz-data.js').then(mod => {
+      this.sectionsData = mod.sectionsData;
+      this.setState({ dataLoaded: true });
+    });
+  }
+
+  renderVals() {
+    if (!this.state.dataLoaded) return { dataLoaded: false, isLoading: true };
+    const { activeFilter } = this.state;
+    const showCorrect = this.props.showCorrectAnswers !== false;
+    const drawPerSection = this.props.drawPerSection || 10;
+    const totalQuestions = this.sectionsData.reduce((sum, s) => sum + s.questions.length, 0);
+
+    const tabStyle = active => ({
+      padding: '8px 16px', border: '1px solid ' + (active ? '#2F6FED' : 'rgba(32,30,29,0.4)'),
+      background: active ? '#2F6FED' : 'transparent', color: active ? '#ffffff' : '#201e1d',
+      fontWeight: 800, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap',
+    });
+
+    const tabs = [{
+      label: 'All', count: totalQuestions, onClick: () => this.setState({ activeFilter: 'all' }),
+      style: tabStyle(activeFilter === 'all'),
+    }].concat(this.sectionsData.map((sec, si) => ({
+      label: sec.title.split('·')[1].trim(), count: sec.questions.length,
+      onClick: () => this.setState({ activeFilter: si }),
+      style: tabStyle(activeFilter === si),
+    })));
+
+    let globalIndex = 0;
+    const offsets = this.sectionsData.map(sec => { const o = globalIndex; globalIndex += sec.questions.length; return o; });
+
+    const allSections = this.sectionsData.map((sec, si) => {
+      const items = sec.questions.map((q, qi) => ({
+        number: offsets[si] + qi + 1,
+        text: q.text,
+        options: q.options.map((opt, oi) => {
+          const isCorrect = oi === q.correct;
+          const highlight = isCorrect && showCorrect;
+          return {
+            text: opt,
+            markerStyle: { width: 8, height: 8, flexShrink: 0, background: highlight ? '#15803d' : 'rgba(32,30,29,0.3)' },
+            textStyle: { fontSize: 14, color: highlight ? '#15803d' : '#444141', fontWeight: highlight ? 700 : 400 },
+            showTag: highlight,
+            tagStyle: { fontSize: 10.5, fontWeight: 700, padding: '2px 8px', background: '#eafaf1', color: '#15803d' },
+          };
+        }),
+      }));
+      return {
+        title: sec.title, count: sec.questions.length, drawCount: Math.min(drawPerSection, sec.questions.length),
+        items, wrapStyle: { marginTop: si === 0 ? 0 : 32, paddingTop: si === 0 ? 0 : 32, borderTop: si === 0 ? 'none' : '2px solid rgba(32,30,29,0.4)' },
+      };
+    });
+
+    const visibleSections = activeFilter === 'all' ? allSections : [{ ...allSections[activeFilter], wrapStyle: { marginTop: 0, paddingTop: 0, borderTop: 'none' } }];
+
+    return { dataLoaded: true, isLoading: false, totalQuestions, tabs, visibleSections };
+  }
+}
+</script>
+</body>
+</html>
