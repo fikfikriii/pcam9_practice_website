@@ -50,6 +50,16 @@ The migration is idempotent — safe to run multiple times. On first run it:
 - Creates the `sections`, `questions`, and `choices` tables
 - Seeds 130 questions across 3 sections (115 original + 15 AI-generated)
 
+### 3a. Apply incremental seed files (optional)
+
+Additional question batches live in `seeds/`. Run them manually after the migration, in order:
+
+```bash
+export $(grep DATABASE_URL .env.local | xargs) && psql $DATABASE_URL -f seeds/seed_new_questions.sql
+```
+
+Each file in `seeds/` is a one-time INSERT — not idempotent. Only run a seed file once per database.
+
 ### 4. Run locally
 
 ```bash

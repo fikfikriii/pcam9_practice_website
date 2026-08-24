@@ -32,6 +32,8 @@ lib/
   db.ts                     → exports `sql` from @neondatabase/serverless
   types.ts                  → Choice, Question, Section interfaces
 migration.sql               → idempotent schema + seed (130 questions)
+seeds/                      → incremental SQL seed files (run manually after migration)
+  seed_new_questions.sql    → first batch of additional questions
 ```
 
 ## Database
