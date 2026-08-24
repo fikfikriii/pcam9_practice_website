@@ -20,5 +20,5 @@ export async function GET() {
     GROUP BY s.id
     ORDER BY s.position
   `;
-  return Response.json(rows);
+  return Response.json(rows, { headers: { 'Cache-Control': 'no-store' } });
 }
