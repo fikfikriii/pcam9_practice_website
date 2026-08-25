@@ -5,10 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "dump": "bash scripts/dump.sh",
+    "docs": "node scripts/generate-docs.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
+    "docx": "^9.7.1",
     "next": "^15.3.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"

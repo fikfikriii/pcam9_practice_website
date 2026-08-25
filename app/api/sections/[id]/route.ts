@@ -3,12 +3,13 @@ import { sql } from '@/lib/db';
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const body = await request.json();
-  const { title, position, draw_per_session } = body;
+  const { title, position, draw_per_session, is_active } = body;
   const rows = await sql`
     UPDATE sections SET
       title = COALESCE(${title ?? null}, title),
       position = COALESCE(${position ?? null}, position),
       draw_per_session = COALESCE(${draw_per_session ?? null}, draw_per_session),
+      is_active = COALESCE(${is_active ?? null}, is_active),
       updated_at = NOW()
     WHERE id = ${id}
     RETURNING *

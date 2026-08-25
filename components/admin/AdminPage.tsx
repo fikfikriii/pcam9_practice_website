@@ -88,7 +88,7 @@ export default function AdminPage() {
 
   const fetchSections = useCallback(async () => {
     try {
-      const res = await fetch('/api/quiz');
+      const res = await fetch('/api/bank');
       const data = await res.json();
       setSections(data);
     } catch {
@@ -143,6 +143,17 @@ export default function AdminPage() {
       if (selectedSectionId === sectionId) setSelectedSectionId(null);
       await fetchSections();
     } catch { setError('Failed to delete section'); }
+  }
+
+  async function handleToggleActive(sectionId: number, currentValue: boolean) {
+    try {
+      await fetch(`/api/sections/${sectionId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_active: !currentValue }),
+      });
+      await fetchSections();
+    } catch { setError('Failed to toggle section status'); }
   }
 
   async function handleMoveSection(sectionId: number, dir: 'up' | 'down') {
@@ -338,15 +349,28 @@ export default function AdminPage() {
                 </div>
               ) : (
                 <div
-                  style={{ padding: '12px 14px', cursor: 'pointer' }}
+                  style={{ padding: '12px 14px', cursor: 'pointer', opacity: section.is_active ? 1 : 0.6 }}
                   onClick={() => setSelectedSectionId(section.id)}
                 >
-                  <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{section.title}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                    <span style={{ fontSize: 13, fontWeight: 600 }}>{section.title}</span>
+                    {!section.is_active && (
+                      <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '1px 6px', border: '1px solid #7d7979', color: '#7d7979' }}>
+                        Inactive
+                      </span>
+                    )}
+                  </div>
                   <div style={{ fontSize: 11.5, color: '#605d5d' }}>{section.questions.length} questions · draw {section.draw_per_session}</div>
-                  <div style={{ display: 'flex', gap: 6, marginTop: 8 }} onClick={(e) => e.stopPropagation()}>
+                  <div style={{ display: 'flex', gap: 6, marginTop: 8, flexWrap: 'wrap' }} onClick={(e) => e.stopPropagation()}>
                     <button onClick={() => { setEditingSectionId(section.id); setEditSectionTitle(section.title); setEditSectionDraw(String(section.draw_per_session)); }} style={btnSmall}>Edit</button>
                     <button onClick={() => handleMoveSection(section.id, 'up')} disabled={idx === 0} style={{ ...btnSmall, opacity: idx === 0 ? 0.4 : 1 }}>↑</button>
                     <button onClick={() => handleMoveSection(section.id, 'down')} disabled={idx === sections.length - 1} style={{ ...btnSmall, opacity: idx === sections.length - 1 ? 0.4 : 1 }}>↓</button>
+                    <button
+                      onClick={() => handleToggleActive(section.id, section.is_active)}
+                      style={{ ...btnSmall, color: section.is_active ? '#b91c1c' : '#15803d', borderColor: section.is_active ? '#b91c1c' : '#15803d' }}
+                    >
+                      {section.is_active ? 'Deactivate' : 'Activate'}
+                    </button>
                     <button onClick={() => handleDeleteSection(section.id)} style={btnDanger}>Delete</button>
                   </div>
                 </div>

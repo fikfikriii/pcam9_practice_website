@@ -1,7 +1,7 @@
 # PCAM 9 OJK — Claude Code Context
 
 ## Project overview
-Internal exam-practice website for the PCAM 9 (OJK) certification. Next.js 15 App Router, PostgreSQL on Neon, deployed on Vercel. Three user-facing modules: `/quiz` (assessment), `/bank` (question bank), `/admin` (CRUD panel).
+Internal exam-practice website for the PCAM 9 (OJK) certification. Next.js 15 App Router, PostgreSQL on Neon, deployed on Vercel. Four user-facing modules: `/quiz` (mock exam), `/drill` (section-focused practice), `/bank` (question bank), `/admin` (CRUD panel).
 
 ## Stack
 - **Next.js 15** App Router — all pages are in `app/`, all API routes in `app/api/`
@@ -12,13 +12,14 @@ Internal exam-practice website for the PCAM 9 (OJK) certification. Next.js 15 Ap
 ## File layout
 ```
 app/
-  page.tsx                  → redirects / to /quiz
+  page.tsx                  → landing page with module cards (Module 1–3 + admin)
   quiz/page.tsx             → imports QuizPage component
+  drill/page.tsx            → imports DrillPage component
   bank/page.tsx             → imports BankPage component
   admin/page.tsx            → imports AdminPage component
   api/
     quiz/route.ts           → GET: sections + questions + choices (for quiz)
-    bank/route.ts           → GET: sections + questions + choices (for bank)
+    bank/route.ts           → GET: sections + questions + choices (for bank + drill)
     sections/route.ts       → GET list, POST create
     sections/[id]/route.ts  → PUT, DELETE
     questions/route.ts      → GET ?section_id=, POST (with choices)
@@ -26,6 +27,7 @@ app/
     choices/[id]/route.ts   → PUT (auto-deselects other correct choices), DELETE
 components/
   quiz/QuizPage.tsx         → full quiz UI (question, review, results views)
+  drill/DrillPage.tsx       → section drill UI (setup, question, results views)
   bank/BankPage.tsx         → question bank browser
   admin/AdminPage.tsx       → section + question + choice CRUD
 lib/
@@ -33,13 +35,15 @@ lib/
   types.ts                  → Choice, Question, Section interfaces
 migration.sql               → idempotent schema + seed (130 questions)
 seeds/                      → incremental SQL seed files (run manually after migration)
-  seed_new_questions.sql    → first batch of additional questions
+  seed_new_questions.sql    → additional AI-generated questions for existing sections
+  seed_data_analytics.sql   → 10 original questions, new 'Data Analytics' section (IAI class materials)
 ```
 
 ## Database
 Three tables: `sections` → `questions` → `choices` (cascade deletes).
 
 Key columns to know:
+- `sections.is_active` — boolean (default `true`). If `false`, the section is excluded from `/api/quiz` (quiz module) but still visible in `/api/bank` (drill + question bank). Toggled via the Admin panel's Activate/Deactivate button.
 - `questions.source` — `'original'` (from class PDFs) or `'additional'` (AI-generated). Default is `'original'`.
 - `questions.position` — display order within a section, freely reorderable integer (not auto-increment)
 - `choices.is_correct` — boolean; only one per question should be true. The PUT `/api/choices/[id]` endpoint auto-deselects all others when setting one to true.
@@ -64,3 +68,12 @@ All routes use the `sql` tagged template literal from `lib/db.ts`. The quiz and 
 ## Env
 - `DATABASE_URL` — Neon PostgreSQL connection string, set in `.env.local` locally and in Vercel environment variables for production
 - `.env.local` is gitignored — never commit it
+
+## Local scripts
+- `npm run dump` — dumps all data (sections, questions, choices) as nested JSON to `dumps/dump_YYYY-MM-DD.json`
+  - Reads `DATABASE_URL` from `.env.local`
+  - Script lives at `scripts/dump.sh`
+  - `dumps/` folder is for local use only — not an API endpoint
+- `npm run docs` — generates `docs/questions_YYYY-MM-DD.docx` (questions + options only)
+- `npm run docs -- --answers` — same but includes correct answers highlighted in green
+  - Script lives at `scripts/generate-docs.mjs`, reads from today's dump file

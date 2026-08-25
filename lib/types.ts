@@ -19,5 +19,6 @@ export interface Section {
   title: string;
   position: number;
   draw_per_session: number;
+  is_active: boolean;
   questions: Question[];
 }

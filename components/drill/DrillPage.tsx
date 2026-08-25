@@ -38,6 +38,7 @@ export default function DrillPage() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [hoveredOption, setHoveredOption] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [confirmingSubmit, setConfirmingSubmit] = useState(false);
 
   useEffect(() => {
     fetch('/api/bank')
@@ -82,6 +83,17 @@ export default function DrillPage() {
   function goTo(idx: number) {
     setCurrent(idx);
     setSidebarOpen(false);
+  }
+
+  function handleSubmit() {
+    const unanswered = total - answeredCount;
+    if (unanswered > 0) { setSidebarOpen(false); setConfirmingSubmit(true); return; }
+    setView('submitted');
+  }
+
+  function confirmSubmit() {
+    setConfirmingSubmit(false);
+    setView('submitted');
   }
 
   function handleRestart() {
@@ -299,7 +311,7 @@ export default function DrillPage() {
           {isMobile ? (
             <button onClick={() => setSidebarOpen(true)} style={{ ...btnOutline, padding: '7px 12px' }}>≡ Questions</button>
           ) : (
-            <button onClick={() => setView('submitted')} style={btnOutline}>Submit</button>
+            <button onClick={handleSubmit} style={btnOutline}>Submit</button>
           )}
         </div>
       </div>
@@ -311,10 +323,23 @@ export default function DrillPage() {
           <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '85%', maxWidth: 320, background: '#f3f2f2', overflowY: 'auto', padding: '20px 18px', borderRight: '2px solid rgba(32,30,29,0.4)' }}>
             <SidebarGrid onClose={() => setSidebarOpen(false)} />
             <div style={{ marginTop: 28, paddingTop: 20, borderTop: '2px solid rgba(32,30,29,0.4)' }}>
-              <button onClick={() => { setSidebarOpen(false); setView('submitted'); }} style={{ ...btnPrimary, width: '100%', textAlign: 'center' }}>
+              <button onClick={() => { setSidebarOpen(false); handleSubmit(); }} style={{ ...btnPrimary, width: '100%', textAlign: 'center' }}>
                 Submit Drill
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Unanswered confirmation bar */}
+      {confirmingSubmit && (
+        <div style={{ flexShrink: 0, background: '#fffbeb', borderTop: '2px solid #d97706', borderBottom: '2px solid #d97706', padding: `12px ${px}px`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#92400e' }}>
+            {total - answeredCount} question{total - answeredCount > 1 ? 's' : ''} unanswered. Submit anyway?
+          </span>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={() => setConfirmingSubmit(false)} style={btnOutline}>Cancel</button>
+            <button onClick={confirmSubmit} style={btnPrimary}>Submit</button>
           </div>
         </div>
       )}
@@ -372,7 +397,7 @@ export default function DrillPage() {
                   <button onClick={() => !isFirst && goTo(current - 1)} disabled={isFirst} style={{ ...btnOutline, opacity: isFirst ? 0.45 : 1, cursor: isFirst ? 'not-allowed' : 'pointer' }}>
                     Previous
                   </button>
-                  <button onClick={() => { if (!isLast) goTo(current + 1); else setView('submitted'); }} style={btnPrimary}>
+                  <button onClick={() => { if (!isLast) goTo(current + 1); else handleSubmit(); }} style={btnPrimary}>
                     {isLast ? 'Submit' : 'Next'}
                   </button>
                 </div>

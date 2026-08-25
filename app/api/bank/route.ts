@@ -2,7 +2,7 @@ import { sql } from '@/lib/db';
 
 export async function GET() {
   const rows = await sql`
-    SELECT s.id, s.title, s.position, s.draw_per_session,
+    SELECT s.id, s.title, s.position, s.draw_per_session, s.is_active,
       COALESCE(json_agg(
         json_build_object(
           'id', q.id, 'text', q.text, 'position', q.position, 'section_id', q.section_id, 'source', q.source,

@@ -1,15 +1,16 @@
 # PCAM 9 OJK — Quiz Practice & Question Bank
 
-An internal exam-practice platform for the PCAM 9 (OJK) certification, covering Accounting, Financial Statement Analysis, and Risk Based Audit.
+An internal exam-practice platform for the PCAM 9 (OJK) certification, covering Accounting, Financial Statement Analysis, Risk Based Audit, and Data Analytics.
 
 ## Modules
 
 | Module | Path | Description |
 |---|---|---|
-| Quiz Practice | `/quiz` | Student-facing exam: one question per screen, sidebar navigation, flag-for-review, autosave, review/submit, scored results |
-| Question Bank | `/bank` | Read-only reference of all questions, filterable by section and source, with correct answers shown |
+| Module 1 — Quiz Practice | `/quiz` | Mock exam: one question per screen, sidebar navigation, flag-for-review, autosave, review/submit, scored results |
+| Module 2 — Section Drill | `/drill` | Focused practice: pick one section + question count (5–max), answer one by one, get scored results |
+| Module 3 — Question Bank | `/bank` | Read-only reference of all questions, filterable by section and source, with correct answers shown |
 | Admin Panel | `/admin` | CRUD for sections, questions, and choices |
-| Root | `/` | Redirects to `/quiz` |
+| Landing page | `/` | Module selection cards |
 
 ## Tech Stack
 
@@ -55,10 +56,18 @@ The migration is idempotent — safe to run multiple times. On first run it:
 Additional question batches live in `seeds/`. Run them manually after the migration, in order:
 
 ```bash
-export $(grep DATABASE_URL .env.local | xargs) && psql $DATABASE_URL -f seeds/seed_new_questions.sql
+export $(grep DATABASE_URL .env.local | xargs)
+
+psql $DATABASE_URL -f seeds/seed_new_questions.sql
+psql $DATABASE_URL -f seeds/seed_data_analytics.sql
 ```
 
-Each file in `seeds/` is a one-time INSERT — not idempotent. Only run a seed file once per database.
+| File | Section | Questions | Source |
+|---|---|---|---|
+| `seed_new_questions.sql` | Existing sections | additional batch | AI-generated |
+| `seed_data_analytics.sql` | Data Analytics (new) | 10 | original (IAI class materials) |
+
+Each file is a one-time INSERT — not idempotent. Only run a seed file once per database.
 
 ### 4. Run locally
 
@@ -68,6 +77,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Local Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dump` | Dumps all data to `dumps/dump_YYYY-MM-DD.json` (reads `DATABASE_URL` from `.env.local`) |
+| `npm run docs` | Generates `docs/questions_YYYY-MM-DD.docx` — questions + options only |
+| `npm run docs -- --answers` | Generates `docs/questions_YYYY-MM-DD_with-answers.docx` — includes correct answers |
+
 ## Question Bank Content
 
 | Section | Original | Additional (AI) | Total |
@@ -75,7 +92,8 @@ Open [http://localhost:3000](http://localhost:3000).
 | Akuntansi | 32 | 5 | 37 |
 | Analisis Laporan Keuangan | 17 | 5 | 22 |
 | Risk Based Audit | 66 | 5 | 71 |
-| **Total** | **115** | **15** | **130** |
+| Data Analytics | 10 | 0 | 10 |
+| **Total** | **125** | **15** | **140** |
 
 **Source flag**: every question is tagged `original` (from class materials) or `additional` (AI-generated). The Question Bank shows a colored badge per question and a source filter row.
 
@@ -84,7 +102,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | Method | Path | Description |
 |---|---|---|
 | GET | `/api/quiz` | All sections + questions + choices for the quiz |
-| GET | `/api/bank` | All sections + questions + choices for the bank |
+| GET | `/api/bank` | All sections + questions + choices for the bank and drill |
 | GET / POST | `/api/sections` | List or create sections |
 | PUT / DELETE | `/api/sections/[id]` | Update or delete a section |
 | GET / POST | `/api/questions` | List by `?section_id=` or create (with choices) |
