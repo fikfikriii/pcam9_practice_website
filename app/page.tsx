@@ -25,7 +25,7 @@ export default function Home() {
             PCAM 9 OJK
           </div>
           <div style={{ fontSize: isMobile ? 14 : 15, color: '#605d5d', lineHeight: 1.6 }}>
-            Exam practice platform covering Accounting, Financial Statement Analysis, and Risk Based Audit.
+            Exam practice platform covering Accounting, Risk Based Audit, and Data Analytics.
           </div>
         </div>
 
