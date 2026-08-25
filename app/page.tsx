@@ -30,10 +30,10 @@ export default function Home() {
         </div>
 
         {/* Cards */}
-        <div style={{ display: 'flex', gap: 16, flexDirection: isMobile ? 'column' : 'row', width: '100%', maxWidth: isMobile ? 480 : 820 }}>
+        <div style={{ display: 'flex', gap: 16, flexDirection: isMobile ? 'column' : 'row', width: '100%', maxWidth: isMobile ? 480 : 1060 }}>
           {/* Quiz Practice */}
           <Link href="/quiz" style={{ textDecoration: 'none', flex: 1 }}>
-            <div style={{ background: '#2F6FED', color: '#fff', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid #2F6FED', cursor: 'pointer', boxSizing: 'border-box' }}>
+            <div style={{ background: '#2F6FED', color: '#fff', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid #2F6FED', cursor: 'pointer', boxSizing: 'border-box', height: '100%' }}>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.75, marginBottom: 12 }}>
                 Module 1
               </div>
@@ -47,11 +47,27 @@ export default function Home() {
             </div>
           </Link>
 
-          {/* Question Bank */}
-          <Link href="/bank" style={{ textDecoration: 'none', flex: 1 }}>
-            <div style={{ background: '#fff', color: '#201e1d', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid rgba(32,30,29,0.4)', cursor: 'pointer', boxSizing: 'border-box' }}>
+          {/* Section Drill */}
+          <Link href="/drill" style={{ textDecoration: 'none', flex: 1 }}>
+            <div style={{ background: '#fff', color: '#201e1d', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid rgba(32,30,29,0.4)', cursor: 'pointer', boxSizing: 'border-box', height: '100%' }}>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7d7979', marginBottom: 12 }}>
                 Module 2
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 10 }}>Section Drill</div>
+              <div style={{ fontSize: 13.5, lineHeight: 1.6, color: '#605d5d' }}>
+                Focus on one section at a time. Choose how many questions to practice and get instant feedback.
+              </div>
+              <div style={{ marginTop: 24, fontSize: 13, fontWeight: 700, color: '#1d4ed8' }}>
+                Start drill →
+              </div>
+            </div>
+          </Link>
+
+          {/* Question Bank */}
+          <Link href="/bank" style={{ textDecoration: 'none', flex: 1 }}>
+            <div style={{ background: '#fff', color: '#201e1d', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid rgba(32,30,29,0.4)', cursor: 'pointer', boxSizing: 'border-box', height: '100%' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7d7979', marginBottom: 12 }}>
+                Module 3
               </div>
               <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 10 }}>Question Bank</div>
               <div style={{ fontSize: 13.5, lineHeight: 1.6, color: '#605d5d' }}>
