@@ -36,6 +36,7 @@ export default function DrillPage() {
   const [drillQuestions, setDrillQuestions] = useState<Question[]>([]);
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [flagged, setFlagged] = useState<Record<number, boolean>>({});
   const [hoveredOption, setHoveredOption] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [confirmingSubmit, setConfirmingSubmit] = useState(false);
@@ -70,8 +71,15 @@ export default function DrillPage() {
     drawn.sort((a, b) => a.position - b.position);
     setDrillQuestions(drawn);
     setAnswers({});
+    setFlagged({});
     setCurrent(0);
     setView('drill');
+  }
+
+  function handleFlag() {
+    const q = drillQuestions[current];
+    if (!q) return;
+    setFlagged((prev) => ({ ...prev, [q.id]: !prev[q.id] }));
   }
 
   function handleAnswer(choiceId: number) {
@@ -98,6 +106,7 @@ export default function DrillPage() {
 
   function handleRestart() {
     setAnswers({});
+    setFlagged({});
     setCurrent(0);
     setView('setup');
     setDrillQuestions([]);
@@ -109,6 +118,7 @@ export default function DrillPage() {
   const currentChoiceId = currentQuestion ? answers[currentQuestion.id] : undefined;
   const isFirst = current === 0;
   const isLast = current === total - 1;
+  const isCurrentFlagged = currentQuestion ? !!flagged[currentQuestion.id] : false;
 
   const scoreCorrect = drillQuestions.filter((q) => {
     const choiceId = answers[q.id];
@@ -270,17 +280,25 @@ export default function DrillPage() {
               <span style={{ fontSize: 11.5, color: '#605d5d' }}>{label}</span>
             </div>
           ))}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ width: 13, height: 13, background: '#f8f4f4', border: '1px solid rgba(32,30,29,0.4)', flexShrink: 0, position: 'relative' }}>
+              <span style={{ position: 'absolute', top: -4, right: -4, width: 7, height: 7, background: '#d97706', borderRadius: '50%', border: '1px solid #f3f2f2', display: 'block' }} />
+            </div>
+            <span style={{ fontSize: 11.5, color: '#605d5d' }}>Flagged</span>
+          </div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 8 }}>
           {drillQuestions.map((q, idx) => {
             const isAnswered = !!answers[q.id];
             const isCurrent = idx === current;
+            const isFlagged = !!flagged[q.id];
             let tileBg = '#f8f4f4', tileColor = '#444141', tileBorder = '1px solid rgba(32,30,29,0.4)';
             if (isAnswered) { tileBg = '#15803d'; tileColor = '#fff'; tileBorder = '1px solid transparent'; }
             if (isCurrent) { tileBorder = '2px solid #2F6FED'; }
             return (
-              <div key={q.id} onClick={() => goTo(idx)} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', background: tileBg, color: tileColor, border: tileBorder, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>
+              <div key={q.id} onClick={() => goTo(idx)} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', background: tileBg, color: tileColor, border: tileBorder, cursor: 'pointer', fontSize: 13, fontWeight: 600, position: 'relative' }}>
                 {idx + 1}
+                {isFlagged && <span style={{ position: 'absolute', top: -5, right: -5, width: 10, height: 10, background: '#d97706', borderRadius: '50%', border: '1.5px solid #f3f2f2' }} />}
               </div>
             );
           })}
@@ -361,10 +379,19 @@ export default function DrillPage() {
                 <div style={{ background: '#eae9e9', padding: isMobile ? '24px 20px' : '40px 44px' }}>
                   <div style={{ height: 4, width: 64, background: '#2F6FED', marginBottom: 18 }} />
 
-                  <div style={{ marginBottom: 14 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 14, flexWrap: 'wrap' }}>
                     <span style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#1d4ed8' }}>
                       Question {current + 1} of {total}
                     </span>
+                    <button
+                      onClick={handleFlag}
+                      style={isCurrentFlagged
+                        ? { background: '#d97706', border: 'none', color: '#fff', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
+                        : { background: 'transparent', border: '1.5px solid rgba(32,30,29,0.4)', color: '#201e1d', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
+                      }
+                    >
+                      {isCurrentFlagged ? 'Flagged ✕' : 'Flag for review'}
+                    </button>
                   </div>
 
                   <div style={{ fontSize: isMobile ? 18 : 25, fontWeight: 800, lineHeight: 1.4, marginBottom: 24 }}>
