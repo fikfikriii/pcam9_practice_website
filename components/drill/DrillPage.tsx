@@ -380,9 +380,12 @@ export default function DrillPage() {
                   <div style={{ height: 4, width: 64, background: '#2F6FED', marginBottom: 18 }} />
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 14, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#1d4ed8' }}>
-                      Question {current + 1} of {total}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#1d4ed8' }}>
+                        Question {current + 1} of {total}
+                      </span>
+                      <DrillSourceBadge source={currentQuestion.source} />
+                    </div>
                     <button
                       onClick={handleFlag}
                       style={isCurrentFlagged
@@ -434,5 +437,19 @@ export default function DrillPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function DrillSourceBadge({ source }: { source: 'original' | 'additional' | 'references' }) {
+  const map = {
+    original:   { label: 'Original',   color: '#15803d', bg: '#eafaf1' },
+    additional: { label: 'Additional', color: '#2F6FED', bg: '#eaf1fd' },
+    references: { label: 'References', color: '#6d28d9', bg: '#f5f3ff' },
+  };
+  const { label, color, bg } = map[source] ?? map.additional;
+  return (
+    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '2px 7px', border: `1px solid ${color}`, color, background: bg }}>
+      {label}
+    </span>
   );
 }

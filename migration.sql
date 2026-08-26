@@ -1103,3 +1103,28 @@ BEGIN
 
   END IF;
 END $$;
+
+-- ─── Simulation tables ──────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS simulation_configs (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS simulation_parts (
+  id SERIAL PRIMARY KEY,
+  simulation_id INTEGER NOT NULL REFERENCES simulation_configs(id) ON DELETE CASCADE,
+  part_number INTEGER NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  question_count INTEGER NOT NULL DEFAULT 40,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS simulation_part_sections (
+  part_id INTEGER NOT NULL REFERENCES simulation_parts(id) ON DELETE CASCADE,
+  section_id INTEGER NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+  PRIMARY KEY (part_id, section_id)
+);

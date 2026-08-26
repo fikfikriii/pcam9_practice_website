@@ -44,7 +44,7 @@ const textareaStyle: React.CSSProperties = {
 
 interface NewQuestionForm {
   text: string;
-  source: 'original' | 'additional';
+  source: 'original' | 'additional' | 'references';
   choices: { text: string; is_correct: boolean }[];
 }
 
@@ -415,6 +415,7 @@ export default function AdminPage() {
                       >
                         <option value="additional">Additional (AI-generated)</option>
                         <option value="original">Original (from class)</option>
+                        <option value="references">References (last year's exam)</option>
                       </select>
                     </div>
                     <div style={{ marginBottom: 16 }}>
@@ -467,10 +468,11 @@ export default function AdminPage() {
                             <select
                               style={{ ...inputStyle, width: 'auto', padding: '4px 8px', fontSize: 12 }}
                               value={editQuestion.source}
-                              onChange={(e) => setEditQuestion({ ...editQuestion, source: e.target.value as 'original' | 'additional' })}
+                              onChange={(e) => setEditQuestion({ ...editQuestion, source: e.target.value as 'original' | 'additional' | 'references' })}
                             >
                               <option value="additional">Additional (AI-generated)</option>
                               <option value="original">Original (from class)</option>
+                              <option value="references">References (last year's exam)</option>
                             </select>
                           </div>
                         </>
@@ -552,21 +554,16 @@ export default function AdminPage() {
   );
 }
 
-function AdminSourceBadge({ source }: { source: 'original' | 'additional' }) {
-  const isOriginal = source === 'original';
+function AdminSourceBadge({ source }: { source: 'original' | 'additional' | 'references' }) {
+  const map = {
+    original:   { label: 'Original',   color: '#15803d', bg: '#eafaf1' },
+    additional: { label: 'Additional', color: '#2F6FED', bg: '#eaf1fd' },
+    references: { label: 'References', color: '#6d28d9', bg: '#f5f3ff' },
+  };
+  const { label, color, bg } = map[source] ?? map.additional;
   return (
-    <span style={{
-      display: 'inline-block',
-      fontSize: 10,
-      fontWeight: 700,
-      letterSpacing: '0.05em',
-      textTransform: 'uppercase',
-      padding: '2px 7px',
-      border: `1px solid ${isOriginal ? '#15803d' : '#2F6FED'}`,
-      color: isOriginal ? '#15803d' : '#2F6FED',
-      background: isOriginal ? '#eafaf1' : '#eaf1fd',
-    }}>
-      {isOriginal ? 'Original' : 'Additional'}
+    <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '2px 7px', border: `1px solid ${color}`, color, background: bg }}>
+      {label}
     </span>
   );
 }

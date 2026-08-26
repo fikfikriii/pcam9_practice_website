@@ -78,6 +78,22 @@ export default function Home() {
               </div>
             </div>
           </Link>
+
+          {/* Exam Simulation */}
+          <Link href="/simulation" style={{ textDecoration: 'none', flex: 1 }}>
+            <div style={{ background: '#201e1d', color: '#fff', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid #201e1d', cursor: 'pointer', boxSizing: 'border-box', height: '100%' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.6, marginBottom: 12 }}>
+                Module 4
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 10 }}>Exam Simulation</div>
+              <div style={{ fontSize: 13.5, lineHeight: 1.6, opacity: 0.75 }}>
+                Full-length timed simulation. Multi-part format mirroring the real exam. Unlock each part sequentially.
+              </div>
+              <div style={{ marginTop: 24, fontSize: 13, fontWeight: 700, opacity: 0.9 }}>
+                Start simulation →
+              </div>
+            </div>
+          </Link>
         </div>
       </div>
 

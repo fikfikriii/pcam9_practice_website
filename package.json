@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "dump": "bash scripts/dump.sh",
-    "docs": "node scripts/generate-docs.mjs"
+    "docs": "node scripts/generate-docs.mjs",
+    "positions": "bash scripts/positions.sh"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",

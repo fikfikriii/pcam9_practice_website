@@ -10,7 +10,7 @@ export interface Question {
   section_id: number;
   text: string;
   position: number;
-  source: 'original' | 'additional';
+  source: 'original' | 'additional' | 'references';
   choices: Choice[];
 }
 

@@ -9,7 +9,7 @@ export default function BankPage() {
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<'all' | number>('all');
-  const [sourceFilter, setSourceFilter] = useState<'all' | 'original' | 'additional'>('all');
+  const [sourceFilter, setSourceFilter] = useState<'all' | 'original' | 'additional' | 'references'>('all');
   const isMobile = useMobile();
   const px = isMobile ? 16 : 32;
 
@@ -98,17 +98,27 @@ export default function BankPage() {
       </div>
 
       {/* Source filter row */}
-      <div style={{ padding: `10px ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+      <div style={{ padding: `10px ${px}px`, borderBottom: '1px solid rgba(32,30,29,0.15)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: '#7d7979', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Source</span>
-        <button onClick={() => setSourceFilter('all')} style={sourceFilter === 'all' ? { ...tabBase, background: '#444141', color: '#fff', border: '1px solid #444141' } : tabBase}>
-          All
-        </button>
-        <button onClick={() => setSourceFilter('original')} style={sourceFilter === 'original' ? srcTabActive('#15803d') : tabBase}>
-          Original
-        </button>
-        <button onClick={() => setSourceFilter('additional')} style={sourceFilter === 'additional' ? srcTabActive('#2F6FED') : tabBase}>
-          Additional
-        </button>
+        <button onClick={() => setSourceFilter('all')} style={sourceFilter === 'all' ? { ...tabBase, background: '#444141', color: '#fff', border: '1px solid #444141' } : tabBase}>All</button>
+        <button onClick={() => setSourceFilter('original')} style={sourceFilter === 'original' ? srcTabActive('#15803d') : tabBase}>Original</button>
+        <button onClick={() => setSourceFilter('additional')} style={sourceFilter === 'additional' ? srcTabActive('#2F6FED') : tabBase}>Additional</button>
+        <button onClick={() => setSourceFilter('references')} style={sourceFilter === 'references' ? srcTabActive('#6d28d9') : tabBase}>References</button>
+      </div>
+
+      {/* Source legend */}
+      <div style={{ padding: `10px ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: '#7d7979', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Legend</span>
+        {[
+          { label: 'Original', color: '#15803d', bg: '#eafaf1', desc: 'Latihan soal, quiz, & PCS 8 quiz' },
+          { label: 'Additional', color: '#2F6FED', bg: '#eaf1fd', desc: 'AI-generated questions' },
+          { label: 'References', color: '#6d28d9', bg: '#f5f3ff', desc: "Last year's exam" },
+        ].map(({ label, color, bg, desc }) => (
+          <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '2px 7px', border: `1px solid ${color}`, color, background: bg }}>{label}</span>
+            <span style={{ fontSize: 11.5, color: '#605d5d' }}>{desc}</span>
+          </div>
+        ))}
       </div>
 
       {/* Body */}
@@ -162,17 +172,16 @@ export default function BankPage() {
   );
 }
 
-function SourceBadge({ source }: { source: 'original' | 'additional' }) {
-  const isOriginal = source === 'original';
+function SourceBadge({ source }: { source: 'original' | 'additional' | 'references' }) {
+  const map = {
+    original:   { label: 'Original',   color: '#15803d', bg: '#eafaf1' },
+    additional: { label: 'Additional', color: '#2F6FED', bg: '#eaf1fd' },
+    references: { label: 'References', color: '#6d28d9', bg: '#f5f3ff' },
+  };
+  const { label, color, bg } = map[source] ?? map.additional;
   return (
-    <span style={{
-      fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase',
-      padding: '2px 7px',
-      border: `1px solid ${isOriginal ? '#15803d' : '#2F6FED'}`,
-      color: isOriginal ? '#15803d' : '#2F6FED',
-      background: isOriginal ? '#eafaf1' : '#eaf1fd',
-    }}>
-      {isOriginal ? 'Original' : 'Additional'}
+    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '2px 7px', border: `1px solid ${color}`, color, background: bg }}>
+      {label}
     </span>
   );
 }
