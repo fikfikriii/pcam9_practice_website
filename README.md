@@ -1,6 +1,6 @@
-# PCAM 9 OJK — Exam Practice Platform
+# PCAM9 MLE OJK — Exam Practice Platform
 
-Internal practice platform for the PCAM 9 (OJK) certification. Questions are organized by exam module and section category.
+Internal practice platform for the PCAM9 MLE (OJK) certification. Questions are organized by exam module and section category.
 
 ## Pages
 
@@ -9,8 +9,8 @@ Internal practice platform for the PCAM 9 (OJK) certification. Questions are org
 | `/` | Landing page — module cards with exam dates, links to Quiz and Drill per module |
 | `/quiz` | Mock exam: all sections in a module, one question per screen, flag-for-review, scored results |
 | `/drill` | Focused practice: pick sections by category and source filter, configurable question count |
-| `/bank` | Question bank: read-only, filterable by section and source, correct answers shown |
-| `/simulation` | Full exam simulation: multi-part, sequential locking, drawn randomly from section pools |
+| `/bank` | Question bank: read-only, filterable by category → section → source, correct answers shown; questions load on demand per section |
+| `/simulation` | Full exam simulation — **disabled** (button visible, not clickable; format TBD) |
 | `/admin` | CRUD panel for sections, questions, and choices (accessible via URL only) |
 
 ## Exam Modules
@@ -22,18 +22,20 @@ Internal practice platform for the PCAM 9 (OJK) certification. Questions are org
 | 3 | Manajemen Risiko | 2026-09-22 |
 | 4 | Materi Pendukung Pengawasan | 2026-09-25 |
 
-## Section Categories (Module 1)
+## Section Categories
 
-Sections within a module are grouped by category in the Drill setup:
+Sections are grouped by category in both the Drill setup and the Question Bank:
 
-| Category | Sections |
+| ID | Label |
 |---|---|
-| Perbankan | Aplikasi Perbankan, Pengawasan Bank Berbasis Risiko |
-| Pasar Modal | Pengawasan SRO Pasar Modal |
-| Inklusi | Inklusi Keuangan |
-| IAKD | IAKD (Inovasi Aset Keuangan Digital) |
-| IKNB | Layanan Urun Dana |
-| Syariah | — |
+| `perbankan` | Perbankan |
+| `pasar_modal` | Pasar Modal |
+| `inklusi` | Inklusi |
+| `iakd` | IAKD (Inovasi Aset Keuangan Digital) |
+| `iknb` | IKNB (Industri Keuangan Non-Bank) |
+| `syariah` | Syariah |
+| `pvml` | PVML (Perusahaan Pembiayaan, Ventura, Modal & Lainnya) |
+| `ppdp` | PPDP |
 
 ## Question Sources
 
@@ -53,6 +55,7 @@ Every question is tagged with a source, shown as a colored badge:
 - **DB client**: `@neondatabase/serverless` — raw SQL, no ORM
 - **Styling**: Tailwind CSS v3 + inline styles for design token precision
 - **Font**: Archivo 400/600/800
+- **Favicon**: `app/icon.png` (auto-picked up by Next.js App Router)
 
 ## Getting Started
 
@@ -125,8 +128,9 @@ Open [http://localhost:3000](http://localhost:3000).
 | GET | `/api/modules` | List of exam modules with section/question counts |
 | GET | `/api/question-sources` | List of question source types |
 | GET | `/api/section-categories` | List of section categories |
+| GET | `/api/sections` | List of sections with `question_count` (no questions payload) |
 | GET | `/api/quiz` | Sections + questions + choices for quiz (`?module=N`) |
-| GET | `/api/bank` | All sections + questions + choices for bank/drill (`?module=N`) |
+| GET | `/api/bank` | Sections + questions + choices (`?module=N` or `?section_id=N` for single-section) |
 | GET / POST | `/api/sections` | List or create sections |
 | PUT / DELETE | `/api/sections/[id]` | Update or delete a section |
 | GET / POST | `/api/questions` | List by `?section_id=` or create with choices |
@@ -144,7 +148,7 @@ Supporting tables: `modules`, `question_sources`, `section_categories`.
 **Key rules:**
 - `sections.is_active` — if false, excluded from `/api/quiz` but visible in `/api/bank`
 - `sections.module_id` — assigns a section to an exam module
-- `sections.category_id` — groups sections by category within the Drill setup
+- `sections.category_id` — groups sections by category in Drill and Question Bank
 - `questions.source` — FK to `question_sources`; tagged badge in all views
 - `choices.is_correct` — only one true per question; `PUT /api/choices/[id]` auto-deselects others
 - User answers are in `localStorage`, not the database

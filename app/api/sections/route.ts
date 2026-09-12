@@ -1,7 +1,13 @@
 import { sql } from '@/lib/db';
 
 export async function GET() {
-  const rows = await sql`SELECT * FROM sections ORDER BY position`;
+  const rows = await sql`
+    SELECT s.*, COUNT(q.id)::int AS question_count
+    FROM sections s
+    LEFT JOIN questions q ON q.section_id = s.id
+    GROUP BY s.id
+    ORDER BY s.position
+  `;
   return Response.json(rows);
 }
 

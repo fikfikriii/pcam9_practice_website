@@ -1,7 +1,7 @@
 import AdminPage from '@/components/admin/AdminPage';
 
 export const metadata = {
-  title: 'PCAM 9 OJK — Admin',
+  title: 'PCAM9 MLE OJK — Admin',
 };
 
 export default function Admin() {

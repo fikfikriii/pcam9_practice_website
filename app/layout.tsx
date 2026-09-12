@@ -9,7 +9,7 @@ const archivo = Archivo({
 });
 
 export const metadata: Metadata = {
-  title: 'PCAM 9 OJK — Quiz Practice',
+  title: 'PCAM9 MLE OJK — Quiz Practice',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

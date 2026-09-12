@@ -284,7 +284,7 @@ export default function AdminPage() {
       {/* Header */}
       <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
-          <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
+          <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM9 MLE OJK</span>
           <span style={{ fontSize: 13, color: '#605d5d' }}>Admin — Question Bank</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>

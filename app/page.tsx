@@ -67,7 +67,7 @@ export default function Home() {
       {/* Header */}
       <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
-          <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
+          <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM9 MLE OJK</span>
           {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>Assessment Practices</span>}
         </div>
       </div>
@@ -146,15 +146,18 @@ export default function Home() {
           <Link href="/bank" style={{ ...btnBase, background: '#fff', color: '#201e1d', border: '1.5px solid rgba(32,30,29,0.35)', padding: '10px 20px' }}>
             Question Bank
           </Link>
-          <Link href="/simulation" style={{ ...btnBase, background: '#201e1d', color: '#fff', padding: '10px 20px' }}>
+          <span
+            style={{ ...btnBase, background: '#c8c6c6', color: '#7d7979', padding: '10px 20px', cursor: 'not-allowed' }}
+            title="Coming soon"
+          >
             Exam Simulation
-          </Link>
+          </span>
         </div>
       </div>
 
       {/* Footer */}
       <div style={{ padding: `16px ${px}px`, borderTop: '1px solid rgba(32,30,29,0.15)', display: 'flex', justifyContent: 'center' }}>
-        <span style={{ fontSize: 12, color: '#7d7979' }}>PCAM 9 OJK — Internal Practice Platform</span>
+        <span style={{ fontSize: 12, color: '#7d7979' }}>PCAM9 MLE OJK — Internal Practice Platform</span>
       </div>
     </div>
   );

@@ -235,7 +235,7 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#f3f2f2', overflow: 'hidden' }}>
         <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
-            <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
+            <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM9 MLE OJK</span>
             {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Results` : 'Results'}</span>}
           </div>
           <button onClick={handleGoHome} style={{ ...btnOutline, color: '#1d4ed8', borderColor: '#1d4ed8' }}>Home</button>
@@ -296,7 +296,7 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#f3f2f2', overflow: 'hidden' }}>
         <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
-            <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
+            <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM9 MLE OJK</span>
             {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Review` : 'Summary before submit'}</span>}
           </div>
           <button onClick={() => setView('quiz')} style={btnOutline}>Back</button>
@@ -367,7 +367,7 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
       {/* Header */}
       <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
-          <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
+          <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM9 MLE OJK</span>
           {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Quiz` : 'Quiz Practice'}</span>}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 20 }}>

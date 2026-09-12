@@ -1,6 +1,6 @@
 -- seed_syariah_kuis.sql
--- Source: Soal-Soal Tes Produk Perbankan Syariah — Sertifikasi Pengawas OJK (LPPI, September 2026)
--- Section: Perbankan Syariah | Source: original | Category: syariah | Module: 1
+-- Source: Soal-Soal Tes Produk Syariah — Sertifikasi Pengawas OJK (LPPI, September 2026)
+-- Section: Syariah | Source: original | Category: syariah | Module: 1
 -- 24 questions (Q1 and Q2 were duplicates; only Q1 included)
 -- All answers confirmed via KUNCI JAWABAN (answer key page).
 
@@ -12,12 +12,12 @@ DECLARE
   pos     INTEGER := 0;
 BEGIN
   -- Insert section (idempotent)
-  SELECT id INTO sec_id FROM sections WHERE title = 'Perbankan Syariah';
+  SELECT id INTO sec_id FROM sections WHERE title = 'Syariah';
 
   IF sec_id IS NULL THEN
     SELECT COALESCE(MAX(position), 0) + 1 INTO sec_pos FROM sections;
     INSERT INTO sections (title, position, draw_per_session, module_id, category_id)
-    VALUES ('Perbankan Syariah', sec_pos, 15, 1, 'syariah')
+    VALUES ('Syariah', sec_pos, 15, 1, 'syariah')
     RETURNING id INTO sec_id;
   END IF;
 

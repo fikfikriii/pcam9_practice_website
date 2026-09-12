@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import DrillPage from '@/components/drill/DrillPage';
 
-export const metadata: Metadata = { title: 'PCAM 9 OJK — Section Drill' };
+export const metadata: Metadata = { title: 'PCAM9 MLE OJK — Section Drill' };
 
 export default async function Drill({ searchParams }: { searchParams: Promise<{ module?: string }> }) {
   const params = await searchParams;

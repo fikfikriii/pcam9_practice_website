@@ -1,7 +1,7 @@
-# PCAM 9 OJK — Claude Code Context
+# PCAM9 MLE OJK — Claude Code Context
 
 ## Project overview
-Internal exam-practice website for the PCAM 9 (OJK) certification. Next.js 15 App Router, PostgreSQL on Neon, deployed on Vercel. Five user-facing pages: `/quiz` (mock exam), `/drill` (multi-section practice with category and source filters), `/bank` (question bank), `/simulation` (multi-part exam simulation), `/admin` (CRUD panel, URL-only access).
+Internal exam-practice website for the PCAM9 MLE (OJK) certification. Next.js 15 App Router, PostgreSQL on Neon, deployed on Vercel. Five user-facing pages: `/quiz` (mock exam), `/drill` (multi-section practice with category and source filters), `/bank` (question bank — lazy-loads questions per section), `/simulation` (disabled — button visible but non-functional, format TBD), `/admin` (CRUD panel, URL-only access).
 
 ## Stack
 - **Next.js 15** App Router — all pages are in `app/`, all API routes in `app/api/`
@@ -23,7 +23,7 @@ app/
     question-sources/route.ts   → GET: question source types (id + label)
     section-categories/route.ts → GET: section categories (id + label)
     quiz/route.ts               → GET: sections + questions + choices (is_active=TRUE, ?module=N)
-    bank/route.ts               → GET: sections + questions + choices (all, ?module=N)
+    bank/route.ts               → GET: sections + questions + choices (all, ?module=N, or ?section_id=N for single section)
     sections/route.ts           → GET list, POST create
     sections/[id]/route.ts      → PUT, DELETE
     questions/route.ts          → GET ?section_id=, POST (with choices)
@@ -34,12 +34,12 @@ app/
 components/
   quiz/QuizPage.tsx             → full quiz UI (question, review, results views)
   drill/DrillPage.tsx           → drill UI: setup (multi-section + source filter), question, results
-  bank/BankPage.tsx             → question bank browser
+  bank/BankPage.tsx             → question bank browser; loads section metadata on mount, fetches questions per section on demand; filters: category → section → source
   simulation/SimulationPage.tsx → multi-part exam simulation UI
   admin/AdminPage.tsx           → section + question + choice CRUD
 lib/
   db.ts                         → exports `sql` from @neondatabase/serverless
-  types.ts                      → Choice, Question, Section, Module, QuestionSource, SectionCategory
+  types.ts                      → Choice, Question, Section, SectionMeta, Module, QuestionSource, SectionCategory
 migration.sql                   → idempotent schema + seed + module/category/simulation DDL
 seeds/                          → incremental SQL seed files (run manually after migration, one-time)
 ```
@@ -66,7 +66,7 @@ Nine tables total:
 ### Core tables — key columns
 - `sections.is_active` — if `false`, excluded from `/api/quiz` but visible in `/api/bank`. Toggled via Admin panel.
 - `sections.module_id` — FK to `modules.id`; assigns a section to an exam module
-- `sections.category_id` — FK to `section_categories.id`; groups sections in the Drill setup UI
+- `sections.category_id` — FK to `section_categories.id`; groups sections in the Drill setup UI and Question Bank category filter
 - `questions.source` — FK to `question_sources.id`. Default `'original'`; admin panel defaults to `'additional'`
 - `questions.position` — display order within a section, freely reorderable (not auto-increment)
 - `choices.is_correct` — only one true per question. `PUT /api/choices/[id]` auto-deselects all others.
@@ -81,9 +81,10 @@ Nine tables total:
 | 4 | Materi Pendukung Pengawasan | 2026-09-25 |
 
 ### Section categories (current)
-`perbankan`, `pasar_modal`, `inklusi`, `iakd`, `iknb`, `syariah`
-- Full names: Perbankan, Pasar Modal, Inklusi, IAKD (Inovasi Aset Keuangan Digital), IKNB (Industri Keuangan Non-Bank), Syariah
+`perbankan`, `pasar_modal`, `inklusi`, `iakd`, `iknb`, `syariah`, `pvml`, `ppdp`
+- Full names: Perbankan, Pasar Modal, Inklusi, IAKD (Inovasi Aset Keuangan Digital), IKNB (Industri Keuangan Non-Bank), Syariah, PVML (Perusahaan Pembiayaan/Ventura/Modal & Lainnya), PPDP
 - Assigned to Module 1 sections; sections without `category_id` still appear in drill but without a group header
+- Used in both Drill setup (group headers) and Question Bank (category filter row)
 
 ### Question sources (current)
 `original` (Original / green), `additional` (AI / blue), `pcs7` (PCS7 / amber), `pcs8` (PCS8 / purple)
@@ -91,7 +92,9 @@ Nine tables total:
 ## API patterns
 All routes use the `sql` tagged template literal from `lib/db.ts`. The quiz and bank GET routes return nested JSON (sections → questions → choices) via `json_agg` / `json_build_object`. New routes should follow the same pattern.
 
-The quiz and bank routes accept `?module=N` — when present, filter by `s.module_id = (SELECT id FROM modules WHERE number = N)`.
+The quiz and bank routes accept `?module=N` — when present, filter by `s.module_id = (SELECT id FROM modules WHERE number = N)`. The bank route also accepts `?section_id=N` — returns a single section object (not an array) with its questions and choices.
+
+`/api/sections` GET now includes `question_count` via a COUNT JOIN — used by BankPage to show counts in tabs without loading questions. The `SectionMeta` type represents this (same as `Section` but with `question_count: number` instead of `questions: Question[]`).
 
 ## Drill setup
 DrillPage setup view:
