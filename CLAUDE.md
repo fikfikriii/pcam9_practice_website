@@ -1,7 +1,7 @@
 # PCAM 9 OJK — Claude Code Context
 
 ## Project overview
-Internal exam-practice website for the PCAM 9 (OJK) certification. Next.js 15 App Router, PostgreSQL on Neon, deployed on Vercel. Five user-facing modules: `/quiz` (mock exam), `/drill` (section-focused practice), `/bank` (question bank), `/simulation` (multi-part exam simulation), `/admin` (CRUD panel).
+Internal exam-practice website for the PCAM 9 (OJK) certification. Next.js 15 App Router, PostgreSQL on Neon, deployed on Vercel. Five user-facing pages: `/quiz` (mock exam), `/drill` (multi-section practice with category and source filters), `/bank` (question bank), `/simulation` (multi-part exam simulation), `/admin` (CRUD panel, URL-only access).
 
 ## Stack
 - **Next.js 15** App Router — all pages are in `app/`, all API routes in `app/api/`
@@ -12,58 +12,96 @@ Internal exam-practice website for the PCAM 9 (OJK) certification. Next.js 15 Ap
 ## File layout
 ```
 app/
-  page.tsx                  → landing page with module cards (Module 1–4 + admin)
-  quiz/page.tsx             → imports QuizPage component
-  drill/page.tsx            → imports DrillPage component
-  bank/page.tsx             → imports BankPage component
-  simulation/page.tsx       → imports SimulationPage component
-  admin/page.tsx            → imports AdminPage component
+  page.tsx                      → landing page: module cards with exam dates + Quiz/Drill links
+  quiz/page.tsx                 → server component; reads ?module= and passes moduleId to QuizPage
+  drill/page.tsx                → server component; reads ?module= and passes moduleId to DrillPage
+  bank/page.tsx                 → imports BankPage component
+  simulation/page.tsx           → imports SimulationPage component
+  admin/page.tsx                → imports AdminPage component
   api/
-    quiz/route.ts           → GET: sections + questions + choices (is_active=TRUE only)
-    bank/route.ts           → GET: sections + questions + choices (all, including inactive)
-    sections/route.ts       → GET list, POST create
-    sections/[id]/route.ts  → PUT, DELETE
-    questions/route.ts      → GET ?section_id=, POST (with choices)
-    questions/[id]/route.ts → PUT, DELETE
-    choices/[id]/route.ts   → PUT (auto-deselects other correct choices), DELETE
-    simulation/route.ts     → GET: list of active simulation configs (with part metadata, no questions)
-    simulation/[id]/route.ts → GET: full config with all pooled questions per part
+    modules/route.ts            → GET: exam modules with section/question counts
+    question-sources/route.ts   → GET: question source types (id + label)
+    section-categories/route.ts → GET: section categories (id + label)
+    quiz/route.ts               → GET: sections + questions + choices (is_active=TRUE, ?module=N)
+    bank/route.ts               → GET: sections + questions + choices (all, ?module=N)
+    sections/route.ts           → GET list, POST create
+    sections/[id]/route.ts      → PUT, DELETE
+    questions/route.ts          → GET ?section_id=, POST (with choices)
+    questions/[id]/route.ts     → PUT, DELETE
+    choices/[id]/route.ts       → PUT (auto-deselects other correct choices), DELETE
+    simulation/route.ts         → GET: list of active simulation configs (with part metadata)
+    simulation/[id]/route.ts    → GET: full config with all pooled questions per part
 components/
-  quiz/QuizPage.tsx         → full quiz UI (question, review, results views)
-  drill/DrillPage.tsx       → section drill UI (setup, question, results views)
-  bank/BankPage.tsx         → question bank browser
+  quiz/QuizPage.tsx             → full quiz UI (question, review, results views)
+  drill/DrillPage.tsx           → drill UI: setup (multi-section + source filter), question, results
+  bank/BankPage.tsx             → question bank browser
   simulation/SimulationPage.tsx → multi-part exam simulation UI
-  admin/AdminPage.tsx       → section + question + choice CRUD
+  admin/AdminPage.tsx           → section + question + choice CRUD
 lib/
-  db.ts                     → exports `sql` from @neondatabase/serverless
-  types.ts                  → Choice, Question, Section interfaces
-migration.sql               → idempotent schema + seed (130 questions) + simulation table DDL
-seeds/                      → incremental SQL seed files (run manually after migration)
-  seed_new_questions.sql    → additional AI-generated questions for existing sections
-  seed_data_analytics.sql   → 10 original questions, new 'Data Analytics' section (IAI class materials)
-  seed_simulation_config.sql → default 2-part simulation config (idempotent)
+  db.ts                         → exports `sql` from @neondatabase/serverless
+  types.ts                      → Choice, Question, Section, Module, QuestionSource, SectionCategory
+migration.sql                   → idempotent schema + seed + module/category/simulation DDL
+seeds/                          → incremental SQL seed files (run manually after migration, one-time)
 ```
 
 ## Database
-Six tables: `sections` → `questions` → `choices` (cascade deletes), plus `simulation_configs` → `simulation_parts` → `simulation_part_sections` (cascade deletes).
+Nine tables total:
+- Core: `sections` → `questions` → `choices` (cascade deletes)
+- Simulation: `simulation_configs` → `simulation_parts` → `simulation_part_sections` (cascade deletes)
+- Supporting: `modules`, `question_sources`, `section_categories`
+
+### Supporting tables
+- `modules` — exam modules: `id`, `number` (UNIQUE), `title`, `exam_date`
+- `question_sources` — string PK master table: `id` (e.g. `'original'`), `label` (e.g. `'Original'`)
+- `section_categories` — string PK master table: `id` (e.g. `'perbankan'`), `label` (e.g. `'Perbankan'`)
 
 ### Simulation tables
 - `simulation_configs` — top-level exam config: `id`, `title`, `description`, `is_active`
 - `simulation_parts` — parts within a config: `id`, `simulation_id`, `part_number`, `title`, `question_count`
-- `simulation_part_sections` — many-to-many join between parts and sections: `part_id`, `section_id`
+- `simulation_part_sections` — many-to-many join: `part_id`, `section_id`
 - The API draws `question_count` questions randomly from all questions in the part's assigned sections
-- Session state (drawn question IDs, answers, flags, submitted parts) stored in localStorage under key `pcam9-ojk-simulation-{configId}-v1`
+- Session state stored in localStorage under key `pcam9-ojk-simulation-{configId}-v1`
 - Sequential locking: user cannot reach Part N+1 until Part N is submitted
 
 ### Core tables — key columns
-- `sections.is_active` — boolean (default `true`). If `false`, the section is excluded from `/api/quiz` (quiz module) but still visible in `/api/bank` (drill + question bank). Toggled via the Admin panel's Activate/Deactivate button.
-- `questions.source` — `'original'` (from class PDFs) or `'additional'` (AI-generated). Default is `'original'`.
-- `questions.position` — display order within a section, freely reorderable integer (not auto-increment)
-- `choices.is_correct` — boolean; only one per question should be true. The PUT `/api/choices/[id]` endpoint auto-deselects all others when setting one to true.
-- User answers are **not** stored in the DB — they live in `localStorage` under key `pcam9-ojk-quiz-progress-v1`
+- `sections.is_active` — if `false`, excluded from `/api/quiz` but visible in `/api/bank`. Toggled via Admin panel.
+- `sections.module_id` — FK to `modules.id`; assigns a section to an exam module
+- `sections.category_id` — FK to `section_categories.id`; groups sections in the Drill setup UI
+- `questions.source` — FK to `question_sources.id`. Default `'original'`; admin panel defaults to `'additional'`
+- `questions.position` — display order within a section, freely reorderable (not auto-increment)
+- `choices.is_correct` — only one true per question. `PUT /api/choices/[id]` auto-deselects all others.
+- User answers are **not** stored in the DB — they live in `localStorage`
+
+### Exam modules (current)
+| Number | Title | Exam date |
+|---|---|---|
+| 1 | Pendekatan Pengawasan | 2026-09-16 |
+| 2 | Kelembagaan, Struktur, Produk & Aktivitas SJK | 2026-09-18 |
+| 3 | Manajemen Risiko | 2026-09-22 |
+| 4 | Materi Pendukung Pengawasan | 2026-09-25 |
+
+### Section categories (current)
+`perbankan`, `pasar_modal`, `inklusi`, `iakd`, `iknb`, `syariah`
+- Full names: Perbankan, Pasar Modal, Inklusi, IAKD (Inovasi Aset Keuangan Digital), IKNB (Industri Keuangan Non-Bank), Syariah
+- Assigned to Module 1 sections; sections without `category_id` still appear in drill but without a group header
+
+### Question sources (current)
+`original` (Original / green), `additional` (AI / blue), `pcs7` (PCS7 / amber), `pcs8` (PCS8 / purple)
 
 ## API patterns
-All routes use the `sql` tagged template literal from `lib/db.ts`. The quiz and bank GET routes return a nested JSON structure (sections containing questions containing choices) via a single SQL query using `json_agg` / `json_build_object`. New API routes should follow the same pattern.
+All routes use the `sql` tagged template literal from `lib/db.ts`. The quiz and bank GET routes return nested JSON (sections → questions → choices) via `json_agg` / `json_build_object`. New routes should follow the same pattern.
+
+The quiz and bank routes accept `?module=N` — when present, filter by `s.module_id = (SELECT id FROM modules WHERE number = N)`.
+
+## Drill setup
+DrillPage setup view:
+- Fetches `/api/bank?module=N` (or all sections if no module)
+- Fetches `/api/question-sources` and `/api/section-categories`
+- Sections displayed grouped by `category_id` (category header + toggle buttons per section)
+- "Select all / Deselect" per category; global "All / Clear"
+- Source filter: buttons for All + each source present in the selected sections' question pool
+- Question count slider: reflects pool size across all selected sections × chosen source
+- `startDrill` shuffles the combined pool, draws `clampedCount`, then sorts by `position`
 
 ## Styling conventions
 - **Design tokens as inline styles** — never Tailwind for colors, typography, or spacing that must match the spec exactly
@@ -72,13 +110,16 @@ All routes use the `sql` tagged template literal from `lib/db.ts`. The quiz and 
 - Key tokens: background `#f3f2f2`, surface `#eae9e9`, primary blue `#2F6FED`, link blue `#1d4ed8`, success green `#15803d`, error red `#b91c1c`, flag amber `#d97706`
 - Font: Archivo (loaded via `next/font/google`), weights 400/600/800
 
-## Question source tagging
-Three categories, shown as colored badges in quiz, drill, and question bank:
-- `original` — from class PDFs, latihan soal, quiz, PCS 8 quiz (green badge)
-- `additional` — AI-generated questions (blue badge)
-- `references` — last year's exam questions (purple badge)
-- When inserting via admin panel, new questions default to `'additional'`
-- When inserting via seed, set `source` explicitly; omitting it defaults to `'original'`
+## Source badge colors (hardcoded in components)
+```ts
+const SOURCE_COLORS = {
+  original:   { color: '#15803d', bg: '#eafaf1' },
+  additional: { color: '#2F6FED', bg: '#eaf1fd' },
+  pcs8:       { color: '#6d28d9', bg: '#f5f3ff' },
+  pcs7:       { color: '#b45309', bg: '#fffbeb' },
+};
+```
+Labels are fetched from `/api/question-sources` at runtime; colors are hardcoded per component.
 
 ## Env
 - `DATABASE_URL` — Neon PostgreSQL connection string, set in `.env.local` locally and in Vercel environment variables for production
@@ -91,7 +132,6 @@ Three categories, shown as colored badges in quiz, drill, and question bank:
 - `npm run dump` — dumps all data (sections, questions, choices) as nested JSON to `dumps/dump_YYYY-MM-DD.json`
   - Reads `DATABASE_URL` from `.env.local`
   - Script lives at `scripts/dump.sh`
-  - `dumps/` folder is for local use only — not an API endpoint
 - `npm run docs` — generates `docs/questions_YYYY-MM-DD.docx` (questions + options only)
 - `npm run docs -- --answers` — same but includes correct answers highlighted in green
   - Script lives at `scripts/generate-docs.mjs`, reads from today's dump file

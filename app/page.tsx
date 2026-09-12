@@ -1,11 +1,66 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import type { Module } from '@/lib/types';
 import { useMobile } from '@/lib/useMobile';
+
+function daysUntil(dateStr: string): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const target = new Date(dateStr);
+  target.setHours(0, 0, 0, 0);
+  return Math.round((target.getTime() - today.getTime()) / 86400000);
+}
+
+function ExamBadge({ examDate }: { examDate: string }) {
+  const days = daysUntil(examDate);
+  const date = new Date(examDate).toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' });
+
+  if (days < 0) {
+    return (
+      <span style={{ fontSize: 11, fontWeight: 700, color: '#7d7979' }}>
+        Ujian: {date} · Selesai
+      </span>
+    );
+  }
+  if (days === 0) {
+    return (
+      <span style={{ fontSize: 11, fontWeight: 700, color: '#b91c1c' }}>
+        Ujian: Hari ini
+      </span>
+    );
+  }
+  return (
+    <span style={{ fontSize: 11, fontWeight: 700, color: days <= 3 ? '#b91c1c' : '#605d5d' }}>
+      Ujian: {date} · {days} hari lagi
+    </span>
+  );
+}
 
 export default function Home() {
   const isMobile = useMobile();
   const px = isMobile ? 20 : 32;
+  const [modules, setModules] = useState<Module[]>([]);
+
+  useEffect(() => {
+    fetch('/api/modules')
+      .then((r) => r.json())
+      .then(setModules)
+      .catch(() => {});
+  }, []);
+
+  const btnBase: React.CSSProperties = {
+    padding: '8px 16px',
+    fontSize: 13,
+    fontWeight: 700,
+    borderRadius: 0,
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    border: 'none',
+    textDecoration: 'none',
+    display: 'inline-block',
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#f3f2f2', fontFamily: 'inherit' }}>
@@ -18,81 +73,81 @@ export default function Home() {
       </div>
 
       {/* Body */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '40px 20px' : '60px 32px' }}>
-        {/* Hero text */}
-        <div style={{ textAlign: 'center', marginBottom: isMobile ? 36 : 52, maxWidth: 480, width: '100%' }}>
-          <div style={{ fontSize: isMobile ? 26 : 32, fontWeight: 800, lineHeight: 1.2, marginBottom: 12 }}>
-            PCAM 9 OJK
+      <div style={{ flex: 1, padding: isMobile ? '32px 20px 48px' : '48px 32px 64px', maxWidth: 960, width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
+
+        {/* Module cards */}
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7d7979', marginBottom: 16 }}>
+            Modul Ujian
           </div>
-          <div style={{ fontSize: isMobile ? 14 : 15, color: '#605d5d', lineHeight: 1.6 }}>
-            Exam practice platform covering Accounting, Risk Based Audit, and Data Analytics.
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 12 }}>
+            {modules.length === 0 ? [1, 2, 3, 4].map((n) => (
+              <div key={n} style={{ background: '#eae9e9', border: '2px solid rgba(32,30,29,0.1)', padding: '24px 28px', height: 160 }} />
+            )) : modules.map((m) => {
+              const hasQuestions = m.question_count > 0;
+              return (
+                <div key={m.id} style={{ background: '#fff', border: '2px solid rgba(32,30,29,0.2)', padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 0 }}>
+                  {/* Module number chip */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#2F6FED', background: '#eaf1fd', padding: '3px 8px' }}>
+                      Modul {m.number}
+                    </span>
+                    <ExamBadge examDate={m.exam_date} />
+                  </div>
+
+                  {/* Title */}
+                  <div style={{ fontSize: isMobile ? 16 : 18, fontWeight: 800, lineHeight: 1.3, marginBottom: 8 }}>
+                    {m.title}
+                  </div>
+
+                  {/* Stats */}
+                  <div style={{ fontSize: 12.5, color: '#7d7979', marginBottom: 20 }}>
+                    {hasQuestions
+                      ? `${m.section_count} section · ${m.question_count} soal tersedia`
+                      : 'Belum ada soal'}
+                  </div>
+
+                  {/* Action buttons */}
+                  <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
+                    {hasQuestions ? (
+                      <>
+                        <Link
+                          href={`/quiz?module=${m.number}`}
+                          style={{ ...btnBase, background: '#2F6FED', color: '#fff', flex: 1, textAlign: 'center' }}
+                        >
+                          Quiz
+                        </Link>
+                        <Link
+                          href={`/drill?module=${m.number}`}
+                          style={{ ...btnBase, background: 'transparent', color: '#201e1d', border: '1.5px solid rgba(32,30,29,0.35)', flex: 1, textAlign: 'center' }}
+                        >
+                          Drill
+                        </Link>
+                      </>
+                    ) : (
+                      <span style={{ fontSize: 12.5, color: '#b0adad', fontStyle: 'italic' }}>Soal belum tersedia</span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
+
         </div>
 
-        {/* Cards */}
-        <div style={{ display: 'flex', gap: 16, flexDirection: isMobile ? 'column' : 'row', width: '100%', maxWidth: isMobile ? 480 : 1060 }}>
-          {/* Quiz Practice */}
-          <Link href="/quiz" style={{ textDecoration: 'none', flex: 1 }}>
-            <div style={{ background: '#2F6FED', color: '#fff', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid #2F6FED', cursor: 'pointer', boxSizing: 'border-box', height: '100%' }}>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.75, marginBottom: 12 }}>
-                Module 1
-              </div>
-              <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 10 }}>Quiz Practice</div>
-              <div style={{ fontSize: 13.5, lineHeight: 1.6, opacity: 0.85 }}>
-                Take a mock exam. Answer questions one by one, flag for review, and get a scored result with answer key.
-              </div>
-              <div style={{ marginTop: 24, fontSize: 13, fontWeight: 700, opacity: 0.9 }}>
-                Start quiz →
-              </div>
-            </div>
-          </Link>
+        {/* Divider */}
+        <div style={{ borderTop: '1px solid rgba(32,30,29,0.15)', margin: '32px 0 28px' }} />
 
-          {/* Section Drill */}
-          <Link href="/drill" style={{ textDecoration: 'none', flex: 1 }}>
-            <div style={{ background: '#fff', color: '#201e1d', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid rgba(32,30,29,0.4)', cursor: 'pointer', boxSizing: 'border-box', height: '100%' }}>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7d7979', marginBottom: 12 }}>
-                Module 2
-              </div>
-              <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 10 }}>Section Drill</div>
-              <div style={{ fontSize: 13.5, lineHeight: 1.6, color: '#605d5d' }}>
-                Focus on one section at a time. Choose how many questions to practice and get instant feedback.
-              </div>
-              <div style={{ marginTop: 24, fontSize: 13, fontWeight: 700, color: '#1d4ed8' }}>
-                Start drill →
-              </div>
-            </div>
+        {/* Utility row */}
+        <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7d7979', marginBottom: 14 }}>
+          Tools
+        </div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <Link href="/bank" style={{ ...btnBase, background: '#fff', color: '#201e1d', border: '1.5px solid rgba(32,30,29,0.35)', padding: '10px 20px' }}>
+            Question Bank
           </Link>
-
-          {/* Question Bank */}
-          <Link href="/bank" style={{ textDecoration: 'none', flex: 1 }}>
-            <div style={{ background: '#fff', color: '#201e1d', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid rgba(32,30,29,0.4)', cursor: 'pointer', boxSizing: 'border-box', height: '100%' }}>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7d7979', marginBottom: 12 }}>
-                Module 3
-              </div>
-              <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 10 }}>Question Bank</div>
-              <div style={{ fontSize: 13.5, lineHeight: 1.6, color: '#605d5d' }}>
-                Browse the full question repository with correct answers shown. Filter by section or by source.
-              </div>
-              <div style={{ marginTop: 24, fontSize: 13, fontWeight: 700, color: '#1d4ed8' }}>
-                Browse questions →
-              </div>
-            </div>
-          </Link>
-
-          {/* Exam Simulation */}
-          <Link href="/simulation" style={{ textDecoration: 'none', flex: 1 }}>
-            <div style={{ background: '#201e1d', color: '#fff', padding: isMobile ? '28px 24px' : '36px 32px', border: '2px solid #201e1d', cursor: 'pointer', boxSizing: 'border-box', height: '100%' }}>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.6, marginBottom: 12 }}>
-                Module 4
-              </div>
-              <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 10 }}>Exam Simulation</div>
-              <div style={{ fontSize: 13.5, lineHeight: 1.6, opacity: 0.75 }}>
-                Full-length timed simulation. Multi-part format mirroring the real exam. Unlock each part sequentially.
-              </div>
-              <div style={{ marginTop: 24, fontSize: 13, fontWeight: 700, opacity: 0.9 }}>
-                Start simulation →
-              </div>
-            </div>
+          <Link href="/simulation" style={{ ...btnBase, background: '#201e1d', color: '#fff', padding: '10px 20px' }}>
+            Exam Simulation
           </Link>
         </div>
       </div>

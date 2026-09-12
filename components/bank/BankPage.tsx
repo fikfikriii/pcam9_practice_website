@@ -2,16 +2,24 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import type { Section } from '@/lib/types';
+import type { Section, QuestionSource } from '@/lib/types';
 import { useMobile } from '@/lib/useMobile';
 
 export default function BankPage() {
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<'all' | number>('all');
-  const [sourceFilter, setSourceFilter] = useState<'all' | 'original' | 'additional' | 'references'>('all');
+  const [sourceFilter, setSourceFilter] = useState<'all' | string>('all');
+  const [questionSources, setQuestionSources] = useState<QuestionSource[]>([]);
   const isMobile = useMobile();
   const px = isMobile ? 16 : 32;
+
+  useEffect(() => {
+    fetch('/api/question-sources')
+      .then((r) => r.json())
+      .then((data: QuestionSource[]) => setQuestionSources(data))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     fetch('/api/bank')
@@ -52,13 +60,6 @@ export default function BankPage() {
     border: '1px solid #2F6FED',
   };
 
-  const srcTabActive = (color: string): React.CSSProperties => ({
-    ...tabBase,
-    background: color,
-    color: '#fff',
-    border: `1px solid ${color}`,
-  });
-
   if (loading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: 'inherit' }}>
@@ -98,27 +99,24 @@ export default function BankPage() {
       </div>
 
       {/* Source filter row */}
-      <div style={{ padding: `10px ${px}px`, borderBottom: '1px solid rgba(32,30,29,0.15)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+      <div style={{ padding: `10px ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: '#7d7979', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Source</span>
         <button onClick={() => setSourceFilter('all')} style={sourceFilter === 'all' ? { ...tabBase, background: '#444141', color: '#fff', border: '1px solid #444141' } : tabBase}>All</button>
-        <button onClick={() => setSourceFilter('original')} style={sourceFilter === 'original' ? srcTabActive('#15803d') : tabBase}>Original</button>
-        <button onClick={() => setSourceFilter('additional')} style={sourceFilter === 'additional' ? srcTabActive('#2F6FED') : tabBase}>Additional</button>
-        <button onClick={() => setSourceFilter('references')} style={sourceFilter === 'references' ? srcTabActive('#6d28d9') : tabBase}>References</button>
-      </div>
-
-      {/* Source legend */}
-      <div style={{ padding: `10px ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: '#7d7979', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Legend</span>
-        {[
-          { label: 'Original', color: '#15803d', bg: '#eafaf1', desc: 'Latihan soal, quiz, & PCS 8 quiz' },
-          { label: 'Additional', color: '#2F6FED', bg: '#eaf1fd', desc: 'AI-generated questions' },
-          { label: 'References', color: '#6d28d9', bg: '#f5f3ff', desc: "Last year's exam" },
-        ].map(({ label, color, bg, desc }) => (
-          <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '2px 7px', border: `1px solid ${color}`, color, background: bg }}>{label}</span>
-            <span style={{ fontSize: 11.5, color: '#605d5d' }}>{desc}</span>
-          </div>
-        ))}
+        {questionSources.map((s) => {
+          const { color } = SOURCE_COLORS[s.id] ?? { color: '#374151' };
+          const isActive = sourceFilter === s.id;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setSourceFilter(s.id)}
+              style={isActive
+                ? { ...tabBase, background: color, color: '#fff', border: `1px solid ${color}` }
+                : { ...tabBase, color, border: `1px solid ${color}` }}
+            >
+              {s.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* Body */}
@@ -144,7 +142,7 @@ export default function BankPage() {
                 <div key={q.id} style={{ padding: '16px 0', borderBottom: '1px solid rgba(32,30,29,0.15)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                     <span style={{ fontSize: 11, color: '#7d7979' }}>Question {qIdx + 1}</span>
-                    <SourceBadge source={q.source} />
+                    <SourceBadge source={q.source} sources={questionSources} />
                   </div>
                   <div style={{ fontSize: isMobile ? 14.5 : 16, fontWeight: 600, lineHeight: 1.45, marginBottom: 12 }}>{q.text}</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -172,13 +170,16 @@ export default function BankPage() {
   );
 }
 
-function SourceBadge({ source }: { source: 'original' | 'additional' | 'references' }) {
-  const map = {
-    original:   { label: 'Original',   color: '#15803d', bg: '#eafaf1' },
-    additional: { label: 'Additional', color: '#2F6FED', bg: '#eaf1fd' },
-    references: { label: 'References', color: '#6d28d9', bg: '#f5f3ff' },
-  };
-  const { label, color, bg } = map[source] ?? map.additional;
+const SOURCE_COLORS: Record<string, { color: string; bg: string }> = {
+  original:   { color: '#15803d', bg: '#eafaf1' },
+  additional: { color: '#2F6FED', bg: '#eaf1fd' },
+  pcs8:       { color: '#6d28d9', bg: '#f5f3ff' },
+  pcs7:       { color: '#b45309', bg: '#fffbeb' },
+};
+
+function SourceBadge({ source, sources }: { source: string; sources: QuestionSource[] }) {
+  const label = sources.find((s) => s.id === source)?.label ?? source;
+  const { color, bg } = SOURCE_COLORS[source] ?? { color: '#374151', bg: '#f3f4f6' };
   return (
     <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '2px 7px', border: `1px solid ${color}`, color, background: bg }}>
       {label}

@@ -1,23 +1,58 @@
-# PCAM 9 OJK — Quiz Practice & Question Bank
+# PCAM 9 OJK — Exam Practice Platform
 
-An internal exam-practice platform for the PCAM 9 (OJK) certification, covering Accounting, Financial Statement Analysis, Risk Based Audit, and Data Analytics.
+Internal practice platform for the PCAM 9 (OJK) certification. Questions are organized by exam module and section category.
 
-## Modules
+## Pages
 
-| Module | Path | Description |
+| Path | Description |
+|---|---|
+| `/` | Landing page — module cards with exam dates, links to Quiz and Drill per module |
+| `/quiz` | Mock exam: all sections in a module, one question per screen, flag-for-review, scored results |
+| `/drill` | Focused practice: pick sections by category and source filter, configurable question count |
+| `/bank` | Question bank: read-only, filterable by section and source, correct answers shown |
+| `/simulation` | Full exam simulation: multi-part, sequential locking, drawn randomly from section pools |
+| `/admin` | CRUD panel for sections, questions, and choices (accessible via URL only) |
+
+## Exam Modules
+
+| Module | Title | Exam Date |
 |---|---|---|
-| Module 1 — Quiz Practice | `/quiz` | Mock exam: one question per screen, sidebar navigation, flag-for-review, autosave, review/submit, scored results |
-| Module 2 — Section Drill | `/drill` | Focused practice: pick one section + question count (5–max), answer one by one, get scored results |
-| Module 3 — Question Bank | `/bank` | Read-only reference of all questions, filterable by section and source, with correct answers shown |
-| Admin Panel | `/admin` | CRUD for sections, questions, and choices |
-| Landing page | `/` | Module selection cards |
+| 1 | Pendekatan Pengawasan | 2026-09-16 |
+| 2 | Kelembagaan, Struktur, Produk & Aktivitas SJK | 2026-09-18 |
+| 3 | Manajemen Risiko | 2026-09-22 |
+| 4 | Materi Pendukung Pengawasan | 2026-09-25 |
+
+## Section Categories (Module 1)
+
+Sections within a module are grouped by category in the Drill setup:
+
+| Category | Sections |
+|---|---|
+| Perbankan | Aplikasi Perbankan, Pengawasan Bank Berbasis Risiko |
+| Pasar Modal | Pengawasan SRO Pasar Modal |
+| Inklusi | Inklusi Keuangan |
+| IAKD | IAKD (Inovasi Aset Keuangan Digital) |
+| IKNB | Layanan Urun Dana |
+| Syariah | — |
+
+## Question Sources
+
+Every question is tagged with a source, shown as a colored badge:
+
+| ID | Label | Color |
+|---|---|---|
+| `original` | Original | Green |
+| `additional` | AI | Blue |
+| `pcs7` | PCS7 | Amber |
+| `pcs8` | PCS8 | Purple |
 
 ## Tech Stack
 
 - **Framework**: Next.js 15 (App Router) — deployed on Vercel
-- **Database**: PostgreSQL via [Neon](https://neon.tech) (free tier)
+- **Database**: PostgreSQL via [Neon](https://neon.tech)
 - **DB client**: `@neondatabase/serverless` — raw SQL, no ORM
 - **Styling**: Tailwind CSS v3 + inline styles for design token precision
+- **Font**: Archivo 400/600/800
 
 ## Getting Started
 
@@ -41,35 +76,32 @@ Get the connection string from your [Neon dashboard](https://neon.tech).
 
 ### 3. Run the database migration
 
-Paste `migration.sql` into the Neon SQL editor, or run:
-
 ```bash
 export $(grep DATABASE_URL .env.local | xargs) && psql $DATABASE_URL -f migration.sql
 ```
 
-The migration is idempotent — safe to run multiple times. On first run it:
-- Creates the `sections`, `questions`, and `choices` tables
-- Seeds 130 questions across 3 sections (115 original + 15 AI-generated)
+The migration is idempotent — safe to run multiple times. It creates all tables, seeds the base question set, sets up exam modules, section categories, and simulation config.
 
-### 3a. Apply incremental seed files (optional)
+### 4. Apply incremental seed files
 
-Additional question batches live in `seeds/`. Run them manually after the migration, in order:
+Additional question batches live in `seeds/`. Run them once per database after the migration:
 
 ```bash
 export $(grep DATABASE_URL .env.local | xargs)
-
 psql $DATABASE_URL -f seeds/seed_new_questions.sql
+psql $DATABASE_URL -f seeds/seed_laporan_keuangan.sql
 psql $DATABASE_URL -f seeds/seed_data_analytics.sql
+psql $DATABASE_URL -f seeds/seed_iakd_pcs7.sql
+psql $DATABASE_URL -f seeds/seed_pbkn.sql
+psql $DATABASE_URL -f seeds/seed_ppdp.sql
+psql $DATABASE_URL -f seeds/seed_ppdp_pcs7.sql
+psql $DATABASE_URL -f seeds/seed_kuis_sertifikasi.sql
+psql $DATABASE_URL -f seeds/seed_simulation_config.sql
 ```
 
-| File | Section | Questions | Source |
-|---|---|---|---|
-| `seed_new_questions.sql` | Existing sections | additional batch | AI-generated |
-| `seed_data_analytics.sql` | Data Analytics (new) | 10 | original (IAI class materials) |
+Each seed file is a one-time INSERT — not idempotent. Only run each file once per database.
 
-Each file is a one-time INSERT — not idempotent. Only run a seed file once per database.
-
-### 4. Run locally
+### 5. Run locally
 
 ```bash
 npm run dev
@@ -81,83 +113,41 @@ Open [http://localhost:3000](http://localhost:3000).
 
 | Command | Description |
 |---|---|
-| `npm run dump` | Dumps all data to `dumps/dump_YYYY-MM-DD.json` (reads `DATABASE_URL` from `.env.local`) |
+| `npm run positions` | Prints sections from DB: id, title, position, question count, is_active. Run before writing a new seed. |
+| `npm run dump` | Dumps all data to `dumps/dump_YYYY-MM-DD.json` |
 | `npm run docs` | Generates `docs/questions_YYYY-MM-DD.docx` — questions + options only |
-| `npm run docs -- --answers` | Generates `docs/questions_YYYY-MM-DD_with-answers.docx` — includes correct answers |
-
-## Question Bank Content
-
-| Section | Original | Additional (AI) | Total |
-|---|---|---|---|
-| Akuntansi | 32 | 5 | 37 |
-| Analisis Laporan Keuangan | 17 | 5 | 22 |
-| Risk Based Audit | 66 | 5 | 71 |
-| Data Analytics | 10 | 0 | 10 |
-| **Total** | **125** | **15** | **140** |
-
-**Source flag**: every question is tagged `original` (from class materials) or `additional` (AI-generated). The Question Bank shows a colored badge per question and a source filter row.
+| `npm run docs -- --answers` | Same but with correct answers highlighted |
 
 ## API Endpoints
 
 | Method | Path | Description |
 |---|---|---|
-| GET | `/api/quiz` | All sections + questions + choices for the quiz |
-| GET | `/api/bank` | All sections + questions + choices for the bank and drill |
+| GET | `/api/modules` | List of exam modules with section/question counts |
+| GET | `/api/question-sources` | List of question source types |
+| GET | `/api/section-categories` | List of section categories |
+| GET | `/api/quiz` | Sections + questions + choices for quiz (`?module=N`) |
+| GET | `/api/bank` | All sections + questions + choices for bank/drill (`?module=N`) |
 | GET / POST | `/api/sections` | List or create sections |
 | PUT / DELETE | `/api/sections/[id]` | Update or delete a section |
-| GET / POST | `/api/questions` | List by `?section_id=` or create (with choices) |
+| GET / POST | `/api/questions` | List by `?section_id=` or create with choices |
 | PUT / DELETE | `/api/questions/[id]` | Update or delete a question |
 | PUT / DELETE | `/api/choices/[id]` | Update or delete a choice |
+| GET | `/api/simulation` | List active simulation configs (with part metadata) |
+| GET | `/api/simulation/[id]` | Full config with pooled questions per part |
 
 ## Database Schema
 
-```mermaid
-erDiagram
-    sections {
-        int         id               PK
-        varchar     title            "NOT NULL"
-        int         position         "DEFAULT 0"
-        int         draw_per_session "DEFAULT 10"
-        timestamptz created_at
-        timestamptz updated_at
-    }
+Six core tables: `sections` → `questions` → `choices` (cascade deletes), plus `simulation_configs` → `simulation_parts` → `simulation_part_sections`.
 
-    questions {
-        int         id         PK
-        int         section_id FK
-        text        text       "NOT NULL"
-        int         position   "DEFAULT 0"
-        varchar     source     "original | additional"
-        timestamptz created_at
-        timestamptz updated_at
-    }
+Supporting tables: `modules`, `question_sources`, `section_categories`.
 
-    choices {
-        int         id          PK
-        int         question_id FK
-        text        text        "NOT NULL"
-        int         position    "DEFAULT 0"
-        boolean     is_correct  "DEFAULT false"
-        timestamptz created_at
-        timestamptz updated_at
-    }
-
-    sections  ||--o{ questions : "has many"
-    questions ||--o{ choices   : "has many"
-```
-
-**Rules:**
-- Deleting a section cascades to its questions; deleting a question cascades to its choices
-- Only one `is_correct = true` per question — enforced by `PUT /api/choices/[id]` which auto-deselects others
-- `position` controls display order and is freely reorderable (not auto-increment)
-- User answers are stored in `localStorage` (key `pcam9-ojk-quiz-progress-v1`), not in the database
-
-## Deployment (Vercel)
-
-1. Push this repo to GitHub
-2. Import the repo on [vercel.com](https://vercel.com)
-3. Add `DATABASE_URL` in **Settings → Environment Variables**
-4. Redeploy for the variable to take effect
+**Key rules:**
+- `sections.is_active` — if false, excluded from `/api/quiz` but visible in `/api/bank`
+- `sections.module_id` — assigns a section to an exam module
+- `sections.category_id` — groups sections by category within the Drill setup
+- `questions.source` — FK to `question_sources`; tagged badge in all views
+- `choices.is_correct` — only one true per question; `PUT /api/choices/[id]` auto-deselects others
+- User answers are in `localStorage`, not the database
 
 ## Design Tokens
 
@@ -175,6 +165,12 @@ erDiagram
 | Divider (structural) | `rgba(32,30,29,0.4)` | 2px borders |
 | Divider (hairline) | `rgba(32,30,29,0.15)` | 1px row separators |
 
-- **Font**: Archivo 400/600/800 via `next/font/google`
 - **Border-radius**: 0 everywhere except radio dots and flag badge (circles)
-- **Header height**: 68px · **Sidebar width**: 300px
+- **Header height**: 68px
+
+## Deployment
+
+1. Push to GitHub
+2. Import on [vercel.com](https://vercel.com)
+3. Add `DATABASE_URL` in **Settings → Environment Variables**
+4. Redeploy

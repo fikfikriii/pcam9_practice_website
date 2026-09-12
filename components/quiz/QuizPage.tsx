@@ -2,10 +2,10 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Section, Question } from '@/lib/types';
+import type { Section, Question, QuestionSource } from '@/lib/types';
 import { useMobile } from '@/lib/useMobile';
 
-const LS_KEY = 'pcam9-ojk-quiz-progress-v1';
+const BASE_LS_KEY = 'pcam9-ojk-quiz';
 
 type ViewState = 'quiz' | 'review' | 'submitted';
 
@@ -111,9 +111,10 @@ function SidebarContent({
   );
 }
 
-export default function QuizPage() {
+export default function QuizPage({ moduleId }: { moduleId: number | null }) {
   const router = useRouter();
   const isMobile = useMobile();
+  const LS_KEY = moduleId ? `${BASE_LS_KEY}-module-${moduleId}-v1` : `${BASE_LS_KEY}-progress-v1`;
   const [view, setView] = useState<ViewState>('quiz');
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
@@ -121,6 +122,7 @@ export default function QuizPage() {
   const [sections, setSections] = useState<Section[]>([]);
   const [drawnIds, setDrawnIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const [questionSources, setQuestionSources] = useState<QuestionSource[]>([]);
   const [hoveredOption, setHoveredOption] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -129,7 +131,14 @@ export default function QuizPage() {
   }, []);
 
   useEffect(() => {
-    fetch('/api/quiz')
+    fetch('/api/question-sources')
+      .then((r) => r.json())
+      .then((data: QuestionSource[]) => setQuestionSources(data))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch(moduleId ? `/api/quiz?module=${moduleId}` : '/api/quiz')
       .then((r) => r.json())
       .then((data: Section[]) => {
         setSections(data);
@@ -227,7 +236,7 @@ export default function QuizPage() {
         <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
             <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
-            {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>Results</span>}
+            {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Results` : 'Results'}</span>}
           </div>
           <button onClick={handleGoHome} style={{ ...btnOutline, color: '#1d4ed8', borderColor: '#1d4ed8' }}>Home</button>
         </div>
@@ -288,7 +297,7 @@ export default function QuizPage() {
         <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
             <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
-            {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>Summary before submit</span>}
+            {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Review` : 'Summary before submit'}</span>}
           </div>
           <button onClick={() => setView('quiz')} style={btnOutline}>Back</button>
         </div>
@@ -359,7 +368,7 @@ export default function QuizPage() {
       <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
           <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
-          {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>Class Assessment Practice</span>}
+          {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Quiz` : 'Quiz Practice'}</span>}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 20 }}>
           {/* Progress */}
@@ -435,7 +444,7 @@ export default function QuizPage() {
                       <span style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#1d4ed8' }}>
                         Question {current + 1} · {currentSection?.title}
                       </span>
-                      <QuizSourceBadge source={currentQuestion.source} />
+                      <QuizSourceBadge source={currentQuestion.source} sources={questionSources} />
                     </div>
                     <button
                       onClick={handleFlag}
@@ -493,13 +502,16 @@ export default function QuizPage() {
   );
 }
 
-function QuizSourceBadge({ source }: { source: 'original' | 'additional' | 'references' }) {
-  const map = {
-    original:   { label: 'Original',   color: '#15803d', bg: '#eafaf1' },
-    additional: { label: 'Additional', color: '#2F6FED', bg: '#eaf1fd' },
-    references: { label: 'References', color: '#6d28d9', bg: '#f5f3ff' },
-  };
-  const { label, color, bg } = map[source] ?? map.additional;
+const SOURCE_COLORS: Record<string, { color: string; bg: string }> = {
+  original:   { color: '#15803d', bg: '#eafaf1' },
+  additional: { color: '#2F6FED', bg: '#eaf1fd' },
+  pcs8:       { color: '#6d28d9', bg: '#f5f3ff' },
+  pcs7:       { color: '#b45309', bg: '#fffbeb' },
+};
+
+function QuizSourceBadge({ source, sources }: { source: string; sources: QuestionSource[] }) {
+  const label = sources.find((s) => s.id === source)?.label ?? source;
+  const { color, bg } = SOURCE_COLORS[source] ?? { color: '#374151', bg: '#f3f4f6' };
   return (
     <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '2px 7px', border: `1px solid ${color}`, color, background: bg }}>
       {label}

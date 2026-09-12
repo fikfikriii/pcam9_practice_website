@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Section, Question } from '@/lib/types';
+import type { Section, Question, QuestionSource, SectionCategory } from '@/lib/types';
 import { useMobile } from '@/lib/useMobile';
 
 const btnOutline: React.CSSProperties = {
@@ -19,16 +19,19 @@ const btnPrimary: React.CSSProperties = {
 
 type ViewState = 'setup' | 'drill' | 'submitted';
 
-export default function DrillPage() {
+export default function DrillPage({ moduleId }: { moduleId: number | null }) {
   const router = useRouter();
   const isMobile = useMobile();
   const px = isMobile ? 16 : 32;
 
   const [allSections, setAllSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
+  const [questionSources, setQuestionSources] = useState<QuestionSource[]>([]);
+  const [sectionCategories, setSectionCategories] = useState<SectionCategory[]>([]);
 
   // Setup state
-  const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null);
+  const [selectedSectionIds, setSelectedSectionIds] = useState<number[]>([]);
+  const [selectedSource, setSelectedSource] = useState<'all' | string>('all');
   const [questionCount, setQuestionCount] = useState(5);
 
   // Drill state
@@ -42,31 +45,53 @@ export default function DrillPage() {
   const [confirmingSubmit, setConfirmingSubmit] = useState(false);
 
   useEffect(() => {
-    fetch('/api/bank')
+    fetch('/api/question-sources')
+      .then((r) => r.json())
+      .then((data: QuestionSource[]) => setQuestionSources(data))
+      .catch(() => {});
+    fetch('/api/section-categories')
+      .then((r) => r.json())
+      .then((data: SectionCategory[]) => setSectionCategories(data))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch(moduleId ? `/api/bank?module=${moduleId}` : '/api/bank')
       .then((r) => r.json())
       .then((data: Section[]) => {
         const withQuestions = data.filter((s) => s.questions.length > 0);
         setAllSections(withQuestions);
-        if (withQuestions.length > 0) setSelectedSectionId(withQuestions[0].id);
+        setSelectedSectionIds(withQuestions.map((s) => s.id));
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
 
-  const selectedSection = allSections.find((s) => s.id === selectedSectionId) ?? null;
-  const maxCount = selectedSection ? selectedSection.questions.length : 5;
-  const clampedCount = Math.min(Math.max(questionCount, 5), maxCount);
+  const selectedSections = allSections.filter((s) => selectedSectionIds.includes(s.id));
+  const allQuestionsInSelection = selectedSections.flatMap((s) => s.questions);
+  const availableQuestions = selectedSource === 'all'
+    ? allQuestionsInSelection
+    : allQuestionsInSelection.filter((q) => q.source === selectedSource);
+  const sourcesInPool = questionSources.filter((s) => allQuestionsInSelection.some((q) => q.source === s.id));
+  const maxCount = availableQuestions.length;
+  const minCount = Math.min(5, maxCount);
+  const clampedCount = Math.min(Math.max(questionCount, minCount), maxCount);
 
-  function handleSectionChange(id: number) {
-    setSelectedSectionId(id);
-    const sec = allSections.find((s) => s.id === id);
-    const max = sec ? sec.questions.length : 5;
-    setQuestionCount(Math.min(questionCount, max));
+  function handleSectionToggle(id: number) {
+    setSelectedSectionIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+    setSelectedSource('all');
+  }
+
+  function handleSourceChange(source: 'all' | string) {
+    setSelectedSource(source);
+    const pool = selectedSections.flatMap((s) => s.questions);
+    const filtered = source === 'all' ? pool : pool.filter((q) => q.source === source);
+    setQuestionCount((prev) => Math.min(prev, Math.max(filtered.length, 1)));
   }
 
   function startDrill() {
-    if (!selectedSection) return;
-    const shuffled = [...selectedSection.questions].sort(() => Math.random() - 0.5);
+    if (availableQuestions.length === 0) return;
+    const shuffled = [...availableQuestions].sort(() => Math.random() - 0.5);
     const drawn = shuffled.slice(0, clampedCount);
     drawn.sort((a, b) => a.position - b.position);
     setDrillQuestions(drawn);
@@ -141,59 +166,166 @@ export default function DrillPage() {
         <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
             <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
-            {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>Section Drill</span>}
+            {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Drill` : 'Section Drill'}</span>}
           </div>
           <button onClick={() => router.push('/')} style={{ ...btnOutline, color: '#1d4ed8', borderColor: '#1d4ed8' }}>Home</button>
         </div>
 
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '40px 20px' : '60px 32px' }}>
-          <div style={{ width: '100%', maxWidth: 480 }}>
-            <div style={{ fontSize: isMobile ? 22 : 28, fontWeight: 800, marginBottom: 8 }}>Section Drill</div>
+        <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '40px 20px 60px' : '60px 32px 80px', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ width: '100%', maxWidth: 560 }}>
+            <div style={{ fontSize: isMobile ? 22 : 28, fontWeight: 800, marginBottom: 8 }}>{moduleId ? `Modul ${moduleId} — Drill` : 'Section Drill'}</div>
             <div style={{ fontSize: 14, color: '#605d5d', marginBottom: 36, lineHeight: 1.6 }}>
-              Pick a section and how many questions to practice. All questions are shown one by one.
+              Pick sections, source, and how many questions to practice.
             </div>
 
             {/* Section selector */}
             <div style={{ marginBottom: 24 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#7d7979', marginBottom: 8 }}>Section</div>
-              <select
-                value={selectedSectionId ?? ''}
-                onChange={(e) => handleSectionChange(Number(e.target.value))}
-                style={{ width: '100%', padding: '10px 12px', fontSize: 14, fontWeight: 600, border: '1.5px solid rgba(32,30,29,0.4)', background: '#fff', color: '#201e1d', fontFamily: 'inherit', borderRadius: 0, appearance: 'none', cursor: 'pointer', outline: 'none' }}
-              >
-                {allSections.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.title} ({s.questions.length} questions)
-                  </option>
-                ))}
-              </select>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#7d7979' }}>
+                  Sections <span style={{ color: '#2F6FED', fontWeight: 700 }}>{selectedSectionIds.length}/{allSections.length}</span>
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button
+                    onClick={() => { setSelectedSectionIds(allSections.map((s) => s.id)); setSelectedSource('all'); }}
+                    style={{ fontSize: 11.5, fontWeight: 600, color: '#2F6FED', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
+                  >All</button>
+                  <span style={{ color: '#d7d3d3', fontSize: 11.5 }}>|</span>
+                  <button
+                    onClick={() => { setSelectedSectionIds([]); setSelectedSource('all'); }}
+                    style={{ fontSize: 11.5, fontWeight: 600, color: '#7d7979', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
+                  >Clear</button>
+                </div>
+              </div>
+
+              {/* Grouped by category */}
+              {sectionCategories.map((cat) => {
+                const catSections = allSections.filter((s) => s.category_id === cat.id);
+                if (catSections.length === 0) return null;
+                const allCatSelected = catSections.every((s) => selectedSectionIds.includes(s.id));
+                return (
+                  <div key={cat.id} style={{ marginBottom: 14 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#444141' }}>{cat.label}</span>
+                      <button
+                        onClick={() => {
+                          const ids = catSections.map((s) => s.id);
+                          setSelectedSectionIds((prev) => allCatSelected
+                            ? prev.filter((x) => !ids.includes(x))
+                            : [...prev.filter((x) => !ids.includes(x)), ...ids]);
+                          setSelectedSource('all');
+                        }}
+                        style={{ fontSize: 11, fontWeight: 600, color: allCatSelected ? '#b91c1c' : '#2F6FED', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
+                      >{allCatSelected ? 'Deselect' : 'Select all'}</button>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                      {catSections.map((s) => {
+                        const isActive = selectedSectionIds.includes(s.id);
+                        return (
+                          <button
+                            key={s.id}
+                            onClick={() => handleSectionToggle(s.id)}
+                            style={{
+                              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                              padding: '9px 14px', fontSize: 13.5, fontWeight: 600, textAlign: 'left',
+                              border: isActive ? '1.5px solid #2F6FED' : '1.5px solid rgba(32,30,29,0.25)',
+                              background: isActive ? '#eaf1fd' : '#fff',
+                              color: isActive ? '#1d4ed8' : '#444141',
+                              borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', width: '100%', gap: 12,
+                            }}
+                          >
+                            <span style={{ flex: 1, textAlign: 'left' }}>{s.title}</span>
+                            <span style={{ fontSize: 11.5, fontWeight: 700, color: isActive ? '#2F6FED' : '#7d7979', whiteSpace: 'nowrap' }}>
+                              {s.questions.length} soal
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Uncategorized sections (fallback) */}
+              {allSections.filter((s) => !s.category_id).map((s) => {
+                const isActive = selectedSectionIds.includes(s.id);
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => handleSectionToggle(s.id)}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '9px 14px', fontSize: 13.5, fontWeight: 600, textAlign: 'left',
+                      border: isActive ? '1.5px solid #2F6FED' : '1.5px solid rgba(32,30,29,0.25)',
+                      background: isActive ? '#eaf1fd' : '#fff',
+                      color: isActive ? '#1d4ed8' : '#444141',
+                      borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', width: '100%', gap: 12, marginBottom: 5,
+                    }}
+                  >
+                    <span style={{ flex: 1, textAlign: 'left' }}>{s.title}</span>
+                    <span style={{ fontSize: 11.5, fontWeight: 700, color: isActive ? '#2F6FED' : '#7d7979', whiteSpace: 'nowrap' }}>
+                      {s.questions.length} soal
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+
+            {/* Source filter */}
+            {sourcesInPool.length > 0 && (
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#7d7979', marginBottom: 8 }}>Source</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {(['all', ...sourcesInPool.map((s) => s.id)] as string[]).map((id) => {
+                    const label = id === 'all' ? 'All' : (questionSources.find((s) => s.id === id)?.label ?? id);
+                    const { color } = SOURCE_COLORS[id] ?? { color: '#374151' };
+                    const isActive = selectedSource === id;
+                    const activeStyle: React.CSSProperties = id === 'all'
+                      ? { background: '#444141', color: '#fff', border: '1.5px solid #444141' }
+                      : { background: color, color: '#fff', border: `1.5px solid ${color}` };
+                    const baseStyle: React.CSSProperties = { padding: '7px 14px', fontSize: 13, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', border: '1.5px solid rgba(32,30,29,0.4)', background: 'transparent', color: '#201e1d' };
+                    return (
+                      <button key={id} onClick={() => handleSourceChange(id)} style={isActive ? { ...baseStyle, ...activeStyle } : baseStyle}>
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Question count */}
             <div style={{ marginBottom: 36 }}>
               <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#7d7979', marginBottom: 8 }}>
-                Number of questions — <span style={{ color: '#2F6FED' }}>{clampedCount}</span>
+                Number of questions — <span style={{ color: '#2F6FED' }}>{availableQuestions.length === 0 ? 0 : clampedCount}</span>
               </div>
-              <input
-                type="range"
-                min={5}
-                max={maxCount}
-                value={clampedCount}
-                onChange={(e) => setQuestionCount(Number(e.target.value))}
-                style={{ width: '100%', accentColor: '#2F6FED', cursor: 'pointer' }}
-              />
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
-                <span style={{ fontSize: 12, color: '#7d7979' }}>5</span>
-                <span style={{ fontSize: 12, color: '#7d7979' }}>{maxCount}</span>
-              </div>
+              {maxCount > minCount ? (
+                <>
+                  <input
+                    type="range"
+                    min={minCount}
+                    max={maxCount}
+                    value={clampedCount}
+                    onChange={(e) => setQuestionCount(Number(e.target.value))}
+                    style={{ width: '100%', accentColor: '#2F6FED', cursor: 'pointer' }}
+                  />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+                    <span style={{ fontSize: 12, color: '#7d7979' }}>{minCount}</span>
+                    <span style={{ fontSize: 12, color: '#7d7979' }}>{maxCount}</span>
+                  </div>
+                </>
+              ) : maxCount > 0 ? (
+                <div style={{ fontSize: 13, color: '#605d5d' }}>{maxCount} question{maxCount !== 1 ? 's' : ''} available</div>
+              ) : null}
             </div>
 
             <button
               onClick={startDrill}
-              disabled={!selectedSection}
-              style={{ ...btnPrimary, width: '100%', padding: '12px 16px', fontSize: 14, opacity: selectedSection ? 1 : 0.5, cursor: selectedSection ? 'pointer' : 'not-allowed' }}
+              disabled={availableQuestions.length === 0}
+              style={{ ...btnPrimary, width: '100%', padding: '12px 16px', fontSize: 14, opacity: availableQuestions.length > 0 ? 1 : 0.5, cursor: availableQuestions.length > 0 ? 'pointer' : 'not-allowed' }}
             >
-              Start Drill — {clampedCount} questions
+              {availableQuestions.length === 0
+                ? 'Select at least one section'
+                : `Start Drill — ${clampedCount} question${clampedCount !== 1 ? 's' : ''}`}
             </button>
           </div>
         </div>
@@ -208,7 +340,7 @@ export default function DrillPage() {
         <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
             <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
-            {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>Drill Results</span>}
+            {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Results` : 'Drill Results'}</span>}
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <button onClick={handleRestart} style={btnOutline}>New Drill</button>
@@ -313,7 +445,7 @@ export default function DrillPage() {
       <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
           <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM 9 OJK</span>
-          {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>Section Drill</span>}
+          {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Drill` : 'Section Drill'}</span>}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 20 }}>
           {isMobile ? (
@@ -384,7 +516,7 @@ export default function DrillPage() {
                       <span style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#1d4ed8' }}>
                         Question {current + 1} of {total}
                       </span>
-                      <DrillSourceBadge source={currentQuestion.source} />
+                      <DrillSourceBadge source={currentQuestion.source} sources={questionSources} />
                     </div>
                     <button
                       onClick={handleFlag}
@@ -440,13 +572,16 @@ export default function DrillPage() {
   );
 }
 
-function DrillSourceBadge({ source }: { source: 'original' | 'additional' | 'references' }) {
-  const map = {
-    original:   { label: 'Original',   color: '#15803d', bg: '#eafaf1' },
-    additional: { label: 'Additional', color: '#2F6FED', bg: '#eaf1fd' },
-    references: { label: 'References', color: '#6d28d9', bg: '#f5f3ff' },
-  };
-  const { label, color, bg } = map[source] ?? map.additional;
+const SOURCE_COLORS: Record<string, { color: string; bg: string }> = {
+  original:   { color: '#15803d', bg: '#eafaf1' },
+  additional: { color: '#2F6FED', bg: '#eaf1fd' },
+  pcs8:       { color: '#6d28d9', bg: '#f5f3ff' },
+  pcs7:       { color: '#b45309', bg: '#fffbeb' },
+};
+
+function DrillSourceBadge({ source, sources }: { source: string; sources: QuestionSource[] }) {
+  const label = sources.find((s) => s.id === source)?.label ?? source;
+  const { color, bg } = SOURCE_COLORS[source] ?? { color: '#374151', bg: '#f3f4f6' };
   return (
     <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', padding: '2px 7px', border: `1px solid ${color}`, color, background: bg }}>
       {label}

@@ -29,6 +29,64 @@ CREATE TABLE IF NOT EXISTS choices (
 ALTER TABLE questions ADD COLUMN IF NOT EXISTS source VARCHAR(20) NOT NULL DEFAULT 'original';
 ALTER TABLE sections ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
 
+-- Master table for question sources
+CREATE TABLE IF NOT EXISTS question_sources (
+  id    VARCHAR(20) PRIMARY KEY,
+  label TEXT        NOT NULL
+);
+INSERT INTO question_sources (id, label) VALUES
+  ('original',   'Kuis'),
+  ('additional', 'AI'),
+  ('pcs7',       'PCS 7'),
+  ('pcs8',       'PCS 8')
+ON CONFLICT (id) DO NOTHING;
+ALTER TABLE questions
+  ADD CONSTRAINT IF NOT EXISTS questions_source_fkey
+  FOREIGN KEY (source) REFERENCES question_sources(id);
+
+-- Exam modules
+CREATE TABLE IF NOT EXISTS modules (
+  id        SERIAL PRIMARY KEY,
+  number    INTEGER NOT NULL UNIQUE,
+  title     TEXT NOT NULL,
+  exam_date DATE
+);
+INSERT INTO modules (number, title, exam_date) VALUES
+  (1, 'Pendekatan Pengawasan',                        '2026-09-16'),
+  (2, 'Kelembagaan, Struktur, Produk & Aktivitas SJK', '2026-09-18'),
+  (3, 'Manajemen Risiko',                              '2026-09-22'),
+  (4, 'Materi Pendukung Pengawasan',                   '2026-09-25')
+ON CONFLICT (number) DO NOTHING;
+ALTER TABLE sections ADD COLUMN IF NOT EXISTS module_id INTEGER REFERENCES modules(id);
+
+-- Assign sections to modules (idempotent)
+UPDATE sections SET module_id = (SELECT id FROM modules WHERE number = 1)
+  WHERE title IN ('Aplikasi Perbankan', 'Inklusi Keuangan', 'Pengawasan SRO Pasar Modal', 'Pengawasan Bank Berbasis Risiko', 'Layanan Urun Dana', 'IAKD')
+  AND module_id IS DISTINCT FROM (SELECT id FROM modules WHERE number = 1);
+
+-- Section categories
+CREATE TABLE IF NOT EXISTS section_categories (
+  id    TEXT PRIMARY KEY,
+  label TEXT NOT NULL
+);
+INSERT INTO section_categories (id, label) VALUES
+  ('perbankan',   'Perbankan'),
+  ('pasar_modal', 'Pasar Modal'),
+  ('inklusi',     'Inklusi'),
+  ('iakd',        'IAKD'),
+  ('syariah',     'Syariah'),
+  ('ppdp',        'PPDP'),
+  ('pvml',        'PVML')
+ON CONFLICT (id) DO NOTHING;
+ALTER TABLE sections ADD COLUMN IF NOT EXISTS category_id TEXT REFERENCES section_categories(id);
+
+-- Assign categories to sections (idempotent)
+UPDATE sections SET category_id = 'perbankan'   WHERE title IN ('Aplikasi Perbankan', 'Pengawasan Bank Berbasis Risiko') AND category_id IS DISTINCT FROM 'perbankan';
+UPDATE sections SET category_id = 'pasar_modal' WHERE title = 'Pengawasan SRO Pasar Modal' AND category_id IS DISTINCT FROM 'pasar_modal';
+UPDATE sections SET category_id = 'inklusi'     WHERE title = 'Inklusi Keuangan' AND category_id IS DISTINCT FROM 'inklusi';
+UPDATE sections SET category_id = 'iakd'        WHERE title = 'IAKD' AND category_id IS DISTINCT FROM 'iakd';
+-- (IKNB category removed; Layanan Urun Dana left uncategorized)
+
 DO $$
 DECLARE
   s1 INTEGER; s2 INTEGER; s3 INTEGER;
