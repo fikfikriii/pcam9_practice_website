@@ -55,7 +55,7 @@ Every question is tagged with a source, shown as a colored badge:
 - **DB client**: `@neondatabase/serverless` — raw SQL, no ORM
 - **Styling**: Tailwind CSS v3 + inline styles for design token precision
 - **Font**: Archivo 400/600/800
-- **Favicon**: `app/icon.png` (auto-picked up by Next.js App Router)
+- **Favicon**: `app/icon_clean.png` (auto-picked up by Next.js App Router)
 
 ## Getting Started
 

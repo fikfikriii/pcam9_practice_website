@@ -1,8 +1,11 @@
 -- seed_ujian_perbankan_pcs8.sql
--- Source: Ujian Perbankan (lms.ojk.go.id — learnojk, PCS 8 exam attempt 216987)
--- Section: Ujian Perbankan | Source: pcs8 | Category: perbankan | Module: 1
--- 69 questions with confirmed correct answers (Mark 1.00 out of 1.00)
--- Questions with Mark 0.00 (correct answer not shown in review) are excluded.
+-- Source: Perbankan (lms.ojk.go.id — learnojk, PCS 8 exam attempt 216987)
+-- Section: Perbankan | Source: pcs8 | Category: perbankan | Module: 1
+-- 100 questions total:
+--   69 × Mark 1.00 (confirmed correct from LMS)
+--   31 × Mark 0.00 (correct answer not shown; answered with best judgment)
+-- To re-run on a DB that already has the 69-question version: existing questions
+-- are deleted and all 100 are re-inserted.
 
 DO $$
 DECLARE
@@ -12,22 +15,21 @@ DECLARE
   pos     INTEGER := 0;
 BEGIN
   -- Insert section (idempotent)
-  SELECT id INTO sec_id FROM sections WHERE title = 'Ujian Perbankan';
+  SELECT id INTO sec_id FROM sections WHERE title = 'Perbankan';
 
   IF sec_id IS NULL THEN
     SELECT COALESCE(MAX(position), 0) + 1 INTO sec_pos FROM sections;
     INSERT INTO sections (title, position, draw_per_session, module_id, category_id)
-    VALUES ('Ujian Perbankan', sec_pos, 20, 1, 'perbankan')
+    VALUES ('Perbankan', sec_pos, 20, 1, 'perbankan')
     RETURNING id INTO sec_id;
   END IF;
 
-  SELECT COALESCE(MAX(position), 0) INTO pos FROM questions WHERE section_id = sec_id;
+  -- Clear existing questions (handles re-run after 69-question version)
+  DELETE FROM questions WHERE section_id = sec_id;
 
   -- =========================================================================
-  -- Questions (69 total, all Mark 1.00 confirmed)
+  -- Q1 — Mark 1.00
   -- =========================================================================
-
-  -- Q1
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -40,7 +42,9 @@ BEGIN
     (q_id, 'Nasabah berkewajiban membayar hutangnya berupa harga jual yang terdiri dari pokok + margin meskipun dilakukan pembayaran dipercepat', FALSE),
     (q_id, 'Nasabah berkewajiban hanya melunasi sebesar pokok pembiayaan kepada bank apabila dilakukan pelunasan dipercepat', TRUE);
 
-  -- Q2
+  -- =========================================================================
+  -- Q2 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -53,7 +57,9 @@ BEGIN
     (q_id, 'UU Nomor 11 tahun 2008', FALSE),
     (q_id, 'UU Nomor 21 tahun 2008', TRUE);
 
-  -- Q3
+  -- =========================================================================
+  -- Q3 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -66,7 +72,9 @@ BEGIN
     (q_id, 'Jangka waktu tidak ditentukan', FALSE),
     (q_id, 'Bunga yang dapat dinegosiasikan', FALSE);
 
-  -- Q4
+  -- =========================================================================
+  -- Q4 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -79,7 +87,69 @@ BEGIN
     (q_id, 'Pemindahan alamat Kantor di Luar Negeri dalam kota yang sama memerlukan izin DIMB/OJK', TRUE),
     (q_id, 'Pemindahan alamat KP yang mengakibatkan perubahan tempat kedudukan dalam anggaran dasar memerlukan izin DIMB/OJK', FALSE);
 
-  -- Q9
+  -- =========================================================================
+  -- Q5 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Setelah menjalankan fungsinya, Bank Perantara akan:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Dilikuidasi sepenuhnya oleh BI', FALSE),
+    (q_id, 'Dilebur dengan bank sistemik', FALSE),
+    (q_id, 'Dibubarkan oleh OJK', FALSE),
+    (q_id, 'Dialihkan kepemilikannya kepada pihak lain', TRUE);
+
+  -- =========================================================================
+  -- Q6 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Komponen Know Your BPR/BPRS (KYBPR/BPRS):',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Bisnis Utama dan Infrastruktur Pendukung', TRUE),
+    (q_id, 'Kelembagaan dan Organisasi', FALSE),
+    (q_id, 'Semua benar', FALSE),
+    (q_id, 'Perkembangan Kinerja', FALSE);
+
+  -- =========================================================================
+  -- Q7 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Modal disetor yang dipersyaratkan untuk pendirian BUS yang akan menjadi anak dalam struktur kelompok usaha bank adalah sebesar:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Rp 3.000.000.000.000,00', TRUE),
+    (q_id, 'Rp 1.000.000.000.000,00', FALSE),
+    (q_id, 'Rp 500.000.000.000,00', FALSE),
+    (q_id, 'Rp 10.000.000.000.000,00', FALSE);
+
+  -- =========================================================================
+  -- Q8 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Kerangka tata kelola syariah bagi BUS dan UUS terdiri dari:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'DPS, kepatuhan dan manajemen risiko syariah, audit intern syariah, audit ekstern syariah', FALSE),
+    (q_id, 'DPS, kepatuhan syariah, manajemen risiko syariah, audit intern syariah, kaji ulang ekstern syariah', TRUE),
+    (q_id, 'DPS, kepatuhan syariah, komite syariah, audit intern syariah, audit ekstern syariah', FALSE),
+    (q_id, 'DPS, komite syariah, kepatuhan syariah, manajemen risiko syariah, audit intern syariah, kaji ulang ekstern syariah', FALSE);
+
+  -- =========================================================================
+  -- Q9 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -92,7 +162,25 @@ BEGIN
     (q_id, 'Perbuatan-perbuatan yang berhubungan dengan kegiatan usaha pokok bank yang diatur dalam ketentuan-ketentuan di luar UU Perbankan, seperti KUHP, UU Pemberantasan Tipikor, dll.', FALSE),
     (q_id, 'Tindak pidana yang tidak hanya mencakup pelanggaran terhadap Undang-Undang Perbankan saja, melainkan mencakup pula tindak pidana penipuan, penggelapan, pemalsuan dan tindak pidana lain sepanjang berkaitan dengan lembaga perbankan', FALSE);
 
-  -- Q11
+  -- =========================================================================
+  -- Q10 — Mark 0.00 (answered with best judgment; 5 options)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Jangka waktu pelaporan perubahan data Akuntan Publik / Kantor Akuntan Publik di OJK, yaitu:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Paling Lama 20 hari kerja', FALSE),
+    (q_id, 'Paling Lama 7 hari', FALSE),
+    (q_id, 'Paling Lama 7 hari kerja', FALSE),
+    (q_id, 'Paling Lama 10 hari', FALSE),
+    (q_id, 'Paling Lama 10 hari kerja', TRUE);
+
+  -- =========================================================================
+  -- Q11 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -105,7 +193,9 @@ BEGIN
     (q_id, 'Fotokopi bilyet deposito yang telah dicairkan', FALSE),
     (q_id, 'Mutasi rekening 6 (enam) bulan terakhir', TRUE);
 
-  -- Q12
+  -- =========================================================================
+  -- Q12 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -118,7 +208,9 @@ BEGIN
     (q_id, 'Tindakan penyimpangan yang melanggar ketentuan, antara lain UU Perbankan, UU Perbankan Syariah, Peraturan Otoritas Jasa Keuangan (POJK), Peraturan Bank Indonesia (PBI), peraturan perundang-undangan lainnya, Surat Edaran Otoritas Jasa Keuangan (SE OJK), Surat Edaran Bank Indonesia (SE BI), dan ketentuan internal bank.', TRUE),
     (q_id, 'Tindakan sengaja melanggar ketentuan internal (system & procedure) & peraturan perundang-undangan yang berlaku, demi kepentingan pribadi atau pihak lain yang berpotensi merugikan baik material maupun non material (moril)', FALSE);
 
-  -- Q13
+  -- =========================================================================
+  -- Q13 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -131,7 +223,24 @@ BEGIN
     (q_id, 'Perubahan status dari Kantor Cabang menjadi Kantor Cabang Pembantu', TRUE),
     (q_id, 'Perubahan status dari Kantor Cabang Pembantu menjadi Kantor Cabang', FALSE);
 
-  -- Q15
+  -- =========================================================================
+  -- Q14 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Melakukan koordinasi pengawasan di sektor PVML yang berkantor pusat di daerah, merupakan salah satu fungsi satuan kerja koordinator (hub bidang), yaitu:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'DPLK', FALSE),
+    (q_id, 'DPDK', FALSE),
+    (q_id, 'DPLJ', TRUE),
+    (q_id, 'DPVR', FALSE);
+
+  -- =========================================================================
+  -- Q15 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -144,7 +253,9 @@ BEGIN
     (q_id, 'POJK No.55/POJK.03/2016', FALSE),
     (q_id, 'POJK No.12/POJK.03/2021', TRUE);
 
-  -- Q16
+  -- =========================================================================
+  -- Q16 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -157,7 +268,9 @@ BEGIN
     (q_id, 'Koordinasi pengelolaan Kantor OJK daerah, manajemen pengawasan dan perizinan sektor jasa keuangan di daerah, pengembangan ekonomi dan keuangan daerah serta layanan manajemen strategis Kantor OJK daerah', TRUE),
     (q_id, 'Koordinasi pengelolaan Kantor OJK daerah, pengawasan dan perizinan sektor jasa keuangan di daerah, pengembangan ekonomi dan keuangan daerah serta layanan manajemen strategis Kantor OJK daerah.', FALSE);
 
-  -- Q17
+  -- =========================================================================
+  -- Q17 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -170,7 +283,9 @@ BEGIN
     (q_id, 'Identifikasi dokumen, penelitian administratif, permintaan rekomendasi dan track record, hasil PKK', FALSE),
     (q_id, 'Identifikasi dokumen, penelitian administratif dan hasil PKK', FALSE);
 
-  -- Q18
+  -- =========================================================================
+  -- Q18 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -183,7 +298,9 @@ BEGIN
     (q_id, '10% dari modal BPR', FALSE),
     (q_id, '20% dari modal BPR', FALSE);
 
-  -- Q19
+  -- =========================================================================
+  -- Q19 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -196,7 +313,39 @@ BEGIN
     (q_id, 'Auditor Internal, Direksi, Anggota Dewan Pengawas Syariah', FALSE),
     (q_id, 'Pemegang Saham Pengendali, Dewan Komisaris, Auditor Internal', FALSE);
 
-  -- Q22
+  -- =========================================================================
+  -- Q20 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Anggota Komite Tata Kelola Terintegrasi adalah sebagai berikut, kecuali:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Perwakilan Komisaris dari salah satu LJK yang memiliki posisi sebagai perwakilan dari Pemegang Saham', TRUE),
+    (q_id, 'Komisaris Independen yang menjadi ketua pada salah satu komite pada Entitas Utama', FALSE),
+    (q_id, 'Seorang Pihak Independen', FALSE),
+    (q_id, 'Komisaris Independen yang mewakili dan ditunjuk dari LJK dalam Konglomerasi Keuangan', FALSE);
+
+  -- =========================================================================
+  -- Q21 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Bank dinilai memiliki potensi kesulitan yang membahayakan kelangsungan usaha jika memenuhi kriteria berikut, kecuali:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Rasio CAR mencapai 12%', TRUE),
+    (q_id, 'TKS komposit dinilai 4 dalam 2 periode berturut-turut', FALSE),
+    (q_id, 'Rasio GWM tidak tercapai', FALSE),
+    (q_id, 'Rasio kewajiban penyediaan modal minimum Bank sama dengan atau lebih besar dari 8%', FALSE);
+
+  -- =========================================================================
+  -- Q22 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -209,7 +358,24 @@ BEGIN
     (q_id, 'DIMB, DPBS, dan DKEU', FALSE),
     (q_id, 'DIMB, DAJP, dan DPEP', TRUE);
 
-  -- Q24
+  -- =========================================================================
+  -- Q23 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Berdasarkan siklus Pengawasan Terintegrasi, langkah yang dilakukan selanjutnya sebelum Integrated Risk Rating KK Tahap 1 yaitu:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Tindakan Pengawasan dan Pemantauan', FALSE),
+    (q_id, 'Perencanaan Pengawasan', FALSE),
+    (q_id, 'Pemahaman terhadap Konglomerasi Keuangan', TRUE),
+    (q_id, 'Koordinasi Pemeriksaan Berdasarkan Risiko', FALSE);
+
+  -- =========================================================================
+  -- Q24 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -222,7 +388,9 @@ BEGIN
     (q_id, 'Pemegang saham', FALSE),
     (q_id, 'Direksi', FALSE);
 
-  -- Q25
+  -- =========================================================================
+  -- Q25 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -235,7 +403,9 @@ BEGIN
     (q_id, 'Rp100 miliar.', FALSE),
     (q_id, 'Rp50 miliar.', FALSE);
 
-  -- Q26
+  -- =========================================================================
+  -- Q26 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -248,7 +418,9 @@ BEGIN
     (q_id, 'Langsung disampaikan kepada bank oleh aparat penegak hukum', FALSE),
     (q_id, 'Harus diajukan melalui izin tertulis kepada OJK', TRUE);
 
-  -- Q27
+  -- =========================================================================
+  -- Q27 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -261,7 +433,9 @@ BEGIN
     (q_id, 'Data kepemilikan, daftar calon anggota Direksi dan anggota Dewan Komisaris, bukti kesiapan operasional', FALSE),
     (q_id, 'Data kepemilikan, bukti pembayaran biaya perizinan, akta pendirian', FALSE);
 
-  -- Q28
+  -- =========================================================================
+  -- Q28 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -274,7 +448,9 @@ BEGIN
     (q_id, 'Memberikan rekomendasi langkah-langkah pengawasan dan pembinaan kepada pengawas.', FALSE),
     (q_id, 'Memberikan pendapat sebagai ahli untuk membuat jelas suatu perkara', FALSE);
 
-  -- Q29
+  -- =========================================================================
+  -- Q29 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -287,7 +463,9 @@ BEGIN
     (q_id, 'Dewan Audit', FALSE),
     (q_id, 'Dewan Pengawas Syariah', TRUE);
 
-  -- Q30
+  -- =========================================================================
+  -- Q30 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -300,7 +478,9 @@ BEGIN
     (q_id, 'SEDK Nomor 21/SEDK.02/2023 tentang Organisasi Bidang Pengawasan Sektor Pasar Modal, Keuangan Derivatif dan Bursa Karbon', FALSE),
     (q_id, 'SEDK Nomor 22/SEDK.02/2023 tentang Perubahan Atas SEDK Nomor 10/SEDK.02/2023 Organisasi Bidang pengawasan PEPK', FALSE);
 
-  -- Q31
+  -- =========================================================================
+  -- Q31 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -313,7 +493,9 @@ BEGIN
     (q_id, '1 tahun', FALSE),
     (q_id, '9 bulan', FALSE);
 
-  -- Q32
+  -- =========================================================================
+  -- Q32 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -326,7 +508,9 @@ BEGIN
     (q_id, 'SIGAP', FALSE),
     (q_id, 'SIPINA', FALSE);
 
-  -- Q33
+  -- =========================================================================
+  -- Q33 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -339,7 +523,9 @@ BEGIN
     (q_id, 'Istishna', TRUE),
     (q_id, 'Musyarakah', FALSE);
 
-  -- Q34
+  -- =========================================================================
+  -- Q34 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -352,7 +538,9 @@ BEGIN
     (q_id, '1%', TRUE),
     (q_id, '300%', FALSE);
 
-  -- Q35
+  -- =========================================================================
+  -- Q35 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -365,7 +553,9 @@ BEGIN
     (q_id, 'Five Cs of credit', FALSE),
     (q_id, 'Third line of defense', FALSE);
 
-  -- Q36
+  -- =========================================================================
+  -- Q36 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -378,7 +568,9 @@ BEGIN
     (q_id, 'Skor kredit', FALSE),
     (q_id, 'Peringatan fraud', FALSE);
 
-  -- Q37
+  -- =========================================================================
+  -- Q37 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -391,7 +583,24 @@ BEGIN
     (q_id, 'Permintaan pemilik atau pemegang saham Bank BHI untuk melakukan pencabutan izin usaha Bank BHI, termasuk bank perantara', FALSE),
     (q_id, 'Permintaan dari Bank lainnya', TRUE);
 
-  -- Q39
+  -- =========================================================================
+  -- Q38 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Sebutkan pihak yang dapat memperoleh informasi perkreditan dari LPIP',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Lembaga Keuangan non anggota dari LPIP', FALSE),
+    (q_id, 'Non Lembaga Keuangan yang menjadi sumber data LPIP yang bersangkutan', TRUE),
+    (q_id, 'Debitur atau Nasabah Peer-to-Peer Lending', FALSE),
+    (q_id, 'Calon sumber data dari LPIP', FALSE);
+
+  -- =========================================================================
+  -- Q39 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -404,7 +613,9 @@ BEGIN
     (q_id, 'Kartu kredit', FALSE),
     (q_id, 'Letter of Credit (LC)', FALSE);
 
-  -- Q40
+  -- =========================================================================
+  -- Q40 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -417,7 +628,9 @@ BEGIN
     (q_id, 'Estimasi premi risiko yang dikenakan', TRUE),
     (q_id, 'Informasi konversi suku bunga flat setara efektif', FALSE);
 
-  -- Q41
+  -- =========================================================================
+  -- Q41 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -430,7 +643,9 @@ BEGIN
     (q_id, 'Pasal 38', FALSE),
     (q_id, 'Pasal 39', TRUE);
 
-  -- Q42
+  -- =========================================================================
+  -- Q42 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -443,7 +658,9 @@ BEGIN
     (q_id, 'Tidak sedang dalam proses penilaian kembali karena terdapat indikasi permasalahan integritas', FALSE),
     (q_id, 'Tidak sedang menjalani proses hukum', FALSE);
 
-  -- Q43
+  -- =========================================================================
+  -- Q43 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -456,7 +673,39 @@ BEGIN
     (q_id, 'Laporan Laba Rugi', FALSE),
     (q_id, 'Laporan Posisi keuangan', FALSE);
 
-  -- Q46
+  -- =========================================================================
+  -- Q44 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Berikut merupakan komponen Know Your Financial Conglomerate, kecuali:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Infrastruktur Pendukung', FALSE),
+    (q_id, 'Bisnis Utama dan Peran/Kontribusi LJK pada Konglomerasi Keuangan', FALSE),
+    (q_id, 'Struktur Konglomerasi Keuangan', FALSE),
+    (q_id, 'Pengawasan Direksi dan Dewan Komisaris', TRUE);
+
+  -- =========================================================================
+  -- Q45 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Jenis Pembagian KSP terdiri dari',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'TI, APU-PPT, Syariah, Likuiditas dan Pasar', FALSE),
+    (q_id, 'TI, APU-PPT, Kredit, Likuiditas dan Pasar, Panelis', FALSE),
+    (q_id, 'TI, APU-PPT, Kredit, Likuiditas dan Pasar, Syariah', TRUE),
+    (q_id, 'TI, APU-PPT, Market', FALSE);
+
+  -- =========================================================================
+  -- Q46 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -469,7 +718,24 @@ BEGIN
     (q_id, 'Kompleksitas transaksi', FALSE),
     (q_id, 'Ukuran bank', FALSE);
 
-  -- Q48
+  -- =========================================================================
+  -- Q47 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Dasar Hukum pengawasan AP/KAP:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'UU Perbankan No.10 Tahun 1996', FALSE),
+    (q_id, 'POJK Nomor 9 Tahun 2023 dan SEOJK Nomor 18/SEOJK.03/2023', TRUE),
+    (q_id, 'POJK Nomor 9 Tahun 2023 dan SEOJK Nomor 21/SEOJK.03/2023', FALSE),
+    (q_id, 'POJK Nomor 13 Tahun 2017 dan SEOJK Nomor 18/SEOJK.03/2023', FALSE);
+
+  -- =========================================================================
+  -- Q48 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -482,7 +748,24 @@ BEGIN
     (q_id, 'Penerapan manajemen risiko termasuk sistem pengendalian intern', FALSE),
     (q_id, 'Sistem rotasi telah dilaksanakan untuk menghindari ketergantungan kepada pegawai tertentu dan mengurangi kemungkinan terjadinya fraud', TRUE);
 
-  -- Q50
+  -- =========================================================================
+  -- Q49 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Yang bukan merupakan komponen penilaian Kecukupan Penerapan Manajemen Risiko (KPMR) yaitu:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Kecukupan Kebijakan, Prosedur, dan Penetapan Limit', FALSE),
+    (q_id, 'Penilaian Kecukupan Penerapan Tata Kelola', TRUE),
+    (q_id, 'Pengawasan Direksi dan Dewan Komisaris', FALSE),
+    (q_id, 'Pengendalian Intern yang Menyeluruh', FALSE);
+
+  -- =========================================================================
+  -- Q50 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -495,7 +778,24 @@ BEGIN
     (q_id, 'Kinerja Keuangan', FALSE),
     (q_id, 'Aktivitas Bisnis Utama dan Aktivitas Penunjang Utama', FALSE);
 
-  -- Q52
+  -- =========================================================================
+  -- Q51 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Kriteria keunggulan komoditas termasuk dalam top 5 produksi komoditas agrikultur nasional bertujuan untuk, kecuali:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Memberikan keyakinan ketersediaan pasar atas komoditas dimaksud', TRUE),
+    (q_id, 'Memberikan keyakinan kepada offtaker potensial yang bonafide', FALSE),
+    (q_id, 'Memberikan keyakinan komoditas memiliki basis di daerah', FALSE),
+    (q_id, 'Memberikan keyakinan ketersediaan suplai komoditas di daerah secara signifikan', FALSE);
+
+  -- =========================================================================
+  -- Q52 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -508,7 +808,69 @@ BEGIN
     (q_id, 'Risiko Likuiditas', FALSE),
     (q_id, 'Risiko Kredit', FALSE);
 
-  -- Q57
+  -- =========================================================================
+  -- Q53 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Pengalihan Pengawasan Lembaga Jasa Keuangan Bidang Perasuransian, Penjaminan, dan Dana Pensiun (PPDP), direncanakan telah dilakukan pada bulan:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Oktober 2024', FALSE),
+    (q_id, 'Agustus 2024', FALSE),
+    (q_id, 'November 2024', FALSE),
+    (q_id, 'September 2024', TRUE);
+
+  -- =========================================================================
+  -- Q54 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Perbuatan hukum yang dilakukan oleh KCBLN dan Bank dengan mengalihkan aset dan/atau liabilitas KCBLN secara hukum kepada Bank, dan selanjutnya dilakukan pencabutan izin usaha KCBLN disebut:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Peleburan', FALSE),
+    (q_id, 'Konversi', FALSE),
+    (q_id, 'Penggabungan', FALSE),
+    (q_id, 'Integrasi', TRUE);
+
+  -- =========================================================================
+  -- Q55 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Dalam rangka koordinasi OJK dengan LPS, dilakukan koordinasi setiap',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Bulanan atau triwulanan', FALSE),
+    (q_id, 'Bulanan dan triwulanan', TRUE),
+    (q_id, 'Bulanan', FALSE),
+    (q_id, 'Triwulanan', FALSE);
+
+  -- =========================================================================
+  -- Q56 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Pendapatan yang diakui oleh Bank Syariah dalam laporan laba rugi, kecuali:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Margin', FALSE),
+    (q_id, 'Ujrah', FALSE),
+    (q_id, 'Denda', TRUE),
+    (q_id, 'Bagi Hasil', FALSE);
+
+  -- =========================================================================
+  -- Q57 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -521,7 +883,9 @@ BEGIN
     (q_id, 'Profil Risiko Terintegrasi', FALSE),
     (q_id, 'Permodalan Terintegrasi', FALSE);
 
-  -- Q58
+  -- =========================================================================
+  -- Q58 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -534,7 +898,9 @@ BEGIN
     (q_id, 'PSP umumnya tidak mau mempertahankan kepemilikannya pada 1 BPR dan BPRS', TRUE),
     (q_id, 'Kepemilikan BPR/S memiliki nilai historis sehingga kepemilikannya akan dipertahankan', FALSE);
 
-  -- Q59
+  -- =========================================================================
+  -- Q59 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -547,7 +913,9 @@ BEGIN
     (q_id, 'Aspek komprehensif', TRUE),
     (q_id, 'Aspek manajemen', FALSE);
 
-  -- Q60
+  -- =========================================================================
+  -- Q60 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -560,7 +928,9 @@ BEGIN
     (q_id, 'APOLO', FALSE),
     (q_id, 'SPRINT', TRUE);
 
-  -- Q61
+  -- =========================================================================
+  -- Q61 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -573,7 +943,9 @@ BEGIN
     (q_id, 'Menyesuaikan struktur gaji tenaga kerja asing dan domestik', FALSE),
     (q_id, 'Mempermudah proses rekrutmen tenaga kerja dari luar negeri', FALSE);
 
-  -- Q62
+  -- =========================================================================
+  -- Q62 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -586,7 +958,9 @@ BEGIN
     (q_id, 'Pemegang Saham Pengendali', FALSE),
     (q_id, 'Direksi', FALSE);
 
-  -- Q63
+  -- =========================================================================
+  -- Q63 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -599,7 +973,9 @@ BEGIN
     (q_id, 'Pemberian tanggapan/aktif dalam forum/diskusi terkait risiko pasar dan likuiditas', FALSE),
     (q_id, 'Pemberian tanggapan terkait perizinan LPE/LPD dan Penempatan DC/DRC di luar wilayah Indonesia, Laporan Rutin TI (RSTI, RPTI, RPPB, Laporan Kondisi Terkini TI, Laporan Hasil Keamanan Siber); Realisasi Produk;', TRUE);
 
-  -- Q64
+  -- =========================================================================
+  -- Q64 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -612,7 +988,9 @@ BEGIN
     (q_id, 'Kafalah', FALSE),
     (q_id, 'Wakalah', FALSE);
 
-  -- Q65
+  -- =========================================================================
+  -- Q65 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -625,7 +1003,9 @@ BEGIN
     (q_id, 'Anjak Piutang Prinsip Hiwalah dan Bank Garansi Prinsip Kafalah', FALSE),
     (q_id, 'Jual Beli Valuta Asing (bank notes) dengan Prinsip Maisir', TRUE);
 
-  -- Q66
+  -- =========================================================================
+  -- Q66 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -638,7 +1018,39 @@ BEGIN
     (q_id, '5 tahun berturut-turut', FALSE),
     (q_id, '5 tahun kumulatif', FALSE);
 
-  -- Q69
+  -- =========================================================================
+  -- Q67 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Berikut adalah tujuan bagi OJK melaksanakan stress test, kecuali:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Meningkatkan fungsi Pengawasan Bank', FALSE),
+    (q_id, 'Penguatan Mitigasi dalam implementasi fungsi manajemen krisis', FALSE),
+    (q_id, 'Meningkatkan fungsi intermediasi', TRUE),
+    (q_id, 'Meningkatkan fungsi Surveilans', FALSE);
+
+  -- =========================================================================
+  -- Q68 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Bentuk badan hukum Bank Syariah berdasarkan UU No.21 Tahun 2008 tentang Perbankan Syariah adalah:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Perseroan Terbatas (PT), Perusahaan Umum (Perum) dan BUMN', FALSE),
+    (q_id, 'Perseroan Terbatas (PT), Perusahaan Umum (Perum), Yayasan dan BUMN', TRUE),
+    (q_id, 'Perseroan Terbatas (PT)', FALSE),
+    (q_id, 'Perseroan Terbatas (PT), Perusahaan Umum (Perum), Yayasan, BUMN dan Koperasi', FALSE);
+
+  -- =========================================================================
+  -- Q69 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -651,7 +1063,9 @@ BEGIN
     (q_id, 'POJK 60/POJK.03/2021 dan SEOJK 54/SEOJK.03/2020', FALSE),
     (q_id, 'POJK 63/POJK.03/2020 dan SEOJK 26/SEOJK.03/2020', TRUE);
 
-  -- Q70
+  -- =========================================================================
+  -- Q70 — Mark 1.00 (5 options)
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -665,7 +1079,9 @@ BEGIN
     (q_id, 'Daftar AP yang tidak boleh audit LJK', FALSE),
     (q_id, 'Daftar AP Tidak Aktif Tetap', FALSE);
 
-  -- Q71
+  -- =========================================================================
+  -- Q71 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -678,7 +1094,24 @@ BEGIN
     (q_id, 'Memberikan jasa pemeringkatan terhadap debitur atau nasabah', FALSE),
     (q_id, 'Menghimpun dan mengolah data kredit atau pembiayaan dan/atau data lain', FALSE);
 
-  -- Q73
+  -- =========================================================================
+  -- Q72 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Pemisahan UUS dapat dilakukan dalam skema',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Pendirian BUS baru bersama LJK lainnya', TRUE),
+    (q_id, 'Mengalihkan hak dan kewajiban UUS kepada BUK induknya', FALSE),
+    (q_id, 'Mencabut izin usaha UUS', FALSE),
+    (q_id, 'Pendirian BUS bersama dengan UUS lainnya', FALSE);
+
+  -- =========================================================================
+  -- Q73 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -691,7 +1124,9 @@ BEGIN
     (q_id, 'Konversi', TRUE),
     (q_id, 'Konsolidasi', FALSE);
 
-  -- Q74
+  -- =========================================================================
+  -- Q74 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -704,7 +1139,23 @@ BEGIN
     (q_id, 'Kartu Kredit', FALSE),
     (q_id, 'Internet Banking', TRUE);
 
-  -- Q76
+  -- =========================================================================
+  -- Q75 — Mark 0.00 (answered with best judgment; 3 options)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Berikut merupakan jenis jaringan kantor BPR berdasarkan POJK 7 Tahun 2024, kecuali',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Sentra Keuangan Khusus', FALSE),
+    (q_id, 'Unit Layanan Keliling', FALSE),
+    (q_id, 'Kantor Wilayah', TRUE);
+
+  -- =========================================================================
+  -- Q76 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -717,7 +1168,9 @@ BEGIN
     (q_id, 'Sistem Informasi Pengawasan Terintegrasi', TRUE),
     (q_id, 'Sistem Informasi Pengawasan Terkini', FALSE);
 
-  -- Q77
+  -- =========================================================================
+  -- Q77 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -730,7 +1183,24 @@ BEGIN
     (q_id, 'Cadangan Bank', FALSE),
     (q_id, 'Giro Wajib Minimum', FALSE);
 
-  -- Q79
+  -- =========================================================================
+  -- Q78 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Berapa batas waktu konsolidasi BPR non-pemda yang diatur di dalam POJK 7 Tahun 2024?',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, '3 tahun', TRUE),
+    (q_id, '6 bulan', FALSE),
+    (q_id, '1 tahun', FALSE),
+    (q_id, '2 tahun', FALSE);
+
+  -- =========================================================================
+  -- Q79 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -743,7 +1213,39 @@ BEGIN
     (q_id, 'Komite audit dan Dewan Komisaris', FALSE),
     (q_id, 'Pemegang saham menyusun dan menyetujui', FALSE);
 
-  -- Q82
+  -- =========================================================================
+  -- Q80 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Pernyataan yang tidak benar mengenai sinergi perbankan, yaitu:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Sinergi perbankan hanya dapat dilakukan oleh bank-bank dalam satu grup atau memiliki hubungan kepemilikan', FALSE),
+    (q_id, 'Sinergi yang melibatkan bank syariah harus mendapatkan opini/persetujuan dari Dewan Pengawas Syariah', FALSE),
+    (q_id, 'Sinergi perbankan dapat dilakukan di bidang IT, SDM, jaringan kantor, jaringan komunikasi, pelaporan, audit', FALSE),
+    (q_id, 'Sinergi perbankan dapat dilakukan atas izin OJK', TRUE);
+
+  -- =========================================================================
+  -- Q81 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Sesuai dengan SEDK 6/SEDK.02/2024 Tentang Perubahan Atas SEDK Nomor 19/SEDK.02/2023 Tentang Organisasi Bidang Strategis bahwa Kantor OJK Dibagi menjadi Kantor OJK Koordinator dan Kantor OJK Non-Koordinator. Dibawah ini merupakan rincian Kantor OJK Koordinator, kecuali:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Kantor OJK Provinsi Jawa Barat', FALSE),
+    (q_id, 'Kantor OJK Provinsi Kalimantan Selatan', TRUE),
+    (q_id, 'Kantor OJK Provinsi Sumatera Selatan', FALSE),
+    (q_id, 'Kantor OJK Provinsi Sulawesi Selatan dan Sulawesi Barat', FALSE);
+
+  -- =========================================================================
+  -- Q82 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -756,7 +1258,9 @@ BEGIN
     (q_id, 'Penggabungan/Peleburan antara BPR konvensional dengan BPR berdasarkan prinsip syariah hanya dapat dilakukan apabila BPR hasil Penggabungan/Peleburan tetap menjadi BPR konvensional', TRUE),
     (q_id, 'Penggabungan/Peleburan hanya dapat dilakukan antar BPR', FALSE);
 
-  -- Q83
+  -- =========================================================================
+  -- Q83 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -769,7 +1273,9 @@ BEGIN
     (q_id, 'Warga negara Indonesia', FALSE),
     (q_id, 'Badan hukum Indonesia dengan warga negara asing dan/atau badan hukum asing secara kemitraan', TRUE);
 
-  -- Q84
+  -- =========================================================================
+  -- Q84 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -782,7 +1288,24 @@ BEGIN
     (q_id, 'Aspek keberlanjutan, aspek layak investasi dan aspek komprehensif', TRUE),
     (q_id, 'Aspek transparansi, aspek layak investasi dan aspek manajemen', FALSE);
 
-  -- Q86
+  -- =========================================================================
+  -- Q85 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Peran utama offtaker dalam ekosistem Pengembangan Ekonomi Daerah antara lain, kecuali:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Memberikan asistensi teknis aspek produksi', TRUE),
+    (q_id, 'Menyerap hasil produksi pembudidaya', FALSE),
+    (q_id, 'Memberikan imbal hasil produksi kepada pembudidaya', FALSE),
+    (q_id, 'Menghimpun informasi mengenai pembudidaya yang akan bekerja sama', FALSE);
+
+  -- =========================================================================
+  -- Q86 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -795,7 +1318,9 @@ BEGIN
     (q_id, 'Rencana audit bulanan', TRUE),
     (q_id, 'Area berisiko yang diidentifikasi OJK dan SKAI', FALSE);
 
-  -- Q87
+  -- =========================================================================
+  -- Q87 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -808,7 +1333,9 @@ BEGIN
     (q_id, 'Sertifikat pembicara seminar perbankan syariah', FALSE),
     (q_id, 'Sertifikat pelatihan dari DSN MUI', FALSE);
 
-  -- Q88
+  -- =========================================================================
+  -- Q88 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -821,7 +1348,24 @@ BEGIN
     (q_id, 'Integritas dan komitmen', FALSE),
     (q_id, 'Integritas dan kompetensi', FALSE);
 
-  -- Q90
+  -- =========================================================================
+  -- Q89 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Jangka waktu penetapan hasil penilaian kemampuan dan kepatutan dari OJK paling lama',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, '30 (tiga puluh) hari kerja setelah seluruh dokumen permohonan diterima secara lengkap', TRUE),
+    (q_id, '60 (enam puluh) hari kerja setelah seluruh dokumen permohonan diterima secara lengkap', FALSE),
+    (q_id, '30 (tiga puluh) hari kerja setelah penilaian kemampuan dan kepatutan dilakukan', FALSE),
+    (q_id, '60 (enam puluh) hari kerja setelah penilaian kemampuan dan kepatutan dilakukan', FALSE);
+
+  -- =========================================================================
+  -- Q90 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -834,7 +1378,9 @@ BEGIN
     (q_id, 'Setoran deposito/tabungan/giro yang tidak dicatat dalam pembukuan bank.', FALSE),
     (q_id, 'Pemberian kredit kepada debitur fiktif.', FALSE);
 
-  -- Q91
+  -- =========================================================================
+  -- Q91 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -847,7 +1393,9 @@ BEGIN
     (q_id, 'Jumlah anggota direksi BPRS minimal 2 orang', FALSE),
     (q_id, 'Jumlah anggota direksi BUS minimal 3 orang', FALSE);
 
-  -- Q92
+  -- =========================================================================
+  -- Q92 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -860,7 +1408,9 @@ BEGIN
     (q_id, 'Bisa diambil sewaktu-waktu atau sesuai kesepakatan', FALSE),
     (q_id, 'Bonus diperjanjikan di awal', TRUE);
 
-  -- Q93
+  -- =========================================================================
+  -- Q93 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -873,7 +1423,24 @@ BEGIN
     (q_id, 'Menilai kelayakan debitur', TRUE),
     (q_id, 'Menetapkan pajak', FALSE);
 
-  -- Q95
+  -- =========================================================================
+  -- Q94 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Merupakan akad pelimpahan kekuasaan oleh satu pihak (muwakil) kepada pihak lain (wakil) yaitu:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Istishna', FALSE),
+    (q_id, 'Wakalah', TRUE),
+    (q_id, 'Kafalah', FALSE),
+    (q_id, 'Hawalah', FALSE);
+
+  -- =========================================================================
+  -- Q95 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -886,7 +1453,9 @@ BEGIN
     (q_id, 'Beban bunga', FALSE),
     (q_id, 'Tabungan', TRUE);
 
-  -- Q96
+  -- =========================================================================
+  -- Q96 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -899,7 +1468,9 @@ BEGIN
     (q_id, 'Pemeriksaan Berdasarkan Risiko', TRUE),
     (q_id, 'Pemahaman Terhadap Bank', FALSE);
 
-  -- Q97
+  -- =========================================================================
+  -- Q97 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
@@ -912,7 +1483,39 @@ BEGIN
     (q_id, 'Eksposur pada rekening administratif (off-balance sheet exposure)', FALSE),
     (q_id, 'Pajak penghasilan tangguhan (deferred tax)', TRUE);
 
-  -- Q100
+  -- =========================================================================
+  -- Q98 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Yang bukan merupakan cakupan penerapan tata kelola sesuai POJK No.2 tahun 2024 tentang Penerapan Tata Kelola Syariah BUS UUS yaitu:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Kewajiban pengalihan penghasilan yang tidak sesuai dengan prinsip syariah', FALSE),
+    (q_id, 'Kewajiban pembentukan komite syariah', FALSE),
+    (q_id, 'Pembatasan masa jabatan anggota DPS', TRUE),
+    (q_id, 'Kerangka tata kelola syariah', FALSE);
+
+  -- =========================================================================
+  -- Q99 — Mark 0.00 (answered with best judgment)
+  -- =========================================================================
+  pos := pos + 1;
+  INSERT INTO questions (section_id, text, position, source)
+  VALUES (sec_id,
+    'Perbuatan hukum yang dilakukan oleh KCBLN untuk mengubah izin usaha KCBLN menjadi izin usaha Bank, dan selanjutnya dilakukan pencabutan izin usaha KCBLN disebut:',
+    pos, 'pcs8')
+  RETURNING id INTO q_id;
+  INSERT INTO choices (question_id, text, is_correct) VALUES
+    (q_id, 'Konversi', TRUE),
+    (q_id, 'Integrasi', FALSE),
+    (q_id, 'Peleburan', FALSE),
+    (q_id, 'Penggabungan', FALSE);
+
+  -- =========================================================================
+  -- Q100 — Mark 1.00
+  -- =========================================================================
   pos := pos + 1;
   INSERT INTO questions (section_id, text, position, source)
   VALUES (sec_id,
