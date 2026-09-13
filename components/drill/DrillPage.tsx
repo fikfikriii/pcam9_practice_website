@@ -137,6 +137,70 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
     setDrillQuestions([]);
   }
 
+  function handleExportPDF() {
+    const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const moduleLabel = moduleId ? `Modul ${moduleId}` : 'Section Drill';
+    const date = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    let html = `<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>Drill Results — ${esc(moduleLabel)}</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; font-size: 13px; color: #201e1d; margin: 40px; line-height: 1.5; }
+  h1 { font-size: 18px; margin: 0 0 2px; }
+  .meta { font-size: 12px; color: #605d5d; margin-bottom: 24px; }
+  .score-wrap { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .score { font-size: 52px; font-weight: bold; line-height: 1; }
+  .score-sub { font-size: 14px; color: #605d5d; }
+  .bar { height: 4px; background: #2F6FED; margin-bottom: 32px; }
+  .question { padding: 10px 0; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .question-body { flex: 1; }
+  .qnum { font-size: 11px; color: #7d7979; margin-bottom: 2px; }
+  .qtext { font-size: 13px; font-weight: 600; margin-bottom: 5px; line-height: 1.4; }
+  .answer { font-size: 12px; color: #444141; }
+  .answer.green { color: #15803d; margin-top: 2px; }
+  .tag { padding: 2px 8px; font-size: 10px; font-weight: 600; border: 1px solid; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+  .tag-correct { background: #eafaf1; color: #15803d; border-color: #15803d; }
+  .tag-incorrect { background: #fef2f2; color: #b91c1c; border-color: #b91c1c; }
+  .tag-unanswered { color: #605d5d; border-color: rgba(0,0,0,0.3); }
+  @media print { body { margin: 20px; } }
+</style>
+</head><body>`;
+
+    html += `<h1>PCAM9 MLE OJK — ${esc(moduleLabel)}</h1>`;
+    html += `<div class="meta">Drill Results &middot; ${esc(date)}</div>`;
+    html += `<div class="score-wrap"><span class="score">${scorePercent}%</span><span class="score-sub">${scoreCorrect} of ${total} correct</span></div>`;
+    html += `<div class="bar"></div>`;
+
+    drillQuestions.forEach((q, idx) => {
+      const answeredChoiceId = answers[q.id];
+      const answeredChoice = q.choices.find((c) => c.id === answeredChoiceId);
+      const correctChoice = q.choices.find((c) => c.is_correct);
+      const isCorrect = answeredChoice?.is_correct === true;
+      const notAnswered = !answeredChoiceId;
+
+      let tagClass: string, tagText: string;
+      if (notAnswered) { tagClass = 'tag-unanswered'; tagText = 'Not answered'; }
+      else if (isCorrect) { tagClass = 'tag-correct'; tagText = 'Correct'; }
+      else { tagClass = 'tag-incorrect'; tagText = 'Incorrect'; }
+
+      html += `<div class="question">`;
+      html += `<div class="question-body">`;
+      html += `<div class="qnum">Question ${idx + 1}</div>`;
+      html += `<div class="qtext">${esc(q.text)}</div>`;
+      html += `<div class="answer">Your answer: ${answeredChoice ? esc(answeredChoice.text) : '&mdash;'}</div>`;
+      if (!isCorrect && correctChoice) {
+        html += `<div class="answer green">Correct answer: ${esc(correctChoice.text)}</div>`;
+      }
+      html += `</div><div class="tag ${tagClass}">${tagText}</div></div>`;
+    });
+
+    html += `<script>window.onload=function(){window.print();}<\/script></body></html>`;
+
+    const w = window.open('', '_blank');
+    if (w) { w.document.write(html); w.document.close(); }
+  }
+
   const total = drillQuestions.length;
   const answeredCount = Object.keys(answers).length;
   const currentQuestion = drillQuestions[current];
@@ -337,12 +401,14 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
   if (view === 'submitted') {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#f3f2f2', overflow: 'hidden' }}>
+        <MemePopup score={scorePercent} />
         <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
             <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM9 MLE OJK</span>
             {!isMobile && <span style={{ fontSize: 13, color: '#605d5d' }}>{moduleId ? `Modul ${moduleId} — Results` : 'Drill Results'}</span>}
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={handleExportPDF} style={btnOutline}>Export PDF</button>
             <button onClick={handleRestart} style={btnOutline}>New Drill</button>
             <button onClick={() => router.push('/')} style={{ ...btnOutline, color: '#1d4ed8', borderColor: '#1d4ed8' }}>Home</button>
           </div>
@@ -578,6 +644,31 @@ const SOURCE_COLORS: Record<string, { color: string; bg: string }> = {
   pcs8:       { color: '#6d28d9', bg: '#f5f3ff' },
   pcs7:       { color: '#b45309', bg: '#fffbeb' },
 };
+
+function MemePopup({ score }: { score: number }) {
+  const [visible, setVisible] = useState(true);
+  if (!visible) return null;
+  const isGood = score >= 70;
+  const img = isGood ? '/meme_good.png' : '/meme_bad.png';
+  const caption = isGood
+    ? score >= 90 ? 'ezz game 😎' : 'siap jd pengawas 🫡'
+    : score >= 50 ? 'faaaahhh 😩' : 'nilai apa ini dawg 💀';
+  const btn = isGood ? 'Ik fr 😌' : 'Noted bestie 😭';
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.65)' }}>
+      <div style={{ background: '#fff', maxWidth: 400, width: '90%', padding: '24px 24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <img src={img} alt="meme" style={{ width: '100%', display: 'block' }} />
+        <div style={{ marginTop: 14, fontSize: 14, fontWeight: 700, textAlign: 'center', lineHeight: 1.5, color: '#201e1d' }}>{caption}</div>
+        <button
+          onClick={() => setVisible(false)}
+          style={{ marginTop: 14, background: '#201e1d', color: '#fff', border: 'none', padding: '9px 28px', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', letterSpacing: '0.03em' }}
+        >
+          {btn}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function DrillSourceBadge({ source, sources }: { source: string; sources: QuestionSource[] }) {
   const label = sources.find((s) => s.id === source)?.label ?? source;
