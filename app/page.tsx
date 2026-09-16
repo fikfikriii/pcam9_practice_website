@@ -152,7 +152,7 @@ export default function Home() {
             </div>
             <div style={{ marginTop: 'auto' }}>
               <Link href="/lms" style={{ ...btnBase, background: '#2F6FED', color: '#fff', display: 'inline-block', padding: '8px 24px' }}>
-                Mulai Kuis
+                Lihat Soal
               </Link>
             </div>
           </div>
