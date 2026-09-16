@@ -3,7 +3,6 @@ export type LmsQuestion = {
   text: string;
   options: { label: string; text: string }[];
   correctLabel: string;
-  source: 'lms' | 'pdf';
 };
 
 export const LMS_QUESTIONS: LmsQuestion[] = [
@@ -17,7 +16,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "UU No. 4 tahun 2023" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 2,
@@ -29,7 +27,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Modal disetor minimal 500 juta, minimal dua direksi memiliki izin WAPERD" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 3,
@@ -41,7 +38,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menentukan profil risiko nasabah" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 4,
@@ -53,7 +49,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Salam" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 5,
@@ -65,7 +60,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "2 (dua) tahun" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 6,
@@ -77,7 +71,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Laporan Bank Umum Terintegrasi (LBUT)" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 7,
@@ -89,7 +82,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kertas Kerja Kerahasiaan &amp; Keamanan Data" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 8,
@@ -100,8 +92,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Pasal 30 UU Pasar Modal" },
       { label: "d.", text: "Pasal 30 UU Asuransi" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 9,
@@ -112,8 +103,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Wanprestasi kontraktual" },
       { label: "d.", text: "Perbuatan melawan hukum" },
     ],
-    correctLabel: "b.",
-    source: "lms",
+    correctLabel: "d.",
   },
   {
     id: 10,
@@ -124,8 +114,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "sebesar Rp100.000,00 (seratusribu rupiah) per hari keterlambatandan paling banyak sebesar Rp10.000.000,00 (sepuluh juta rupiah)" },
       { label: "d.", text: "tidak ada yang benar" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "d.",
   },
   {
     id: 11,
@@ -136,8 +125,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "9 bulan" },
       { label: "d.", text: "6 bulan" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 12,
@@ -149,7 +137,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Membangun dari desa melalui implementasi GM EKI" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 13,
@@ -161,7 +148,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Mudharabah" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 14,
@@ -173,7 +159,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "kafalah" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 15,
@@ -185,7 +170,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Mudharabah dan Murabahah." },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 16,
@@ -196,8 +180,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "SEDK Nomor 3/SEDK.03/2023" },
       { label: "d.", text: "SEDK Nomor 8/SEDK.03/2015" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 17,
@@ -209,7 +192,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Segregation of duty" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 18,
@@ -221,7 +203,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Proporsionalitas" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 19,
@@ -233,7 +214,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Rp1 milyar" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 20,
@@ -245,7 +225,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Hiwalah" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 21,
@@ -256,8 +235,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Peringkat Profil Risiko Bank Nanas ditetapkan 3 karena KPMR dinilai Marginal sementara Risiko Inheren dinilai Low to Moderate" },
       { label: "d.", text: "Peringkat Profil Risiko Bank Melon ditetapkan 2 karena Risiko Inheren dinilai Moderate sementara KPMR dinilai Fair" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "d.",
   },
   {
     id: 22,
@@ -269,7 +247,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Cukup Sehat" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 23,
@@ -281,7 +258,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Monitoring dan Tindak Lanjut Pengawasan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 24,
@@ -293,7 +269,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Project Developer perdagangan karbon" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 25,
@@ -305,7 +280,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Teknologi Informasi" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 26,
@@ -317,7 +291,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "50%" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 27,
@@ -329,7 +302,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Desaku Cakap Keuangan" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 28,
@@ -340,8 +312,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "sebesar Rp100.000,00 (seratusribu rupiah) per hari keterlambatandan paling banyak sebesar Rp10.000.000,00 (sepuluh juta rupiah)" },
       { label: "d.", text: "sebesar Rp50.000,00 (lima puluh ribu rupiah) per hari keterlambatan dan paling banyak sebesar Rp5.000.000,00 (lima juta rupiah)" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 29,
@@ -353,7 +324,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Mengadministrasikan kepemilikan Efek Emiten" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 30,
@@ -365,7 +335,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Melaksanakan penanganan atas Kegiatan Usaha Tanpa Izin di Sektor Keuangan" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 31,
@@ -377,7 +346,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Melakukan pencegahan terhadap Kegiatan Usaha Tanpa Izin di Sektor Keuangan" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 32,
@@ -389,7 +357,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kondisi geografis Indonesia" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 33,
@@ -401,7 +368,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Compliance based" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 34,
@@ -413,7 +379,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Tidak ada masalah" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 35,
@@ -424,8 +389,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Juni dan Desember saja" },
       { label: "d.", text: "Maret (data Desember) dan September (data Juni)" },
     ],
-    correctLabel: "b.",
-    source: "lms",
+    correctLabel: "d.",
   },
   {
     id: 36,
@@ -436,8 +400,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Konsistensi Penerapan One Debtor Concept/Uniform Classification" },
       { label: "d.", text: "Amortisasi Provisi Rekening Kredit Tidak Wajar" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 37,
@@ -449,7 +412,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kepala internal audit" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 38,
@@ -461,7 +423,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Meningkatkan keuntungan perusahaan sekuritas" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 39,
@@ -473,7 +434,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menjanjikan bonus dari perekrutan anggota baru (member get member)" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 40,
@@ -485,7 +445,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Fokus Tambahan" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 41,
@@ -496,8 +455,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Kesehatan keuangan PUJK" },
       { label: "d.", text: "Kesesuaian fitur, produk, dan biaya dengan target Konsumen" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 42,
@@ -509,7 +467,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Rp100 miliar" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 43,
@@ -521,7 +478,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "3 bulan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 44,
@@ -533,7 +489,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "15 Februari" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 45,
@@ -545,7 +500,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Agregat" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 46,
@@ -557,7 +511,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Disepakati para pihak" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 47,
@@ -566,8 +519,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "a.", text: "al-waiad" },
       { label: "b.", text: "ikhbar" },
     ],
-    correctLabel: "b.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 48,
@@ -578,8 +530,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Laporan Tengah Tahunan" },
       { label: "d.", text: "Laporan Insidentil" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 49,
@@ -591,7 +542,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menyelenggarakan sistem pengaturan dan pengawasan yang terintegrasi terhadap keseluruhankegiatan di sektor jasa keuangan" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 50,
@@ -603,7 +553,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menetapkan Rencana Bisnis Bank" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 51,
@@ -615,7 +564,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penerbitan Saham Pengganti" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 52,
@@ -627,7 +575,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pengadilan Tata Usaha Negara" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 53,
@@ -639,7 +586,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Risiko operasional" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 54,
@@ -651,7 +597,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Five Cs of credit" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 55,
@@ -663,7 +608,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Murabahah tanpa pesanan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 56,
@@ -674,8 +618,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Konfirmasi Hasil Pemeriksaan" },
       { label: "d.", text: "Risalah Rapat Validasi" },
     ],
-    correctLabel: "b.",
-    source: "lms",
+    correctLabel: "d.",
   },
   {
     id: 57,
@@ -686,8 +629,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Prinsip Syariah, Demokrasi Ekonomi, dan Prinsip Kehati-hatian" },
       { label: "d.", text: "Prinsip Syariah, Kebersamaan, dan Prinsip Kehati-hatian" },
     ],
-    correctLabel: "b.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 58,
@@ -699,7 +641,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "9 risiko: risiko asuransi, risiko strategi, risiko kredit, risiko pasar, risiko operasional, risiko rentabilitas, risiko hukum, risiko kepatuhan, risiko reputasi" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 59,
@@ -711,7 +652,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Tepat Sasaran" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 60,
@@ -722,8 +662,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Surat Edaran Otoritas Jasa Keuangan Nomor 8/SEOJK.05/2021" },
       { label: "d.", text: "Surat Edaran Otoritas Jasa Keuangan Nomor 1/SEOJK.05/2021" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "d.",
   },
   {
     id: 61,
@@ -735,7 +674,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Forum Panel" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 62,
@@ -747,7 +685,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Komprehensif dan Terstruktur" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 63,
@@ -759,7 +696,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Sistem Mailing Room" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 64,
@@ -771,7 +707,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kualitas pembiayaan yang menurun sehingga Bank harus membentuk CKPN yang lebih tinggi" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 65,
@@ -782,8 +717,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "penerima manfaat/beneficial owner" },
       { label: "d.", text: "profil nasabah" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 66,
@@ -795,7 +729,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "risywah" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 67,
@@ -807,7 +740,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "POJK 44/2021" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 68,
@@ -819,7 +751,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Sebagai tindak lanjut pemeriksaan" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 69,
@@ -831,7 +762,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Reprofiling Risk dan Displaced Corporate Risk" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 70,
@@ -843,7 +773,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Direktur Perusahaan Efek dilarang mempunyai jabatan rangkap pada Perusahaan lain" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 71,
@@ -855,7 +784,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pemeringkat" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 72,
@@ -866,8 +794,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Dilarang" },
       { label: "d.", text: "Wajib dilakukan" },
     ],
-    correctLabel: "b.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 73,
@@ -879,7 +806,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Skimming" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 74,
@@ -891,7 +817,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Fase 1: Penilaian Tingkat Kesehatan Bank; Fase 2: Tindakan Pengawasan dan Pemantauan" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 75,
@@ -903,7 +828,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menjamin objektivitas dan konsistensi penilaian" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 76,
@@ -914,8 +838,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Perusahaan Terbuka" },
       { label: "d.", text: "Perseroan Terbatas" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 77,
@@ -927,7 +850,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kegiatan di sektor ITSK serta aset keuangan digital dan aset kripto" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 78,
@@ -939,7 +861,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Rasio Keuangan" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 79,
@@ -951,7 +872,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "TKS PK-5" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 80,
@@ -963,7 +883,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Sumber-sumber rentabilitas" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 81,
@@ -975,7 +894,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penetapan Efek Ekuitas sebagai Efek Syariah" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 82,
@@ -986,8 +904,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Lembaga Alternatif Penyelesaian Sengketa Sektor Jasa Keuangan" },
       { label: "d.", text: "Penyelenggaraan Layanan Konsumen Dan Masyarakat Di Sektor Jasa Keuangan Oleh Otoritas Jasa Keuangan" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 83,
@@ -998,8 +915,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Komposisi dari aset, liabilitas, dan transaksi rekening administratif." },
       { label: "d.", text: "Teknologi informasi dan infrastruktur pendukung." },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 84,
@@ -1011,7 +927,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "OBOX" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 85,
@@ -1023,7 +938,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Perencanaan Pengawasan" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 86,
@@ -1035,7 +949,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Cukup Sehat" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 87,
@@ -1047,7 +960,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Channeling" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 88,
@@ -1059,7 +971,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Tanggal 30 November tahun berjalan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 89,
@@ -1071,7 +982,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Global Islamic Economic Indicator" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 90,
@@ -1083,7 +993,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kredit, Pasar, Operasional, dan Reputasi" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 91,
@@ -1095,7 +1004,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Bagi hasil" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 92,
@@ -1107,7 +1015,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Perusahaan dinilai cukup sehat, memiliki nilai RBC 120% dan faktor tata kelola dinilai pada peringkat 3." },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 93,
@@ -1119,7 +1026,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "3 bulan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 94,
@@ -1131,7 +1037,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menggunakan platform resmi dan tersertifikasi AFPI" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 95,
@@ -1143,7 +1048,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Proses pengumpulan data/informasi melalui metode undercover dengan berkomunikasi melalui media telepon dengan PUJK dan/ataukonsumen untuk mengumpulkan data/informasiterkait dengan isu perlindungan konsumen yang sedang ditangani" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 96,
@@ -1155,7 +1059,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Risiko underwriting" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 97,
@@ -1167,7 +1070,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Khusus" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 98,
@@ -1178,8 +1080,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Kementerian Koordinator Bidang Perekonomian, Kementerian Keuangan, dan Otoritas Jasa Keuangan" },
       { label: "d.", text: "Pemerintah, Dewan Nasional Keuangan Inklusif, dan Otoritas Jasa Keuangan" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 99,
@@ -1190,8 +1091,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Peraturan Otoritas Jasa Keuangan Nomor 13/POJK.03/2017 tentang Penggunaan Jasa Akuntan Publik dan Kantor Akuntan Publik Dalam Kegiatan Jasa Keuangan;" },
       { label: "d.", text: "Peraturan Otoritas Jasa Keuangan Nomor: 38/POJK.04/2018 tentang Perizinan Perusahaan Pemeringkat Efek (selanjutnya disebut POJK 38/ 2018);" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 100,
@@ -1203,7 +1103,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Analisis Laporan PUJK" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 101,
@@ -1215,7 +1114,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Reksa Dana Saham" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 102,
@@ -1227,7 +1125,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pemahaman LJKNB" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 103,
@@ -1239,7 +1136,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pihak yang telah tercatat dari OJK untuk melakukan kegiatan di sektor pasar modal" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 104,
@@ -1251,7 +1147,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "9 risiko: risiko asuransi, risiko strategi, risiko kredit, risiko pasar, risiko operasional, risiko likuiditas, risiko hukum, risiko kepatuhan, risiko reputasi" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 105,
@@ -1262,8 +1157,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "mencakup segala aturan hukum Islam yang terkait dengan hubungan antar manusia" },
       { label: "d.", text: "hanya membahas persoalan aturan hukum antar manusia yang terkait dengan harta benda (maal)" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 106,
@@ -1275,7 +1169,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "1 tahun" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 107,
@@ -1287,7 +1180,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menghapus permohonan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 108,
@@ -1299,7 +1191,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "hiwalah" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 109,
@@ -1310,8 +1201,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Perusahaan dinilai cukup sehat, memiliki nilai RBC 120% dan faktor tata kelola dinilai pada peringkat 3." },
       { label: "d.", text: "Perusahaan dinilai kurang sehat, memiliki nilai RBC 120% dan faktor tata kelola dinilai pada peringkat 4." },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 110,
@@ -1323,7 +1213,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kertas Kerja Umum" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 111,
@@ -1335,7 +1224,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Murabahah" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 112,
@@ -1347,7 +1235,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "3 bulan setelah tahun buku berakhi" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 113,
@@ -1359,7 +1246,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kepatuhan" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 114,
@@ -1371,7 +1257,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Langsung mengajukan permintaan pemblokiran URL ke Kementerian Komunikasi dan Digital atas nama Satgas PASTI Daerah" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 115,
@@ -1383,7 +1268,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Normal" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 116,
@@ -1394,8 +1278,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Didukung oleh pegawai-pegawai yang ahli di dalam bidang penjaminan Emisi Efek" },
       { label: "d.", text: "Sekurang-kurangnya mempunyai seorang direktur dan dua orang pegawai yang telah memperoleh izin orang perseorangan sebagai Wakil Penjamin Emisi Efek" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 117,
@@ -1406,8 +1289,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "1 tahun" },
       { label: "d.", text: "5 tahun" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 118,
@@ -1418,8 +1300,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Program Pendampingan UMKM potensial ekspor" },
       { label: "d.", text: "Program Simpanan Pemuda (SiMuda) untuk pemuda" },
     ],
-    correctLabel: "b.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 119,
@@ -1431,7 +1312,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Rencana pemasaran produk baru" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 120,
@@ -1443,7 +1323,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Data Pokok (DAPOK)" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 121,
@@ -1455,7 +1334,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "30 Juni tahun berjalan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 122,
@@ -1467,7 +1345,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "POJK 9/2022" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 123,
@@ -1479,7 +1356,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Gabungan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 124,
@@ -1490,8 +1366,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Pernyataan kemampuan menghitung" },
       { label: "d.", text: "Konsep aritmatika sederhana" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 125,
@@ -1503,7 +1378,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Risiko Hukum" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 126,
@@ -1514,8 +1388,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Risiko inheren Imbal Hasil BUS A sama dengan BUS B" },
       { label: "d.", text: "Risiko inheren Investasi BUS A lebih tinggi dibandingkan BUS B" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 127,
@@ -1527,7 +1400,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Bursa Karbon" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 128,
@@ -1538,8 +1410,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Jelas, Akurat, Jujur, Mudah diakses dan Tidak Menyesatkan" },
       { label: "d.", text: "Jelas, Akurat, Benar, Mudah diakses dan Tidak Menyesatkan" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 129,
@@ -1551,7 +1422,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pengamatan Lapangan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 130,
@@ -1563,7 +1433,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Integritas, reputasi keuangan, kelayakan keuangan, kompetensi" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 131,
@@ -1575,7 +1444,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Risiko Operasional" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 132,
@@ -1587,7 +1455,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "3" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 133,
@@ -1599,7 +1466,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Dikecualikan dari batasan pembelian Efek" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 134,
@@ -1611,7 +1477,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Bersifat Rahasia Selamanya" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 135,
@@ -1623,7 +1488,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Ditujukan untuk segmen ekonomi tertentu" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 136,
@@ -1635,7 +1499,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Logis & Loyal" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 137,
@@ -1647,7 +1510,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "International good practices" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 138,
@@ -1658,8 +1520,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Proses pengumpulan informasi dengan menggunakan sumberterbuka, seperti internet, media cetak, media sosial dan lain-lain" },
       { label: "d.", text: "Proses pengumpulan data/informasi melalui metode undercover dengan berkomunikasi melalui media telepon dengan PUJK dan/ataukonsumen untuk mengumpulkan data/informasiterkait dengan isu perlindungan konsumen yang sedang ditangani" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 139,
@@ -1671,7 +1532,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Monitoring dan Tindak Lanjut Pengawasan" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 140,
@@ -1682,8 +1542,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Reverse repo" },
       { label: "d.", text: "Penempatan pada bank lain" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 141,
@@ -1695,7 +1554,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pihak yang mewakili kepentingan pemegang Efek bersifat utang" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 142,
@@ -1707,7 +1565,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Anggaran investasi" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 143,
@@ -1719,7 +1576,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pemahaman terhadap Lembaga Jasa Keuangan NonBank" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 144,
@@ -1730,8 +1586,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Pengawasan terhadap perilaku PUSK dalam mendesain, menyediakan dan menyampaikan informasi, menawarkan, menyusun perjanjian, memberikan pelayanan atas penggunaan produk dan/atau layanan, serta penanganan pengaduan dan penyelesaian sengketa dalam upaya mewujudkan Pelindungan Konsumen" },
       { label: "d.", text: "Pengawasan terhadap perilaku PUJK dalam mendesain, menyediakan dan menyampaikan informasi, menawarkan, menyusun perjanjian, memberikanpelayanan atas penggunaan produk dan/atau layanan, serta penanganan pengaduan dan penyelesaian sengketa dalam upaya mewujudkan Pelindungan Konsumen" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 145,
@@ -1743,7 +1598,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "kafalah" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 146,
@@ -1755,7 +1609,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Memberikan sanksi administratif kepada PUJK yang menanggapi melewati SLA sesuai ketentuan" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 147,
@@ -1767,7 +1620,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "30 Januari" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 148,
@@ -1779,7 +1631,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Komposisi portofolio aset dan tingkat konsentrasi." },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 149,
@@ -1791,7 +1642,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pasal 59" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 150,
@@ -1802,8 +1652,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Sumber-sumber rentabilitas" },
       { label: "d.", text: "Sustainability rentabilitas" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "d.",
   },
   {
     id: 151,
@@ -1813,8 +1662,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "b.", text: "manfaat barang maupun jasa" },
       { label: "c.", text: "mahall al manfa ah" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 152,
@@ -1826,7 +1674,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Brosur" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 153,
@@ -1838,7 +1685,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Struktur Modal, Struktur Organisasi, dan Struktur Bisnis" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 154,
@@ -1850,7 +1696,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Rasio piutang pembiayaan bermasalah < 25%" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 155,
@@ -1862,7 +1707,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penjaminan Kendaraan Bermotor" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 156,
@@ -1873,8 +1717,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "AFTECH" },
       { label: "d.", text: "AFPI" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 157,
@@ -1886,7 +1729,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Margin call." },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 158,
@@ -1896,7 +1738,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "b.", text: "al-waiad" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 159,
@@ -1908,7 +1749,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Terdapat penurunan nominal persediaan yang signifikan pada bulan laporan dibandingkan bulan sebelumnya." },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 160,
@@ -1920,7 +1760,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Departemen Pemeriksaan Khusus, Pengawasan Keuangan Derivatif, Bursa Karbon dan Transaksi Efek – Direktorat Pemeriksaan Khusus Pasar Modal" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 161,
@@ -1932,7 +1771,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penggunaan produk dan/atau layanan jasa keuangan" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 162,
@@ -1944,7 +1782,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Profit call." },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 163,
@@ -1956,7 +1793,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "3 bulan" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 164,
@@ -1968,7 +1804,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Melakukan Penyidikan dan Melakukan Pendampingan Hukum" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 165,
@@ -1979,8 +1814,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Kinerja rentabilitas" },
       { label: "d.", text: "Tata kelola rentabilitas" },
     ],
-    correctLabel: "b.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 166,
@@ -1991,8 +1825,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Entry Meeting, Pemeriksaan, Penyusunan KHP, Pre-Exit Meeting, Exit Meeting" },
       { label: "d.", text: "Entry Meeting, Pemeriksaan, Penyusunan LHP, Pre-Exit Meeting, Exit Meeting" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 167,
@@ -2004,7 +1837,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Dewan Syariah Nasional Majelis Ulama Indonesia" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 168,
@@ -2016,7 +1848,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pasal 247 ayat (1)" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 169,
@@ -2028,7 +1859,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Exit meeting" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 170,
@@ -2039,8 +1869,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Laporan keuangan tahunan, laporan keuangan tengah tahunan, dan laporan tahunan" },
       { label: "d.", text: "Laporan keuangan tahunan, laporan keuangan tengah tahunan, laporan tahunan, dan laporan keberlanjutan" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 171,
@@ -2052,7 +1881,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Konglomerasi Keuangan (KK)" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 172,
@@ -2064,7 +1892,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Mudharabah" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 173,
@@ -2075,8 +1902,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Peraturan Otoritas Jasa Keuangan Nomor 44/POJK.05/2020" },
       { label: "d.", text: "Peraturan Otoritas Jasa Keuangan Nomor 28/POJK.05/2020" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 174,
@@ -2088,7 +1914,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Istishna" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 175,
@@ -2100,7 +1925,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Exit Meeting" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 176,
@@ -2112,7 +1936,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kemampuan akses permodalan" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 177,
@@ -2123,8 +1946,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Global Islamic Entrepreneurship Index" },
       { label: "d.", text: "Global Islamic Education Index" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "b.",
   },
   {
     id: 178,
@@ -2135,8 +1957,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Asta Cita 2" },
       { label: "d.", text: "Asta Cita 4" },
     ],
-    correctLabel: "c.",
-    source: "lms",
+    correctLabel: "a.",
   },
   {
     id: 179,
@@ -2148,7 +1969,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Literasi Keuangan, Inklusi Keuangan, dan Pengawasan Perilaku PUJK" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 180,
@@ -2160,7 +1980,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Perdagangan Karbon" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 181,
@@ -2172,7 +1991,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Prinsip Syariah, Demokrasi Ekonomi, dan Prinsip Kehati-hatian" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 182,
@@ -2184,7 +2002,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Melakukan pencegahan terhadap Kegiatan Usaha Tanpa Izin di Sektor Keuangan" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 183,
@@ -2196,7 +2013,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Istishna" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 184,
@@ -2208,7 +2024,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Meminjam pada penyelenggara yang terdaftar dan diawasi OJK" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 185,
@@ -2220,7 +2035,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Fase 1: Pemeriksaan Umum; Fase 2: Pemeriksaan Khusus" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 186,
@@ -2232,7 +2046,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Piutang Tagihan komersial, Future Cash Flow, Future Revenue, Aset keuangan setara dan aset keuangan lain." },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 187,
@@ -2243,8 +2056,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "POJK Nomor 22 tahun 2023 dan POJK Nomor 3 tahun 2023" },
       { label: "d.", text: "POJK Nomor 21 tahun 2023 dan POJK Nomor 2 tahun 2023" },
     ],
-    correctLabel: "d.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 188,
@@ -2256,7 +2068,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "https://jktsipb.ojk.go.id" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 189,
@@ -2268,7 +2079,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Tidak Sehat" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 190,
@@ -2280,7 +2090,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Third line of defense" },
     ],
     correctLabel: "a.",
-    source: "lms",
   },
   {
     id: 191,
@@ -2292,7 +2101,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "sebesar Rp100.000,00 (seratusribu rupiah) per hari keterlambatandan paling banyak sebesar Rp10.000.000,00 (sepuluh juta rupiah)" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 192,
@@ -2304,7 +2112,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Mencegah dan menangani kegiatan usaha tanpa izin di sektor keuangan" },
     ],
     correctLabel: "d.",
-    source: "lms",
   },
   {
     id: 193,
@@ -2316,7 +2123,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Sniffing" },
     ],
     correctLabel: "b.",
-    source: "lms",
   },
   {
     id: 194,
@@ -2328,7 +2134,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Sebagai tindak lanjut pemeriksaan" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 195,
@@ -2340,7 +2145,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "OJK-Box (OBOX)" },
     ],
     correctLabel: "c.",
-    source: "lms",
   },
   {
     id: 196,
@@ -2351,8 +2155,7 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "c.", text: "Unit Karbon" },
       { label: "d.", text: "Kuota Emisi" },
     ],
-    correctLabel: "a.",
-    source: "lms",
+    correctLabel: "c.",
   },
   {
     id: 197,
@@ -2364,7 +2167,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Bank Perekonomian Rakyat Syariah" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
     id: 198,
@@ -2376,7 +2178,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pra Entry Meeting, Entry Meeting, Pemeriksaan, Penyusunan KHP, Exit Meeting" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
     id: 199,
@@ -2388,7 +2189,6 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Mudharabah" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
     id: 200,
@@ -2400,22 +2200,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menunggu nasabah membuat LP terlebih dahulu, baru bank bertindak" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
     id: 201,
-    text: "Risiko kegagalan Perusahaan untuk memenuhi kewajiban kepada pemegang polis, tertanggung, dan/atau peserta sebagai akibat dari ketidakcukupan proses seleksi risiko (underwriting), penetapan premi atau kontribusi, penggunaan reasuransi, dan/atau penanganan klaim, adalah",
-    options: [
-      { label: "a.", text: "Risiko underwriting" },
-      { label: "b.", text: "Risiko asuransi" },
-      { label: "c.", text: "Risiko kredit" },
-      { label: "d.", text: "Risiko operasional" },
-    ],
-    correctLabel: "b.",
-    source: "pdf",
-  },
-  {
-    id: 202,
     text: "Berikut ini merupakan tantangan dalam meningkatkan literasi dan inklusi keuangan masyarakat Indonesia, kecuali…..",
     options: [
       { label: "a.", text: "Kondisi geografis Indonesia" },
@@ -2424,10 +2211,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Digitalisasi dan kompleksitas produk dan/atau layanan jasa keuangan" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 203,
+    id: 202,
     text: "Berdasarkan Pasal 247 ayat (2) UU P2SK, tugas pokok Satgas PASTI adalah...",
     options: [
       { label: "a.", text: "Mengawasi kegiatan usaha tanpa izin di sektor keuangan" },
@@ -2436,43 +2222,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menangani kegiatan usaha tanpa izin di sektor keuangan" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 204,
-    text: "Dalam proses bisnis perkreditan, bank perlu untuk melakukan analisa berjenjang dan/atau terpisah terhadap suatu debitur yang dilakukan oleh unit kerja yang berbeda, antara lain oleh account manager dengan credit reviewer. Praktik dimaksud umumnya dikenal sebagai:",
-    options: [
-      { label: "a.", text: "Third line of defense" },
-      { label: "b.", text: "Four eyes principle" },
-      { label: "c.", text: "Segregation of duty" },
-      { label: "d.", text: "Five Cs of credit" },
-    ],
-    correctLabel: "b.",
-    source: "pdf",
-  },
-  {
-    id: 205,
-    text: "Prinsip bagi hasil dalam Bank Syariah mengedepankan nilai-nilai keadilan. Hal ini tercermin antara lain dari kerugian waktu dan tenaga yang dibebankan kepada mudharib (pengelola dana investasi), sementara kerugian finansial yang sepenuhnya ditanggung oleh shahibul maal (investor), dengan syarat kegagalan pembiayaan bagi hasil benar-benar disebabkan oleh kerugian bisnis, bukan karena tindakan mudharib yang termasuk:",
-    options: [
-      { label: "a.", text: "This choice was deleted after the attempt was started." },
-    ],
-    correctLabel: "",
-    source: "pdf",
-  },
-  {
-    id: 206,
-    text: "Jangka waktu status pengawasan intensif paling lama … sejak surat pemberitahuan OJK",
-    options: [
-      { label: "a.", text: "3 bulan" },
-      { label: "b.", text: "1 tahun" },
-      { label: "c.", text: "2 tahun" },
-      { label: "d.", text: "6 bulan" },
-    ],
-    correctLabel: "b.",
-    source: "pdf",
-  },
-  {
-    id: 207,
+    id: 203,
     text: "Sistem Perdagangan Alternatif (SPA) ditransaksikan melalui:",
     options: [
       { label: "a.", text: "Auction" },
@@ -2481,34 +2233,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pasar Nego" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 208,
-    text: "Dasar hukum penentuan Status Pengawasan Lembaga Pembiayaan dan Perusahaan Modal Ventura terbaru adalah …",
-    options: [
-      { label: "a.", text: "POJK 29/2021" },
-      { label: "b.", text: "POJK 49/2024 sebagaimana telah diubah dengan POJK 25/2025" },
-      { label: "c.", text: "POJK 9/2022" },
-      { label: "d.", text: "POJK 44/2021" },
-    ],
-    correctLabel: "b.",
-    source: "pdf",
-  },
-  {
-    id: 209,
-    text: "Pengertian fiqh muamalah dalam arti sempit adalah",
-    options: [
-      { label: "a.", text: "mengatur hubungan antar manusia baik yang bersifat individual maupun kolektif" },
-      { label: "b.", text: "terdiri dari hukum keluarga, hukum kebendaan, hukum pidana, hukum acara, perundang-undangan, hukum internasional, hukum ekonomi dan keuangan" },
-      { label: "c.", text: "mencakup segala aturan hukum Islam yang terkait dengan hubungan antar manusia" },
-      { label: "d.", text: "hanya membahas persoalan aturan hukum antar manusia yang terkait dengan harta benda (maal)" },
-    ],
-    correctLabel: "a.",
-    source: "pdf",
-  },
-  {
-    id: 210,
+    id: 204,
     text: "Prinsip pelaksanaan Gerakan Nasional Cerdas Keuangan (GENCARKAN) adalah sebagai berikut…..",
     options: [
       { label: "a.", text: "Masif, Merata, Sinergi, Terarah, Terukur, Berkelanjutan" },
@@ -2517,10 +2244,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Merata, Sinergi, Kolaborasi, Terukur, Berkelanjutan" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 211,
+    id: 205,
     text: "Dalam kegiatan Pemeriksaan Tematik, setelah pemeriksaan selesai, tim membuat Laporan Hasil Pemeriksaan selambat-lambatnya",
     options: [
       { label: "a.", text: "10 Hari Kerja setelah exit meeting" },
@@ -2529,22 +2255,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "20 Hari Kalender setelah exit meeting" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 212,
-    text: "Siklus pengawasan RBS pada Perusahaan Pembiayaan dimulai dengan tahap …",
-    options: [
-      { label: "a.", text: "Tindakan Pengawasan dan Pemantauan" },
-      { label: "b.", text: "Penilaian Tingkat Kesehatan Lembaga Jasa Keuangan NonBank" },
-      { label: "c.", text: "Perencanaan Pengawasan" },
-      { label: "d.", text: "Pemahaman terhadap Lembaga Jasa Keuangan NonBank" },
-    ],
-    correctLabel: "d.",
-    source: "pdf",
-  },
-  {
-    id: 213,
+    id: 206,
     text: "Terdapat amanat dalam UU Pengembangan dan Penguatan Sektor Jasa Keuangan (UU P2SK) pembentukan salah satu Kepala Eksekutif Pengawas, berikut merupakan pernyataan yang benar:",
     options: [
       { label: "a.", text: "Kepala Eksekutif Pengawas Perilaku Pelaku Usaha Jasa Keuangan, Edukasi, dan Pelindungan Konsumen merangkap ketua Etik" },
@@ -2553,10 +2266,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kepala Eksekutif Pengawas Perilaku Pelaku Usaha Jasa Keuangan, Literasi, Inklusi dan Pelindungan Konsumen merangkap anggota" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 214,
+    id: 207,
     text: "Pemantauan Supervisory Plan dilakukan oleh Pengawas secara:",
     options: [
       { label: "a.", text: "Bulanan" },
@@ -2565,10 +2277,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Semesteran" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 215,
+    id: 208,
     text: "Mudharabah dapat memberikan hasil tetap, apabila",
     options: [
       { label: "a.", text: "Ditujukan untuk pembiayaan yang tidak menggunakan prinsip jual beli" },
@@ -2577,10 +2288,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Ditujukan untuk pembiayaan yang tidak menggunakan prinsip bagi hasil" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 216,
+    id: 209,
     text: "Berikut merupakan tugas pokok Direktorat Literasi dan Inklusi Keuangan Syariah, kecuali:",
     options: [
       { label: "a.", text: "Mengoordinasikan pengembangan program dan model LIKS" },
@@ -2589,10 +2299,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Mengoordinasikan implementasi program LIKS" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 217,
+    id: 210,
     text: "Output dari kegiatan validasi Laporan Hasil Penilaian Sendiri PUJK yang dilakukan secara on-site ke Kantor PUJK berupa dokumen:",
     options: [
       { label: "a.", text: "Konfirmasi Hasil Pemeriksaan" },
@@ -2601,10 +2310,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Konfirmasi Hasil Validasi" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 218,
+    id: 211,
     text: "Wakil Agen Penjual Reksa Dana wajib memenuhi persyartan sebagai berikut, kecuali…",
     options: [
       { label: "a.", text: "Memiliki akhlak dan moral yang baik" },
@@ -2613,10 +2321,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Tidak Cakap melakukan perbuatan hukum" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 219,
+    id: 212,
     text: "Risiko yang timbul sebagai akibat kegagalan counterparty memenuhi kewajibannya, merupakan pengertian dari risiko:",
     options: [
       { label: "a.", text: "Operasional" },
@@ -2625,22 +2332,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Stratejik" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 220,
-    text: "PT Bank Nusantara merupakan perusahaan anak dari ABC Bank, Ltd., yaitu Bank terbesar ke-5 di dunia dari total aset dan mendapatkan rating “AAA” dari Fetch Ratings serta Poor & Standar’s. Dalam penilaian permodalan RBBR, informasi tersebut paling tepat sebagai penilaian atas:",
-    options: [
-      { label: "a.", text: "Manajemen permodalan bank" },
-      { label: "b.", text: "Kecukupan permodalan" },
-      { label: "c.", text: "Risiko permodalan" },
-      { label: "d.", text: "Kemampuan akses permodalan" },
-    ],
-    correctLabel: "d.",
-    source: "pdf",
-  },
-  {
-    id: 221,
+    id: 213,
     text: "Berdasarkan Rencana Pembangunan Jangka Menengah Nasional (RPJMN) target inklusi keuangan yang harus dicapai tahun 2029 adalah sebesar ...",
     options: [
       { label: "a.", text: "91%" },
@@ -2649,10 +2343,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "98%" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 222,
+    id: 214,
     text: "Kepanjangan dari APPK adalah",
     options: [
       { label: "a.", text: "Aplikasi Portal Pengawasan Keuangan" },
@@ -2661,22 +2354,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Aplikasi Portal Perlindungan Konsumen" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 223,
-    text: "Pelimpahan kekuasaan oleh satu pihak kepada pihak lain dalam hal-hal yang boleh diwakilkan adalah",
-    options: [
-      { label: "a.", text: "wakalah" },
-      { label: "b.", text: "kafalah" },
-      { label: "c.", text: "rahn" },
-      { label: "d.", text: "hiwalah" },
-    ],
-    correctLabel: "a.",
-    source: "pdf",
-  },
-  {
-    id: 224,
+    id: 215,
     text: "Berikut kriteria pembayaran ganti rugi pemodal dengan menggunakan Dana Perlindungan Pemodal, kecuali:",
     options: [
       { label: "a.", text: "Kustodian tidak memiliki kemampuan untuk mengembalikan Aset Pemodal yang hilang" },
@@ -2685,10 +2365,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pemodal tidak mengajukan ganti rugi" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 225,
+    id: 216,
     text: "Yang termasuk kelompok risiko governance, kecuali …",
     options: [
       { label: "a.", text: "Risiko Strategis" },
@@ -2697,10 +2376,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Risiko Reputasi" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 226,
+    id: 217,
     text: "Pihak yang melakukan kegiatan usaha jual beli Efek untuk kepentingan sendiri atau pihak lain adalah...",
     options: [
       { label: "a.", text: "Biro Administrasi Efek" },
@@ -2709,10 +2387,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Perusahaan Terbuka" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 227,
+    id: 218,
     text: "Alur penetapan sanksi yang berlaku di Direktorat Pengawasan Transaksi Efek:",
     options: [
       { label: "a.", text: "Pelimpahan dari Direktorat Pemeriksaan Khusus Pasar Modal – Penyusunan Surat Sanksi – Penyusunan Pendapat Hukum – Surat Sanksi" },
@@ -2721,10 +2398,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penyusunan Pendapat Hukum – Penyusunan Surat Sanksi – Surat Sanksi – Pelimpahan ke Direktorat Pemeriksaan Khusus Pasar Modal" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 228,
+    id: 219,
     text: "Pengadilan yang berwenang mengadili gugatan terhadap PUJK konvensional adalah",
     options: [
       { label: "a.", text: "Pengadilan Negeri" },
@@ -2733,10 +2409,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pengadilan Agama" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 229,
+    id: 220,
     text: "Berdasarkan akadnya, penghimpunan Dana Pihak Ketiga (DPK) bank syariah terdiri dari akad Wadiah dan akad Mudharabah (Bagi Hasil). Komposisi akad wadiah DPK BUS A lebih tinggi dibandingkan BUS B. Berikut pernyataan yang benar, adalah:",
     options: [
       { label: "a.", text: "Risiko inheren Imbal Hasil BUS A sama dengan BUS B" },
@@ -2745,10 +2420,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Risiko inheren Imbal Hasil BUS A lebih rendah dibandingkan BUS B" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 230,
+    id: 221,
     text: "Yang termasuk kategori status pengawasan intensif kecuali …",
     options: [
       { label: "a.", text: "TKS PK-3 dengan faktor Tata Kelola Peringkat 5" },
@@ -2757,10 +2431,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "TKS PK-3 dengan faktor Tata Kelola Peringkat 4" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 231,
+    id: 222,
     text: "Jenis persyaratan yang harus dipenuhi oleh calon Direksi dan calon Dewan Komisaris yaitu …",
     options: [
       { label: "a.", text: "Integritas, kelayakan keuangan, kompetensi" },
@@ -2769,10 +2442,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Integritas, reputasi keuangan, kompetensi" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 232,
+    id: 223,
     text: "Bahaya utama menggunakan pinjaman online ilegal adalah...",
     options: [
       { label: "a.", text: "Penagihan sesuai norma dan peraturan" },
@@ -2781,10 +2453,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Data pengguna hanya digunakan sesuai kesepakatan" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 233,
+    id: 224,
     text: "Seorang pegawai bank menerima email dari 'atasan' yang meminta segera mentransfer dana ke rekening tertentu dengan gaya bahasa & tanda tangan mirip pimpinan asli. Modus scam yang paling tepat menggambarkan kasus ini adalah...",
     options: [
       { label: "a.", text: "Social Engineering" },
@@ -2793,10 +2464,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Phising" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 234,
+    id: 225,
     text: "Di bawah ini yang bukan termasuk dalam komponen penilaian KPMR pada Risiko Likuditas adalah:",
     options: [
       { label: "a.", text: "Teknologi informasi dan infrastruktur pendukung." },
@@ -2805,10 +2475,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penetapan pihak yang independen untuk melakukan pengujian dan validasi model pengukuran risiko dan pricing model secara berkala." },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 235,
+    id: 226,
     text: "Murabahah yang dilakukan melalui proses pengadaan barang terlebih dahulu disebut dengan :",
     options: [
       { label: "a.", text: "Murabahah dengan persediaan" },
@@ -2817,20 +2486,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Murabahah dengan pesanan" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 236,
-    text: "Pernyataan kehendak dari seseorang atau satu pihak untuk melakukan sesuatu yang baik (atau tidak melakukan sesuatu yang buruk) kepada pihak lain di masa yang akan datang disebut",
-    options: [
-      { label: "a.", text: "ikhbar" },
-      { label: "b.", text: "al-waiad" },
-    ],
-    correctLabel: "a.",
-    source: "pdf",
-  },
-  {
-    id: 237,
+    id: 227,
     text: "Salah satu aplikasi yang digunakan oleh Pengawas Transaksi Efek untuk melihat data pelaporan transaksi EBUS (Efek bersifat utang (obligasi) atau sukuk) adalah:",
     options: [
       { label: "a.", text: "Microsoft Power Point" },
@@ -2839,10 +2497,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Sipetro (Nasdaq)" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 238,
+    id: 228,
     text: "Salah satu tugas pokok dari Biro Administrasi Efek (BAE) yaitu …",
     options: [
       { label: "a.", text: "Mengadministrasikan kepemilikan Efek Emiten" },
@@ -2851,10 +2508,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Melakukan proses pemeringkatan untuk memberikan peringkat/rating atas surat utang yang diterbitkan oleh suatu perusahaan" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 239,
+    id: 229,
     text: "Dalam hal LJKNB melakukan pengendalian terhadap Perusahaan anak, selain melakukan penilaian tingkat kesehatan dengan pendekatan risiko secara individual, LJKNB wajib melakukan penilaian tingkat kesehatan dengan pendekatan risiko secara …",
     options: [
       { label: "a.", text: "Gabungan" },
@@ -2863,10 +2519,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Konsolidasi" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 240,
+    id: 230,
     text: "Suatu bagian dari pengendalian kualitas Pengawasan LJKNB yang memastikan input, proses, dan output kegiatan Pengawasan LJKNB Berbasis Risiko telah memenuhi standar kualitas tertentu, berupa penggunaan informasi secara komprehensif, ketajaman dan kedalaman analisis, kualitas pengambilan kesimpulan atas kondisi LJKNB, dan tindakan pengawasan yang dilakukan, disebut juga",
     options: [
       { label: "a.", text: "Supervisory plan" },
@@ -2875,10 +2530,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penilaian tingkat risiko" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 241,
+    id: 231,
     text: "Reksa Dana Campuran melakukan investasi dalam Efek bersifat Ekuitas, Efek bersifat utang, dan/atau instrumen Pasar Uang dalam negeri yang masing-masing paling banyak",
     options: [
       { label: "a.", text: "70% dari NAB" },
@@ -2887,22 +2541,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "79% dari NAB" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 242,
-    text: "Salah satu siklus pengawasan RBS adalah, kecuali ...",
-    options: [
-      { label: "a.", text: "Exit Meeting" },
-      { label: "b.", text: "Penyusunan KYNBFI" },
-      { label: "c.", text: "Penyusunan Supervisory Plan" },
-      { label: "d.", text: "Monitoring dan Tindak Lanjut Pengawasan" },
-    ],
-    correctLabel: "a.",
-    source: "pdf",
-  },
-  {
-    id: 243,
+    id: 232,
     text: "Letter of Credit dalam perbankan syariah yang telah difatwakan dapat menggunakan",
     options: [
       { label: "a.", text: "Kafalah dan Wakalah" },
@@ -2911,10 +2552,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Hiwalah dan Kafalah" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 244,
+    id: 233,
     text: "Perantara Pedagang Efek yang khusus didirikan untuk memasarkan Efek Reksa Dana wajib memenuhi:",
     options: [
       { label: "a.", text: "Modal disetor minimal 500 juta, minimal dua direksi memiliki izin WAPERD" },
@@ -2923,10 +2563,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Modal disetor minimal 500 juta, minimal dua direksi memiliki izin WMI" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 245,
+    id: 234,
     text: "Yang merupakan peraturan terkait perizinan Manajer Investasi adalah sebagai berikut:",
     options: [
       { label: "a.", text: "Peraturan V.B.4 dan POJK 5 Tahun 2026" },
@@ -2935,10 +2574,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Peraturan V.D.5 dan POJK 3 Tahun 2026" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 246,
+    id: 235,
     text: "Apabila terdapat perbedaan antara hasil self-assessment Tingkat Kesehatan Bank oleh bank dengan penilaian Tingkat Kesehatan Bank oleh OJK, maka yang berlaku adalah...",
     options: [
       { label: "a.", text: "Rata-rata dari kedua penilaian" },
@@ -2947,10 +2585,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penilaian diulang oleh akuntan publik independen" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 247,
+    id: 236,
     text: "Berikut merupakan enabler dalam kerangka kerja TPAKD periode 2026 - 2030, kecuali",
     options: [
       { label: "a.", text: "Teknologi Informasi" },
@@ -2959,10 +2596,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Sumber Daya" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 248,
+    id: 237,
     text: "Yang merupakan norma dasar iklan jasa keuangan yang diatur pada POJK Nomor 22 Tahun 2023 tentang Pelindungan Konsumen dan Masyarakat di Sektor Jasa Keuangan, adalah",
     options: [
       { label: "a.", text: "Jelas, Akurat, Benar, Mudah diakses dan Tidak Menyesatkan" },
@@ -2971,10 +2607,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Jelas, Akurat, Jujur, Mudah diakses dan Tidak Berpotensi Menyesatkan" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 249,
+    id: 238,
     text: "Berdasarkan UU No. 21 Tahun 2011 Pasal 6 huruf a, OJK melaksanakan tugas pengaturan dan pengawasan terhadap...",
     options: [
       { label: "a.", text: "Kegiatan jasa keuangan di sektor perbankan" },
@@ -2983,10 +2618,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kebijakan moneter nasional" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 250,
+    id: 239,
     text: "Berikut merupakan faktor penilaian yang tidak terdapat dalam penilaian Tingkat Kesehatan UUS yaitu:",
     options: [
       { label: "a.", text: "Risiko Imbal Hasil, GCG, dan Rentabilitas" },
@@ -2995,10 +2629,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "GCG, Permodalan, dan Rentabilitas" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 251,
+    id: 240,
     text: "Jika calon Direksi Pemeringkat pernah ditolak dalam fit and proper test, maka:",
     options: [
       { label: "a.", text: "Harus pindah perusahaan" },
@@ -3007,10 +2640,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Tidak dapat mengajukan kembali" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 252,
+    id: 241,
     text: "Gugatan yang diajukan oleh OJK dalam POJK Nomor 38 Tahun 2025 merupakan gugatan berdasarkan:",
     options: [
       { label: "a.", text: "Legal standing yang diberikan undang-undang" },
@@ -3019,10 +2651,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Mediasi perbankan" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 253,
+    id: 242,
     text: "Dalam pemeriksaan langsung, tahapan dalam menyampaikan temuan pemeriksaan, rekomendasi pemeriksaan dan tindak lanjut pemeriksaan, dilakukan pada saat:",
     options: [
       { label: "a.", text: "Pra Exit Meeting" },
@@ -3031,10 +2662,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pra Entry Meeting" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 254,
+    id: 243,
     text: "Penunjukan AP dan/atau KAP yang akan memberikan jasa audit historis tahunan wajib diputuskan oleh RUPS dengan mempertimbangkan usulan",
     options: [
       { label: "a.", text: "Sekretaris Perusahaan" },
@@ -3043,10 +2673,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Dewan Komisaris" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 255,
+    id: 244,
     text: "Tindakan yang paling tepat dilakukan Pengawas Bank saat pemeriksaan berlangsung dalam menindaklanjuti simtom yang muncul di OSIDA adalah…",
     options: [
       { label: "a.", text: "Mendalami/mengonfirmasi penyebab munculnya simtom ke pihak terkait di bank" },
@@ -3055,10 +2684,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Memintakan arahan Pimpinan satuan kerja atas simtom OSIDA tersebut" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 256,
+    id: 245,
     text: "PT Bank Nusantara merupakan perusahaan anak dari ABC Bank, Ltd., yaitu Bank terbesar ke-5 di dunia dari segi total aset dan mendapatkan rating “AAA” dari Fetch Ratings dan Standard & Poor’s. Dalam penilaian permodalan RBBR, informasi tersebut paling tepat digunakan sebagai penilaian atas:",
     options: [
       { label: "a.", text: "Kecukupan permodalan" },
@@ -3067,10 +2695,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kemampuan akses permodalan" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 257,
+    id: 246,
     text: "Penilaian risiko inheren dan kualitas penerapan manajemen risiko untuk Perusahaan Asuransi terdiri dari:",
     options: [
       { label: "a.", text: "9 risiko: risiko asuransi, risiko strategi, risiko kredit, risiko pasar, risiko operasional, risiko likuiditas, risiko hukum, risiko kepatuhan, risiko reputasi" },
@@ -3079,10 +2706,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "9 risiko: risiko asuransi, risiko strategi, risiko kredit, risiko pasar, risiko operasional, risiko rentabilitas, risiko hukum, risiko kepatuhan, risiko reputasi" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 258,
+    id: 247,
     text: "Di bawah ini yang tidak termasuk sebagai sumber data Sistem Informasi Pengawasan Perbankan (SIPB) yaitu",
     options: [
       { label: "a.", text: "E-mail Bank" },
@@ -3091,10 +2717,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Laporan APOLO" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 259,
+    id: 248,
     text: "Dalam RBBR, faktor Profil Risiko merupakan penilaian terhadap ....",
     options: [
       { label: "a.", text: "Kemampuan bank menghasilkan laba saja" },
@@ -3103,46 +2728,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Kualitas penerapan tata kelola saja" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 260,
-    text: "Bagi PT Permodalan Nasional Madani yang dinyatakan tidak menyampaikan laporan hasil penilaian sendiri setelah 30 (hari) dari batas waktu keterlambatan penyampaian laporan, dikenakan sanksi:",
-    options: [
-      { label: "a.", text: "sebesar Rp50.000.000,00 (lima puluh juta rupiah)" },
-      { label: "b.", text: "tidak ada yang benar" },
-      { label: "c.", text: "sebesar Rp100.000,00 (seratusribu rupiah) per hari keterlambatandan paling banyak sebesar Rp10.000.000,00 (sepuluh juta rupiah)" },
-      { label: "d.", text: "sebesar Rp50.000,00 (lima puluh ribu rupiah) per hari keterlambatan dan paling  banyak sebesar Rp5.000.000,00 (lima juta rupiah)" },
-    ],
-    correctLabel: "a.",
-    source: "pdf",
-  },
-  {
-    id: 261,
-    text: "Dalam proses bisnis perkreditan, bank perlu untuk melakukan analisis berjenjang dan/atau terpisah terhadap suatu debitur yang dilakukan oleh unit kerja yang berbeda. Praktik dimaksud umumnya dikenal sebagai",
-    options: [
-      { label: "a.", text: "Five Cs of credit" },
-      { label: "b.", text: "Segregation of duty" },
-      { label: "c.", text: "Four eyes principle" },
-      { label: "d.", text: "Third line of defense" },
-    ],
-    correctLabel: "c.",
-    source: "pdf",
-  },
-  {
-    id: 262,
-    text: "Dalam siklus pengawasan RBS, proses pembuatan Know Your Insurance Company berada dalam tahapan:",
-    options: [
-      { label: "a.", text: "Pemahaman LJKNB" },
-      { label: "b.", text: "Tindakan Pengawasan dan Monitoring" },
-      { label: "c.", text: "Perencanaan Pengawasan" },
-      { label: "d.", text: "Penilaian Tingkat Kesehatan" },
-    ],
-    correctLabel: "a.",
-    source: "pdf",
-  },
-  {
-    id: 263,
+    id: 249,
     text: "Sebuah Bank Umum Syariah diketahui memiliki expertise di segmen mikro dengan komposisi sebesar 95% dari total portofolio pembiayaan. Dalam RBB, diketahui bahwa BUS tsb memproyeksikan peningkatan yang cukup signifikan untuk pembiayaan segmen Corporate dan Commercial menjadi sebesar 40% dari total portofolio pembiayaan. Berdasarkan informasi dimaksud, risiko yang patut mendapatkan perhatian lebih dari Pengawas dalam penilaian tingkat kesehatan adalah:",
     options: [
       { label: "a.", text: "Risiko Operasional" },
@@ -3151,10 +2739,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Risiko Reputasi" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 264,
+    id: 250,
     text: "Kapan permohonan perpanjangan izin diajukan kepada OJK?",
     options: [
       { label: "a.", text: "Paling cepat 90 hari kerja setelah masa berlaku izin berakhir" },
@@ -3163,10 +2750,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Paling cepat 90 hari sebelum masa berlaku izin berakhir" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 265,
+    id: 251,
     text: "Emiten atau Perusahaan Publik mempunyai kewajiban untuk melaporkan laporan berkala maupun insidentil. Di bawah ini adalah laporan yang disampaikan secara insidentil, yaitu",
     options: [
       { label: "a.", text: "Laporan realisasi penggunaan dan" },
@@ -3175,10 +2761,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Laporan tahunan" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 266,
+    id: 252,
     text: "Yang dimaksud dengan Mystery Shopping pada Teknik Kegiatan Pengamatan Lapangan dalam Pengawasan Perilaku Pelaku Usaha Jasa Keuangan (Market Conduct), adalah",
     options: [
       { label: "a.", text: "Proses pengumpulan informasi dengan menggunakan sumberterbuka, seperti internet, media cetak, media sosial dan lain-lain" },
@@ -3187,22 +2772,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Proses pengumpulan data/informasi melalui metode undercover dengan melakukan interview dengan konsumen dan/atau eks konsumen terkait dengan pengalaman penggunaan produk/layanan" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 267,
-    text: "Peraturan Otoritas Jasa Keuangan yang mengatur Pemeriksaan Langsung Lembaga Jasa Keuangan Nonbank, yaitu:",
-    options: [
-      { label: "a.", text: "Peraturan Otoritas Jasa Keuangan Nomor 44/POJK.05/2020" },
-      { label: "b.", text: "Peraturan Otoritas Jasa Keuangan Nomor 30/POJK.05/2020" },
-      { label: "c.", text: "Peraturan Otoritas Jasa Keuangan Nomor 17/POJK.05/2017" },
-      { label: "d.", text: "Peraturan Otoritas Jasa Keuangan Nomor 28/POJK.05/2020" },
-    ],
-    correctLabel: "b.",
-    source: "pdf",
-  },
-  {
-    id: 268,
+    id: 253,
     text: "Salah satu fungsi utama dari Perusahaan Pemeringkat Efek adalah...",
     options: [
       { label: "a.", text: "Melaksanakan transaksi jual-beli saham" },
@@ -3211,10 +2783,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Menilai tingkat kemampuan emiten membayar kewajiban utangnya" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 269,
+    id: 254,
     text: "Pendekatan yang digunakan dalam Kampanye Nasional Anti Scam yang diluncurkan 19 Agustus 2025 adalah...",
     options: [
       { label: "a.", text: "Hanya melalui instansi pemerintah" },
@@ -3223,21 +2794,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Hanya melalui media sosial" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 270,
-    text: "Akad Ijarah adalah akad sewa antara pemberi sewa dengan penyewa atau antara penyewa dengan pihak yang memberikan jasa untuk mempertukarkan manfaah dan ujrah berupa",
-    options: [
-      { label: "a.", text: "ajir" },
-      { label: "b.", text: "manfaat barang maupun jasa" },
-      { label: "c.", text: "mahall al manfa ah" },
-    ],
-    correctLabel: "b.",
-    source: "pdf",
-  },
-  {
-    id: 271,
+    id: 255,
     text: "Sebelum melakukan kegiatan di Pasar Modal, Profesi Penunjang Pasar Modal, wajib terlebih dahulu memperoleh ... dari Otoritas Jasa Keuangan",
     options: [
       { label: "a.", text: "Surat Tanda Terdaftar (STTD)" },
@@ -3246,46 +2805,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Sertifikasi di bidang manajemen risiko" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 272,
-    text: "Risiko akibat ketidakcukupan dan/atau tidak berfungsinya proses internal, kesalahan manusia, kegagalan sistem, dan/atau adanya kejadian eksternal yang mempengaruhi operasional Perusahaan adalah",
-    options: [
-      { label: "a.", text: "Risiko kredit" },
-      { label: "b.", text: "Risiko asuransi" },
-      { label: "c.", text: "Risiko underwriting" },
-      { label: "d.", text: "Risiko operasional" },
-    ],
-    correctLabel: "d.",
-    source: "pdf",
-  },
-  {
-    id: 273,
-    text: "Pembiayaan untuk pengadaan/pembangunan ruko, idealnya menggunakan prinsip",
-    options: [
-      { label: "a.", text: "Musyarakah" },
-      { label: "b.", text: "Murabahah" },
-      { label: "c.", text: "Mudharabah" },
-      { label: "d.", text: "Istishna" },
-    ],
-    correctLabel: "d.",
-    source: "pdf",
-  },
-  {
-    id: 274,
-    text: "Yang bukan merupakan Kertas Kerja Laporan Penilaian Sendiri pada Pengawasan Perilaku Pelaku Usaha Jasa Keuangan (Market Conduct), adalah:",
-    options: [
-      { label: "a.", text: "Kertas Kerja APU &amp; PPT" },
-      { label: "b.", text: "Kertas Kerja Umum" },
-      { label: "c.", text: "Kertas Kerja Kerahasiaan &amp; Keamanan Data" },
-      { label: "d.", text: "Kertas Kerja Pemberian Layanan" },
-    ],
-    correctLabel: "a.",
-    source: "pdf",
-  },
-  {
-    id: 275,
+    id: 256,
     text: "Akad pengalihan utang dari satu pihak yang berutang kepada pihak lain yang wajib menanggung (membayar)-nya adalah",
     options: [
       { label: "a.", text: "kafalah" },
@@ -3294,10 +2816,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "wakalah" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 276,
+    id: 257,
     text: "Literasi dan Inklusi Keuangan Syariah menjadi salah satu topik pembahasan pada Komite terkait Keuangan Syariah yang dibentuk oleh OJK, yaitu:",
     options: [
       { label: "a.", text: "Komite Ekonomi dan Keuangan Syariah" },
@@ -3306,10 +2827,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Komite Nasional Penguatan Keuangan Syariah" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 277,
+    id: 258,
     text: "Pihak yang mengajukan izin usaha ke Otoritas Jasa Keuangan yaitu …",
     options: [
       { label: "a.", text: "Semuanya benar" },
@@ -3318,10 +2838,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penyelenggara" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 278,
+    id: 259,
     text: "Parameter kuantitatif untuk status pengawasan khusus bagi Perusahaan Pembiayaan adalah",
     options: [
       { label: "a.", text: "Rasio ekuitas terhadap modal disetor 0% ≤ x < 50%" },
@@ -3330,10 +2849,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Rasio piutang pembiayaan bermasalah < 25%" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 279,
+    id: 260,
     text: "Pada tahapan pra inkubasi dalam ekosistem keuangan inklusif, dilaksanakan proses.........",
     options: [
       { label: "a.", text: "Memahami kondisi desa dan kebutuhan masyarakatnya" },
@@ -3342,10 +2860,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pembangunan infrastruktur keuangan desa" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 280,
+    id: 261,
     text: "Parameter kuantitatif dalam yang digunakan sebagai parameter penilaian kriteria status pengawasan Perusahaan Pembiayaan adalah… ",
     options: [
       { label: "a.", text: "Rasio Piutang Pembiayaan Bermasalah dan Rasio Permodalan" },
@@ -3354,10 +2871,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Rasio Likuiditas dan Rasio Piutang Pembiayaan Bermasalah" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 281,
+    id: 262,
     text: "Tahapan Siklus Risk Based Supervision Perusahaan Asuransi antara lain, kecuali:",
     options: [
       { label: "a.", text: "Pemahaman LJKNB" },
@@ -3366,10 +2882,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Perencanaan Pengawasan" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 282,
+    id: 263,
     text: "UU No. 4 Tahun 2023 tentang P2SK menjadi dasar pembaruan status pengawasan bank menjadi....",
     options: [
       { label: "a.", text: "Umum, Khusus, dan Resolusi" },
@@ -3378,34 +2893,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Normal, Intensif, dan Khusus" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
   {
-    id: 283,
-    text: "Perusahaan dapat ditetapkan dalam pengawasan intensif, apabila berada dalam kondisi sebagai berikut, kecuali:",
-    options: [
-      { label: "a.", text: "Perusahaan dinilai cukup sehat, memiliki nilai RBC 120% dan faktor tata kelola dinilai pada peringkat 4." },
-      { label: "b.", text: "Perusahaan dinilai kurang sehat, memiliki nilai RBC 110% dan faktor tata kelola dinilai pada peringkat 3." },
-      { label: "c.", text: "Perusahaan dinilai cukup sehat, memiliki nilai RBC 120% dan faktor tata kelola dinilai pada peringkat 3." },
-      { label: "d.", text: "Perusahaan dinilai kurang sehat, memiliki nilai RBC 120% dan faktor tata kelola dinilai pada peringkat 4." },
-    ],
-    correctLabel: "c.",
-    source: "pdf",
-  },
-  {
-    id: 284,
-    text: "Untuk mendukung Asta Cita 3 yaitu \"Mendorong Kewirausahaan dan Industri Kreatif,\" program TPAKD yang disebutkan adalah:",
-    options: [
-      { label: "a.", text: "Membangun dari desa melalui implementasi GM EKI" },
-      { label: "b.", text: "Program asistensi/onboarding bagi UMKM atau Business Matching" },
-      { label: "c.", text: "Implementasi Pedoman Setara bagi disabilitas" },
-      { label: "d.", text: "Program Galeri Investasi" },
-    ],
-    correctLabel: "b.",
-    source: "pdf",
-  },
-  {
-    id: 285,
+    id: 264,
     text: "Peraturan OJK yang mengatur tentang Perdagangan Karbon melalui Bursa Karbon adalah:",
     options: [
       { label: "a.", text: "POJK Nomor 14 Tahun 2024" },
@@ -3414,10 +2904,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "POJK Nomor 10 Tahun 2023" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 286,
+    id: 265,
     text: "Jenis fokus pengawasan yang terdapat pada Supervisory Plan adalah",
     options: [
       { label: "a.", text: "Fokus Pengawasan Utama, Fokus Pengawasan Sekunder, Fokus Pengawasan Tambahan" },
@@ -3426,10 +2915,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Fokus Pengawasan Utama, Fokus Pengawasan Sekunder, Fokus Pengawasan Lainnya" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 287,
+    id: 266,
     text: "Yang merupakan status pengawasan LJKNB, kecuali",
     options: [
       { label: "a.", text: "Intensif" },
@@ -3438,22 +2926,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Penyehatan" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 288,
-    text: "Asta Cita manakah yang fokus pada program pendampingan bagi UMKM potensial ekspor dan program industrialisasi hilirisasi bagi komoditas unggulan daerah:",
-    options: [
-      { label: "a.", text: "Asta Cita 5" },
-      { label: "b.", text: "Asta Cita 4" },
-      { label: "c.", text: "Asta Cita 2" },
-      { label: "d.", text: "Asta Cita 3" },
-    ],
-    correctLabel: "a.",
-    source: "pdf",
-  },
-  {
-    id: 289,
+    id: 267,
     text: "Hal yang membedakan pemeriksaan tematik dan pemeriksaan khusus dalam Pengawasan Perilaku Pelaku Usaha Jasa Keuangan (Market Conduct) adalah sebagai berikut, kecuali",
     options: [
       { label: "a.", text: "Pelaksanaan pemeriksaan tematik berdasarkan rencana dan jadwal yang telah ditentukan sedangkan pemeriksaan khusus dapat dilakukan sewaktu-waktu" },
@@ -3462,10 +2937,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Laporan Hasil Pemeriksaan Khusus disampaikan kepada PUJK sedangkan Laporan Hasil Pemeriksaan Tematik tidak disampaikan kepada PUJK" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 290,
+    id: 268,
     text: "Salah satu tujuan kegiatan Pengamatan Lapangan dalam Pengawasan Perilaku Pelaku Usaha Jasa Keuangan (Market Conduct), adalah",
     options: [
       { label: "a.", text: "Sebagai salah satu cara untuk mengkonfirmasi Laporan Hasil Pemeriksaan (LHP)" },
@@ -3474,10 +2948,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Sebagai tindak lanjut pemeriksaan" },
     ],
     correctLabel: "b.",
-    source: "pdf",
   },
   {
-    id: 291,
+    id: 269,
     text: "Peraturan OJK Nomor 31/POJK.07/2020 berisi tentang ...",
     options: [
       { label: "a.", text: "Penyelenggaraan Layanan Konsumen Dan Masyarakat Di Sektor Jasa Keuangan Oleh Otoritas Jasa Keuangan" },
@@ -3486,10 +2959,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Lembaga Alternatif Penyelesaian Sengketa di Sektor Jasa Keuangan" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 292,
+    id: 270,
     text: "Salah satu komponen yang dinilai dalam Komponen Laba Rugi dan Rasio Rentabilitas bank adalah...",
     options: [
       { label: "a.", text: "Non Performing Loan" },
@@ -3498,10 +2970,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pendapatan Bunga Bersih (Net Interest Income)" },
     ],
     correctLabel: "d.",
-    source: "pdf",
   },
   {
-    id: 293,
+    id: 271,
     text: "Pendekatan pengawasan yang sedang dikembangkan berdasarkan tingkat risiko dikenal sebagai...",
     options: [
       { label: "a.", text: "Risk-Based Supervision" },
@@ -3510,10 +2981,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Compliance Based Supervision" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 294,
+    id: 272,
     text: "Pengawasan Perilaku Pasar (Market Conduct) sebagaimana diatur Undang-Undang Nomor 4 Tahun 2023 Tentang Pengembangan dan Penguatan Sektor Keuangan adalah:",
     options: [
       { label: "a.", text: "Pengawasan terhadap perilaku PUSK dalam mendesain, menyediakan dan menyampaikan informasi, menawarkan, menyusun perjanjian, memberikan pelayanan atas penggunaan produk dan/atau layanan, serta penanganan pengaduan dan penyelesaian sengketa dalam upaya mewujudkan Pelindungan Konsumen" },
@@ -3522,22 +2992,9 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "Pengawasan terhadap perilaku PUJK dalam mendesain, menyediakan dan menyampaikan informasi, menawarkan, menyusun perjanjian, memberikanpelayanan atas penggunaan produk dan/atau layanan, serta penanganan pengaduan dan penyelesaian sengketa dalam upaya mewujudkan Pelindungan Konsumen" },
     ],
     correctLabel: "a.",
-    source: "pdf",
   },
   {
-    id: 295,
-    text: "Berdasarkan data pengawasan pada Bank Umum dengan modal inti sebesar Rp22 Triliun, diketahui terdapat 1 kejadian fraud yang melibatkan pegawai bank dan terjadi pada bulan Maret 2024 total sebesar Rp200 juta namun setengahnya dapat dipulihkan. Atas informasi tersebut, pengawas tidak merubah peringkat risiko inheren operasional pada RBBR periode Semester I 2024. Dasar penilaian ini menggunakan prinsip:",
-    options: [
-      { label: "a.", text: "Komprehensif dan Terstruktur" },
-      { label: "b.", text: "Materialitas/Signifikansi" },
-      { label: "c.", text: "Analisis Berorientasi Risiko" },
-      { label: "d.", text: "Proporsionalitas" },
-    ],
-    correctLabel: "b.",
-    source: "pdf",
-  },
-  {
-    id: 296,
+    id: 273,
     text: "Pemahaman terhadap Bank (Know Your Bank/KYB) sebagai tahapan pertama dalam siklus RBS mengacu pada ketentuan...",
     options: [
       { label: "a.", text: "SEDK Nomor 3/SEDK.03/2023" },
@@ -3546,6 +3003,5 @@ export const LMS_QUESTIONS: LmsQuestion[] = [
       { label: "d.", text: "SEDK Nomor 6/SEDK.03/2020" },
     ],
     correctLabel: "c.",
-    source: "pdf",
   },
 ];

@@ -148,7 +148,7 @@ export default function Home() {
               Soal Aktual OJK
             </div>
             <div style={{ fontSize: 12.5, color: '#7d7979', marginBottom: 20 }}>
-              296 soal tersedia
+              273 soal tersedia
             </div>
             <div style={{ marginTop: 'auto' }}>
               <Link href="/lms" style={{ ...btnBase, background: '#2F6FED', color: '#fff', display: 'inline-block', padding: '8px 24px' }}>
