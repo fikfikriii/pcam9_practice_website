@@ -135,6 +135,29 @@ export default function Home() {
 
         </div>
 
+        {/* Kuis Aktual */}
+        <div style={{ marginTop: 32 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7d7979', marginBottom: 16 }}>
+            Kuis Aktual
+          </div>
+          <div style={{ background: '#fff', border: '2px solid rgba(32,30,29,0.2)', padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 0, maxWidth: isMobile ? '100%' : 'calc(50% - 6px)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#b45309', background: '#fffbeb', padding: '3px 8px' }}>OJK LMS</span>
+            </div>
+            <div style={{ fontSize: isMobile ? 16 : 18, fontWeight: 800, lineHeight: 1.3, marginBottom: 8 }}>
+              Soal Aktual OJK
+            </div>
+            <div style={{ fontSize: 12.5, color: '#7d7979', marginBottom: 20 }}>
+              296 soal tersedia
+            </div>
+            <div style={{ marginTop: 'auto' }}>
+              <Link href="/lms" style={{ ...btnBase, background: '#2F6FED', color: '#fff', display: 'inline-block', padding: '8px 24px' }}>
+                Mulai Kuis
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Divider */}
         <div style={{ borderTop: '1px solid rgba(32,30,29,0.15)', margin: '32px 0 28px' }} />
 
