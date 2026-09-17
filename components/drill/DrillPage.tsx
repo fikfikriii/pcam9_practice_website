@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Section, Question, QuestionSource, SectionCategory } from '@/lib/types';
 import { useMobile } from '@/lib/useMobile';
+import DownloadDocsModal from '@/components/shared/DownloadDocsModal';
 
 const btnOutline: React.CSSProperties = {
   background: 'transparent', border: '1.5px solid rgba(32,30,29,0.4)', color: '#201e1d',
@@ -43,6 +44,7 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
   const [hoveredOption, setHoveredOption] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [confirmingSubmit, setConfirmingSubmit] = useState(false);
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   useEffect(() => {
     fetch('/api/question-sources')
@@ -527,7 +529,10 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
           {isMobile ? (
             <button onClick={() => setSidebarOpen(true)} style={{ ...btnOutline, padding: '7px 12px' }}>≡ Questions</button>
           ) : (
-            <button onClick={handleSubmit} style={btnOutline}>Submit</button>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button onClick={() => setShowDownloadModal(true)} style={btnOutline}>Download Docs</button>
+              <button onClick={handleSubmit} style={btnOutline}>Submit</button>
+            </div>
           )}
         </div>
       </div>
@@ -634,6 +639,13 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
           </div>
         </div>
       </div>
+      {showDownloadModal && (
+        <DownloadDocsModal
+          title={moduleId ? `Modul ${moduleId} — Drill` : 'Section Drill'}
+          questions={drillQuestions.map((q) => ({ text: q.text, choices: q.choices.map((c) => ({ text: c.text, is_correct: c.is_correct })) }))}
+          onClose={() => setShowDownloadModal(false)}
+        />
+      )}
     </div>
   );
 }

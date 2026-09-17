@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Section, Question, QuestionSource } from '@/lib/types';
 import { useMobile } from '@/lib/useMobile';
+import DownloadDocsModal from '@/components/shared/DownloadDocsModal';
 
 const BASE_LS_KEY = 'pcam9-ojk-quiz';
 
@@ -125,6 +126,7 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
   const [questionSources, setQuestionSources] = useState<QuestionSource[]>([]);
   const [hoveredOption, setHoveredOption] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   const persist = useCallback((a: Record<number, number>, f: Record<number, boolean>, c: number, ids: number[]) => {
     try { localStorage.setItem(LS_KEY, JSON.stringify({ answers: a, flagged: f, current: c, selectedIds: ids })); } catch { /* ignore */ }
@@ -456,11 +458,13 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
               </div>
             </div>
           )}
-          {/* On mobile: sidebar toggle; on desktop: Review button */}
           {isMobile ? (
             <button onClick={() => setSidebarOpen(true)} style={{ ...btnOutline, padding: '7px 12px' }}>≡ Questions</button>
           ) : (
-            <button onClick={() => setView('review')} style={btnOutline}>Review &amp; Submit</button>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button onClick={() => setShowDownloadModal(true)} style={btnOutline}>Download Docs</button>
+              <button onClick={() => setView('review')} style={btnOutline}>Review &amp; Submit</button>
+            </div>
           )}
         </div>
       </div>
@@ -572,6 +576,13 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
           </div>
         </div>
       </div>
+      {showDownloadModal && (
+        <DownloadDocsModal
+          title={moduleId ? `Modul ${moduleId} — Quiz` : 'Quiz Practice'}
+          questions={flatQuestions.map((q) => ({ text: q.text, choices: q.choices.map((c) => ({ text: c.text, is_correct: c.is_correct })) }))}
+          onClose={() => setShowDownloadModal(false)}
+        />
+      )}
     </div>
   );
 }
