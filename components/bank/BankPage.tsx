@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import type { Section, SectionMeta, QuestionSource, SectionCategory } from '@/lib/types';
+import type { Section, SectionMeta, QuestionSource, SectionCategory, Module } from '@/lib/types';
 import { useMobile } from '@/lib/useMobile';
 
 export default function BankPage() {
@@ -11,14 +11,21 @@ export default function BankPage() {
   const [activeSections, setActiveSections] = useState<number[]>([]);
   const [loadingSections, setLoadingSections] = useState<Set<number>>(new Set());
   const [metaLoading, setMetaLoading] = useState(true);
+  const [moduleFilter, setModuleFilter] = useState<'all' | number>('all');
   const [categoryFilter, setCategoryFilter] = useState<'all' | string>('all');
   const [sourceFilter, setSourceFilter] = useState<'all' | string>('all');
+  const [modules, setModules] = useState<Module[]>([]);
   const [questionSources, setQuestionSources] = useState<QuestionSource[]>([]);
   const [sectionCategories, setSectionCategories] = useState<SectionCategory[]>([]);
   const isMobile = useMobile();
   const px = isMobile ? 16 : 32;
 
   useEffect(() => {
+    fetch('/api/modules')
+      .then((r) => r.json())
+      .then((data: Module[]) => setModules(data))
+      .catch(() => {});
+
     fetch('/api/question-sources')
       .then((r) => r.json())
       .then((data: QuestionSource[]) => setQuestionSources(data))
@@ -52,6 +59,13 @@ export default function BankPage() {
       });
   }
 
+  function selectModule(mod: 'all' | number) {
+    setModuleFilter(mod);
+    setCategoryFilter('all');
+    setActiveSections([]);
+    setSourceFilter('all');
+  }
+
   function selectCategory(cat: 'all' | string) {
     setCategoryFilter(cat);
     setActiveSections([]);
@@ -82,9 +96,13 @@ export default function BankPage() {
 
   const totalQuestions = sectionMetas.reduce((acc, s) => acc + s.question_count, 0);
 
-  const visibleSections = categoryFilter === 'all'
+  const moduleFilteredSections = moduleFilter === 'all'
     ? sectionMetas
-    : sectionMetas.filter((s) => s.category_id === categoryFilter);
+    : sectionMetas.filter((s) => s.module_id === moduleFilter);
+
+  const visibleSections = categoryFilter === 'all'
+    ? moduleFilteredSections
+    : moduleFilteredSections.filter((s) => s.category_id === categoryFilter);
 
   const allCategorySelected =
     visibleSections.length > 0 && visibleSections.every((s) => activeSections.includes(s.id));
@@ -131,24 +149,42 @@ export default function BankPage() {
         </div>
       </div>
 
+      {/* Module filter row */}
+      <div style={{ padding: `10px ${px}px`, borderBottom: '1px solid rgba(32,30,29,0.15)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: '#7d7979', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Modul</span>
+        <button onClick={() => selectModule('all')} style={moduleFilter === 'all' ? { ...tabBase, background: '#444141', color: '#fff', border: '1px solid #444141' } : tabBase}>
+          All
+        </button>
+        {modules.map((m) => {
+          const isActive = moduleFilter === m.id;
+          return (
+            <button key={m.id} onClick={() => selectModule(m.id)} style={isActive ? tabActive : tabBase}>
+              {isMobile ? `M${m.number}` : `Modul ${m.number}`}
+            </button>
+          );
+        })}
+      </div>
+
       {/* Category filter row */}
       <div style={{ padding: `10px ${px}px`, borderBottom: '1px solid rgba(32,30,29,0.15)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: '#7d7979', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Category</span>
         <button onClick={() => selectCategory('all')} style={categoryFilter === 'all' ? { ...tabBase, background: '#444141', color: '#fff', border: '1px solid #444141' } : tabBase}>
           All
         </button>
-        {sectionCategories.map((cat) => {
-          const isActive = categoryFilter === cat.id;
-          return (
-            <button
-              key={cat.id}
-              onClick={() => selectCategory(cat.id)}
-              style={isActive ? tabActive : tabBase}
-            >
-              {cat.label}
-            </button>
-          );
-        })}
+        {sectionCategories
+          .filter((cat) => moduleFilteredSections.some((s) => s.category_id === cat.id))
+          .map((cat) => {
+            const isActive = categoryFilter === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => selectCategory(cat.id)}
+                style={isActive ? tabActive : tabBase}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
       </div>
 
       {/* Section tab row */}
