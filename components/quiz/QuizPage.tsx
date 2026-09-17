@@ -592,6 +592,7 @@ const SOURCE_COLORS: Record<string, { color: string; bg: string }> = {
   additional: { color: '#2F6FED', bg: '#eaf1fd' },
   pcs8:       { color: '#6d28d9', bg: '#f5f3ff' },
   pcs7:       { color: '#b45309', bg: '#fffbeb' },
+  kisi_kisi:  { color: '#0e7490', bg: '#ecfeff' },
 };
 
 function MemePopup({ score }: { score: number }) {
