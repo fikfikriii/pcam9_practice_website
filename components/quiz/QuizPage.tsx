@@ -189,9 +189,13 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
 
   function handleAnswer(choiceId: number) {
     if (!currentQuestion) return;
+    if (mode === 'belajar' && confirmed[currentQuestion.id]) return;
     const newAnswers = { ...answers, [currentQuestion.id]: choiceId };
     setAnswers(newAnswers);
     persist(newAnswers, flagged, current, drawnIds);
+    if (mode === 'belajar') {
+      setConfirmed((prev) => ({ ...prev, [currentQuestion.id]: true }));
+    }
   }
 
   function handleFlag() {
@@ -646,19 +650,13 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
                   ) : (
                     <>
                       <div />
-                      {!isCurrentConfirmed ? (
-                        <button
-                          onClick={handleConfirm}
-                          disabled={!currentChoiceId}
-                          style={{ ...btnPrimary, opacity: currentChoiceId ? 1 : 0.45, cursor: currentChoiceId ? 'pointer' : 'not-allowed' }}
-                        >
-                          Konfirmasi Jawaban
-                        </button>
-                      ) : (
-                        <button onClick={() => { if (current < total - 1) goTo(current + 1); else setView('submitted'); }} style={btnPrimary}>
-                          {isLast ? 'Lihat Hasil' : 'Soal Berikutnya →'}
-                        </button>
-                      )}
+                      <button
+                        onClick={() => { if (current < total - 1) goTo(current + 1); else setView('submitted'); }}
+                        disabled={!isCurrentConfirmed}
+                        style={{ ...btnPrimary, opacity: isCurrentConfirmed ? 1 : 0.45, cursor: isCurrentConfirmed ? 'pointer' : 'not-allowed' }}
+                      >
+                        {isLast ? 'Lihat Hasil' : 'Soal Berikutnya →'}
+                      </button>
                     </>
                   )}
                 </div>

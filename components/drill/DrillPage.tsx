@@ -122,7 +122,11 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
   function handleAnswer(choiceId: number) {
     const q = drillQuestions[current];
     if (!q) return;
+    if (mode === 'belajar' && confirmed[q.id]) return;
     setAnswers((prev) => ({ ...prev, [q.id]: choiceId }));
+    if (mode === 'belajar') {
+      setConfirmed((prev) => ({ ...prev, [q.id]: true }));
+    }
   }
 
   function goTo(idx: number) {
@@ -683,16 +687,13 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                   ) : (
                     <>
                       <div />
-                      {!isCurrentConfirmed ? (
-                        <button onClick={handleConfirm} disabled={!currentChoiceId}
-                          style={{ ...btnPrimary, opacity: currentChoiceId ? 1 : 0.45, cursor: currentChoiceId ? 'pointer' : 'not-allowed' }}>
-                          Konfirmasi Jawaban
-                        </button>
-                      ) : (
-                        <button onClick={() => { if (!isLast) goTo(current + 1); else setView('submitted'); }} style={btnPrimary}>
-                          {isLast ? 'Lihat Hasil' : 'Soal Berikutnya →'}
-                        </button>
-                      )}
+                      <button
+                        onClick={() => { if (!isLast) goTo(current + 1); else setView('submitted'); }}
+                        disabled={!isCurrentConfirmed}
+                        style={{ ...btnPrimary, opacity: isCurrentConfirmed ? 1 : 0.45, cursor: isCurrentConfirmed ? 'pointer' : 'not-allowed' }}
+                      >
+                        {isLast ? 'Lihat Hasil' : 'Soal Berikutnya →'}
+                      </button>
                     </>
                   )}
                 </div>
