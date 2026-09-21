@@ -8,7 +8,8 @@ import DownloadDocsModal from '@/components/shared/DownloadDocsModal';
 
 const BASE_LS_KEY = 'pcam9-ojk-quiz';
 
-type ViewState = 'quiz' | 'review' | 'submitted';
+type ViewState = 'mode-select' | 'quiz' | 'review' | 'submitted';
+type QuizMode = 'simulasi' | 'belajar';
 
 interface SavedProgress {
   answers: Record<number, number>;
@@ -116,9 +117,11 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
   const router = useRouter();
   const isMobile = useMobile();
   const LS_KEY = moduleId ? `${BASE_LS_KEY}-module-${moduleId}-v1` : `${BASE_LS_KEY}-progress-v1`;
-  const [view, setView] = useState<ViewState>('quiz');
+  const [view, setView] = useState<ViewState>('mode-select');
+  const [mode, setMode] = useState<QuizMode>('simulasi');
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [confirmed, setConfirmed] = useState<Record<number, boolean>>({});
   const [flagged, setFlagged] = useState<Record<number, boolean>>({});
   const [sections, setSections] = useState<Section[]>([]);
   const [drawnIds, setDrawnIds] = useState<number[]>([]);
@@ -204,9 +207,14 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
     persist(answers, flagged, idx, drawnIds);
   }
 
+  function handleConfirm() {
+    if (!currentQuestion || confirmed[currentQuestion.id]) return;
+    setConfirmed((prev) => ({ ...prev, [currentQuestion.id]: true }));
+  }
+
   function handleRestart() {
     const ids = drawQuestions(sections);
-    setDrawnIds(ids); setAnswers({}); setFlagged({}); setCurrent(0); setView('quiz');
+    setDrawnIds(ids); setAnswers({}); setFlagged({}); setConfirmed({}); setCurrent(0); setView('mode-select');
     persist({}, {}, 0, ids);
   }
 
@@ -292,6 +300,50 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
   const scorePercent = total > 0 ? Math.round((scoreCorrect / total) * 100) : 0;
 
   const px = isMobile ? 16 : 32;
+
+  // ─── MODE SELECT VIEW ────────────────────────────────────────────
+  if (view === 'mode-select') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#f3f2f2' }}>
+        <div style={{ height: 68, flexShrink: 0, display: 'flex', alignItems: 'center', padding: `0 ${px}px`, borderBottom: '2px solid rgba(32,30,29,0.4)', background: '#f3f2f2' }}>
+          <span style={{ fontSize: 18, fontWeight: 800 }}>PCAM9 MLE OJK</span>
+        </div>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px 16px' }}>
+          <div style={{ width: '100%', maxWidth: 480 }}>
+            <div style={{ fontSize: isMobile ? 22 : 28, fontWeight: 800, marginBottom: 8 }}>
+              {moduleId ? `Quiz — Modul ${moduleId}` : 'Quiz'}
+            </div>
+            <div style={{ fontSize: 13.5, color: '#605d5d', marginBottom: 32 }}>Pilih mode sebelum memulai.</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
+              {(['simulasi', 'belajar'] as QuizMode[]).map((m) => {
+                const active = mode === m;
+                return (
+                  <div key={m} onClick={() => setMode(m)}
+                    style={{ padding: '20px 24px', border: `2px solid ${active ? '#2F6FED' : 'rgba(32,30,29,0.2)'}`, background: active ? '#eaf1fd' : '#fff', cursor: 'pointer' }}>
+                    <div style={{ fontSize: 15, fontWeight: 800, marginBottom: 4, color: active ? '#2F6FED' : '#201e1d' }}>
+                      {m === 'simulasi' ? 'Mode Simulasi' : 'Mode Belajar'}
+                    </div>
+                    <div style={{ fontSize: 13, color: '#605d5d' }}>
+                      {m === 'simulasi'
+                        ? 'Jawab semua soal, lihat hasil di akhir. Seperti ujian sungguhan.'
+                        : 'Tiap soal langsung muncul jawaban benarnya setelah dijawab. Cocok untuk belajar.'}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <button
+              onClick={() => { if (!loading) setView('quiz'); }}
+              disabled={loading}
+              style={{ ...btnPrimary, width: '100%', padding: '12px 24px', fontSize: 14, opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+            >
+              {loading ? 'Memuat soal...' : 'Mulai'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -437,6 +489,7 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
   const isLast = current === total - 1;
   const currentChoiceId = currentQuestion ? answers[currentQuestion.id] : undefined;
   const isCurrentFlagged = currentQuestion ? !!flagged[currentQuestion.id] : false;
+  const isCurrentConfirmed = currentQuestion ? !!confirmed[currentQuestion.id] : false;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#f3f2f2', overflow: 'hidden' }}>
@@ -496,8 +549,8 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
 
       {/* Body */}
       <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
-        {/* Desktop sidebar */}
-        {!isMobile && (
+        {/* Desktop sidebar — simulasi only */}
+        {!isMobile && mode === 'simulasi' && (
           <div style={{ width: 300, flexShrink: 0, borderRight: '2px solid rgba(32,30,29,0.4)', padding: '24px 20px', overflowY: 'auto' }}>
             <SidebarContent
               activeSections={activeSections}
@@ -524,15 +577,17 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
                       </span>
                       <QuizSourceBadge source={currentQuestion.source} sources={questionSources} />
                     </div>
-                    <button
-                      onClick={handleFlag}
-                      style={isCurrentFlagged
-                        ? { background: '#d97706', border: 'none', color: '#fff', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
-                        : { background: 'transparent', border: '1.5px solid rgba(32,30,29,0.4)', color: '#201e1d', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
-                      }
-                    >
-                      {isCurrentFlagged ? 'Flagged ✕' : 'Flag for review'}
-                    </button>
+                    {mode === 'simulasi' && (
+                      <button
+                        onClick={handleFlag}
+                        style={isCurrentFlagged
+                          ? { background: '#d97706', border: 'none', color: '#fff', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
+                          : { background: 'transparent', border: '1.5px solid rgba(32,30,29,0.4)', color: '#201e1d', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
+                        }
+                      >
+                        {isCurrentFlagged ? 'Flagged ✕' : 'Flag for review'}
+                      </button>
+                    )}
                   </div>
 
                   <div style={{ fontSize: isMobile ? 18 : 25, fontWeight: 800, lineHeight: 1.4, marginBottom: 24 }}>
@@ -542,28 +597,70 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {currentQuestion.choices.map((choice) => {
                       const isSelected = currentChoiceId === choice.id;
-                      const isHovered = hoveredOption === choice.id && !isSelected;
+                      const isHovered = hoveredOption === choice.id && !isSelected && !isCurrentConfirmed;
+                      const locked = mode === 'belajar' && isCurrentConfirmed;
+                      // belajar feedback colors
+                      let bg = isSelected ? '#eaf1fd' : isHovered ? '#eae7e7' : 'transparent';
+                      let border = isSelected ? '1px solid #2F6FED' : '1px solid transparent';
+                      let dotColor = isSelected ? '#2F6FED' : '#d7d3d3';
+                      if (locked) {
+                        if (choice.is_correct) { bg = '#eafaf1'; border = '1px solid #15803d'; dotColor = '#15803d'; }
+                        else if (isSelected && !choice.is_correct) { bg = '#fef2f2'; border = '1px solid #b91c1c'; dotColor = '#b91c1c'; }
+                        else { bg = 'transparent'; border = '1px solid transparent'; }
+                      }
                       return (
-                        <div key={choice.id} onClick={() => handleAnswer(choice.id)} onMouseEnter={() => setHoveredOption(choice.id)} onMouseLeave={() => setHoveredOption(null)}
-                          style={{ display: 'flex', alignItems: 'center', gap: 14, padding: isMobile ? '12px 14px' : '16px 18px', cursor: 'pointer', border: isSelected ? '1px solid #2F6FED' : '1px solid transparent', background: isSelected ? '#eaf1fd' : isHovered ? '#eae7e7' : 'transparent', transition: 'background 0.1s' }}
+                        <div key={choice.id}
+                          onClick={() => !locked && handleAnswer(choice.id)}
+                          onMouseEnter={() => !locked && setHoveredOption(choice.id)}
+                          onMouseLeave={() => setHoveredOption(null)}
+                          style={{ display: 'flex', alignItems: 'center', gap: 14, padding: isMobile ? '12px 14px' : '16px 18px', cursor: locked ? 'default' : 'pointer', border, background: bg, transition: 'background 0.1s' }}
                         >
-                          <div style={{ width: 16, height: 16, borderRadius: '50%', border: `1.5px solid ${isSelected ? '#2F6FED' : '#d7d3d3'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            {isSelected && <div style={{ width: 8, height: 8, background: '#2F6FED', borderRadius: '50%', boxShadow: '0 0 0 2px #eaf1fd' }} />}
+                          <div style={{ width: 16, height: 16, borderRadius: '50%', border: `1.5px solid ${dotColor}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            {(isSelected || (locked && choice.is_correct)) && <div style={{ width: 8, height: 8, background: dotColor, borderRadius: '50%' }} />}
                           </div>
                           <span style={{ fontSize: isMobile ? 14.5 : 15.5, lineHeight: 1.4 }}>{choice.text}</span>
                         </div>
                       );
                     })}
                   </div>
+
+                  {/* Belajar mode: explanation after confirm */}
+                  {mode === 'belajar' && isCurrentConfirmed && (
+                    <div style={{ marginTop: 16, padding: '14px 18px', background: '#fffbeb', border: '1px solid #d97706' }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#b45309', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Penjelasan</div>
+                      <div style={{ fontSize: 13.5, lineHeight: 1.6, color: '#201e1d' }}>
+                        {currentQuestion.explanation || `Jawaban yang benar adalah: ${currentQuestion.choices.find((c) => c.is_correct)?.text ?? '—'}`}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
-                  <button onClick={() => current > 0 && goTo(current - 1)} disabled={isFirst} style={{ ...btnOutline, opacity: isFirst ? 0.45 : 1, cursor: isFirst ? 'not-allowed' : 'pointer' }}>
-                    Previous
-                  </button>
-                  <button onClick={() => { if (current < total - 1) goTo(current + 1); else setView('review'); }} style={btnPrimary}>
-                    {isLast ? 'Review & Submit' : 'Next'}
-                  </button>
+                  {mode === 'simulasi' ? (
+                    <>
+                      <button onClick={() => current > 0 && goTo(current - 1)} disabled={isFirst} style={{ ...btnOutline, opacity: isFirst ? 0.45 : 1, cursor: isFirst ? 'not-allowed' : 'pointer' }}>Previous</button>
+                      <button onClick={() => { if (current < total - 1) goTo(current + 1); else setView('review'); }} style={btnPrimary}>
+                        {isLast ? 'Review & Submit' : 'Next'}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <div />
+                      {!isCurrentConfirmed ? (
+                        <button
+                          onClick={handleConfirm}
+                          disabled={!currentChoiceId}
+                          style={{ ...btnPrimary, opacity: currentChoiceId ? 1 : 0.45, cursor: currentChoiceId ? 'pointer' : 'not-allowed' }}
+                        >
+                          Konfirmasi Jawaban
+                        </button>
+                      ) : (
+                        <button onClick={() => { if (current < total - 1) goTo(current + 1); else setView('submitted'); }} style={btnPrimary}>
+                          {isLast ? 'Lihat Hasil' : 'Soal Berikutnya →'}
+                        </button>
+                      )}
+                    </>
+                  )}
                 </div>
               </>
             )}

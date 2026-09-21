@@ -19,6 +19,7 @@ const btnPrimary: React.CSSProperties = {
 };
 
 type ViewState = 'setup' | 'drill' | 'submitted';
+type DrillMode = 'simulasi' | 'belajar';
 
 export default function DrillPage({ moduleId }: { moduleId: number | null }) {
   const router = useRouter();
@@ -39,7 +40,9 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
   const [view, setView] = useState<ViewState>('setup');
   const [drillQuestions, setDrillQuestions] = useState<Question[]>([]);
   const [current, setCurrent] = useState(0);
+  const [mode, setMode] = useState<DrillMode>('simulasi');
   const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [confirmed, setConfirmed] = useState<Record<number, boolean>>({});
   const [flagged, setFlagged] = useState<Record<number, boolean>>({});
   const [hoveredOption, setHoveredOption] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -98,9 +101,16 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
     drawn.sort((a, b) => a.position - b.position);
     setDrillQuestions(drawn);
     setAnswers({});
+    setConfirmed({});
     setFlagged({});
     setCurrent(0);
     setView('drill');
+  }
+
+  function handleConfirm() {
+    const q = drillQuestions[current];
+    if (!q || confirmed[q.id]) return;
+    setConfirmed((prev) => ({ ...prev, [q.id]: true }));
   }
 
   function handleFlag() {
@@ -210,6 +220,7 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
   const isFirst = current === 0;
   const isLast = current === total - 1;
   const isCurrentFlagged = currentQuestion ? !!flagged[currentQuestion.id] : false;
+  const isCurrentConfirmed = currentQuestion ? !!confirmed[currentQuestion.id] : false;
 
   const scoreCorrect = drillQuestions.filter((q) => {
     const choiceId = answers[q.id];
@@ -382,6 +393,22 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
               ) : maxCount > 0 ? (
                 <div style={{ fontSize: 13, color: '#605d5d' }}>{maxCount} question{maxCount !== 1 ? 's' : ''} available</div>
               ) : null}
+            </div>
+
+            {/* Mode selector */}
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#7d7979', marginBottom: 10 }}>Mode</div>
+              <div style={{ display: 'flex', gap: 10 }}>
+                {(['simulasi', 'belajar'] as DrillMode[]).map((m) => (
+                  <button key={m} onClick={() => setMode(m)}
+                    style={{ flex: 1, padding: '10px 12px', fontSize: 13, fontWeight: 700, fontFamily: 'inherit', borderRadius: 0, cursor: 'pointer', border: `2px solid ${mode === m ? '#2F6FED' : 'rgba(32,30,29,0.2)'}`, background: mode === m ? '#eaf1fd' : '#fff', color: mode === m ? '#2F6FED' : '#605d5d' }}>
+                    {m === 'simulasi' ? 'Simulasi' : 'Belajar'}
+                  </button>
+                ))}
+              </div>
+              <div style={{ fontSize: 12, color: '#7d7979', marginTop: 6 }}>
+                {mode === 'simulasi' ? 'Jawaban direveal di akhir.' : 'Jawaban langsung muncul tiap soal.'}
+              </div>
             </div>
 
             <button
@@ -567,8 +594,8 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
 
       {/* Body */}
       <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
-        {/* Desktop sidebar */}
-        {!isMobile && (
+        {/* Desktop sidebar — simulasi only */}
+        {!isMobile && mode === 'simulasi' && (
           <div style={{ width: 280, flexShrink: 0, borderRight: '2px solid rgba(32,30,29,0.4)', padding: '24px 20px', overflowY: 'auto' }}>
             <SidebarGrid />
           </div>
@@ -589,15 +616,17 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                       </span>
                       <DrillSourceBadge source={currentQuestion.source} sources={questionSources} />
                     </div>
-                    <button
-                      onClick={handleFlag}
-                      style={isCurrentFlagged
-                        ? { background: '#d97706', border: 'none', color: '#fff', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
-                        : { background: 'transparent', border: '1.5px solid rgba(32,30,29,0.4)', color: '#201e1d', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
-                      }
-                    >
-                      {isCurrentFlagged ? 'Flagged ✕' : 'Flag for review'}
-                    </button>
+                    {mode === 'simulasi' && (
+                      <button
+                        onClick={handleFlag}
+                        style={isCurrentFlagged
+                          ? { background: '#d97706', border: 'none', color: '#fff', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
+                          : { background: 'transparent', border: '1.5px solid rgba(32,30,29,0.4)', color: '#201e1d', padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }
+                        }
+                      >
+                        {isCurrentFlagged ? 'Flagged ✕' : 'Flag for review'}
+                      </button>
+                    )}
                   </div>
 
                   <div style={{ fontSize: isMobile ? 18 : 25, fontWeight: 800, lineHeight: 1.4, marginBottom: 24 }}>
@@ -607,32 +636,65 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {currentQuestion.choices.map((choice) => {
                       const isSelected = currentChoiceId === choice.id;
-                      const isHovered = hoveredOption === choice.id && !isSelected;
+                      const locked = mode === 'belajar' && isCurrentConfirmed;
+                      const isHovered = hoveredOption === choice.id && !isSelected && !locked;
+                      let bg = isSelected ? '#eaf1fd' : isHovered ? '#eae7e7' : 'transparent';
+                      let border = isSelected ? '1px solid #2F6FED' : '1px solid transparent';
+                      let dotColor = isSelected ? '#2F6FED' : '#d7d3d3';
+                      if (locked) {
+                        if (choice.is_correct) { bg = '#eafaf1'; border = '1px solid #15803d'; dotColor = '#15803d'; }
+                        else if (isSelected && !choice.is_correct) { bg = '#fef2f2'; border = '1px solid #b91c1c'; dotColor = '#b91c1c'; }
+                        else { bg = 'transparent'; border = '1px solid transparent'; }
+                      }
                       return (
-                        <div
-                          key={choice.id}
-                          onClick={() => handleAnswer(choice.id)}
-                          onMouseEnter={() => setHoveredOption(choice.id)}
+                        <div key={choice.id}
+                          onClick={() => !locked && handleAnswer(choice.id)}
+                          onMouseEnter={() => !locked && setHoveredOption(choice.id)}
                           onMouseLeave={() => setHoveredOption(null)}
-                          style={{ display: 'flex', alignItems: 'center', gap: 14, padding: isMobile ? '12px 14px' : '16px 18px', cursor: 'pointer', border: isSelected ? '1px solid #2F6FED' : '1px solid transparent', background: isSelected ? '#eaf1fd' : isHovered ? '#eae7e7' : 'transparent' }}
+                          style={{ display: 'flex', alignItems: 'center', gap: 14, padding: isMobile ? '12px 14px' : '16px 18px', cursor: locked ? 'default' : 'pointer', border, background: bg }}
                         >
-                          <div style={{ width: 16, height: 16, borderRadius: '50%', border: `1.5px solid ${isSelected ? '#2F6FED' : '#d7d3d3'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            {isSelected && <div style={{ width: 8, height: 8, background: '#2F6FED', borderRadius: '50%', boxShadow: '0 0 0 2px #eaf1fd' }} />}
+                          <div style={{ width: 16, height: 16, borderRadius: '50%', border: `1.5px solid ${dotColor}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            {(isSelected || (locked && choice.is_correct)) && <div style={{ width: 8, height: 8, background: dotColor, borderRadius: '50%' }} />}
                           </div>
                           <span style={{ fontSize: isMobile ? 14.5 : 15.5, lineHeight: 1.4 }}>{choice.text}</span>
                         </div>
                       );
                     })}
                   </div>
+
+                  {mode === 'belajar' && isCurrentConfirmed && (
+                    <div style={{ marginTop: 16, padding: '14px 18px', background: '#fffbeb', border: '1px solid #d97706' }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#b45309', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Penjelasan</div>
+                      <div style={{ fontSize: 13.5, lineHeight: 1.6, color: '#201e1d' }}>
+                        {currentQuestion.explanation || `Jawaban yang benar adalah: ${currentQuestion.choices.find((c) => c.is_correct)?.text ?? '—'}`}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
-                  <button onClick={() => !isFirst && goTo(current - 1)} disabled={isFirst} style={{ ...btnOutline, opacity: isFirst ? 0.45 : 1, cursor: isFirst ? 'not-allowed' : 'pointer' }}>
-                    Previous
-                  </button>
-                  <button onClick={() => { if (!isLast) goTo(current + 1); else handleSubmit(); }} style={btnPrimary}>
-                    {isLast ? 'Submit' : 'Next'}
-                  </button>
+                  {mode === 'simulasi' ? (
+                    <>
+                      <button onClick={() => !isFirst && goTo(current - 1)} disabled={isFirst} style={{ ...btnOutline, opacity: isFirst ? 0.45 : 1, cursor: isFirst ? 'not-allowed' : 'pointer' }}>Previous</button>
+                      <button onClick={() => { if (!isLast) goTo(current + 1); else handleSubmit(); }} style={btnPrimary}>
+                        {isLast ? 'Submit' : 'Next'}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <div />
+                      {!isCurrentConfirmed ? (
+                        <button onClick={handleConfirm} disabled={!currentChoiceId}
+                          style={{ ...btnPrimary, opacity: currentChoiceId ? 1 : 0.45, cursor: currentChoiceId ? 'pointer' : 'not-allowed' }}>
+                          Konfirmasi Jawaban
+                        </button>
+                      ) : (
+                        <button onClick={() => { if (!isLast) goTo(current + 1); else setView('submitted'); }} style={btnPrimary}>
+                          {isLast ? 'Lihat Hasil' : 'Soal Berikutnya →'}
+                        </button>
+                      )}
+                    </>
+                  )}
                 </div>
               </>
             )}

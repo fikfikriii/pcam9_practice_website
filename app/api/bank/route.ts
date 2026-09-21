@@ -12,7 +12,7 @@ export async function GET(request: Request) {
       SELECT s.id, s.title, s.position, s.draw_per_session, s.is_active, s.module_id, s.category_id,
         COALESCE(json_agg(
           json_build_object(
-            'id', q.id, 'text', q.text, 'position', q.position, 'section_id', q.section_id, 'source', q.source,
+            'id', q.id, 'text', q.text, 'position', q.position, 'section_id', q.section_id, 'source', q.source, 'explanation', q.explanation,
             'choices', (
               SELECT COALESCE(json_agg(
                 json_build_object('id', c.id, 'text', c.text, 'position', c.position, 'is_correct', c.is_correct)
@@ -35,7 +35,7 @@ export async function GET(request: Request) {
         SELECT s.id, s.title, s.position, s.draw_per_session, s.is_active, s.module_id, s.category_id,
           COALESCE(json_agg(
             json_build_object(
-              'id', q.id, 'text', q.text, 'position', q.position, 'section_id', q.section_id, 'source', q.source,
+              'id', q.id, 'text', q.text, 'position', q.position, 'section_id', q.section_id, 'source', q.source, 'explanation', q.explanation,
               'choices', (
                 SELECT COALESCE(json_agg(
                   json_build_object('id', c.id, 'text', c.text, 'position', c.position, 'is_correct', c.is_correct)
@@ -55,7 +55,7 @@ export async function GET(request: Request) {
         SELECT s.id, s.title, s.position, s.draw_per_session, s.is_active, s.module_id, s.category_id,
           COALESCE(json_agg(
             json_build_object(
-              'id', q.id, 'text', q.text, 'position', q.position, 'section_id', q.section_id, 'source', q.source,
+              'id', q.id, 'text', q.text, 'position', q.position, 'section_id', q.section_id, 'source', q.source, 'explanation', q.explanation,
               'choices', (
                 SELECT COALESCE(json_agg(
                   json_build_object('id', c.id, 'text', c.text, 'position', c.position, 'is_correct', c.is_correct)

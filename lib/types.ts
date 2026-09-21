@@ -30,6 +30,7 @@ export interface Question {
   text: string;
   position: number;
   source: string;
+  explanation?: string | null;
   choices: Choice[];
 }
 
