@@ -38,6 +38,11 @@ function ExamBadge({ examDate }: { examDate: string }) {
   );
 }
 
+const RINGKASAN_LINKS: Record<number, string> = {
+  2: 'https://claude.ai/artifact/DUzYXFe26HKDsTrbHE96Fs',
+  3: 'https://claude.ai/artifact/DW6UXEcLgJv3No7wQELQjh',
+};
+
 export default function Home() {
   const isMobile = useMobile();
   const px = isMobile ? 20 : 32;
@@ -127,6 +132,16 @@ export default function Home() {
                     ) : (
                       <span style={{ fontSize: 12.5, color: '#b0adad', fontStyle: 'italic' }}>Soal belum tersedia</span>
                     )}
+                    {RINGKASAN_LINKS[m.number] && (
+                      <a
+                        href={RINGKASAN_LINKS[m.number]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ ...btnBase, background: 'transparent', color: '#15803d', border: '1.5px solid #15803d', flex: 1, textAlign: 'center' }}
+                      >
+                        Ringkasan
+                      </a>
+                    )}
                   </div>
                 </div>
               );
@@ -140,22 +155,26 @@ export default function Home() {
           <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7d7979', marginBottom: 16 }}>
             Kuis Aktual
           </div>
-          <div style={{ background: '#fff', border: '2px solid rgba(32,30,29,0.2)', padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 0, maxWidth: isMobile ? '100%' : 'calc(50% - 6px)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-              <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#b45309', background: '#fffbeb', padding: '3px 8px' }}>OJK LMS</span>
+          {modules.length === 0 ? (
+            <div style={{ background: '#eae9e9', border: '2px solid rgba(32,30,29,0.1)', height: 160, maxWidth: isMobile ? '100%' : 'calc(50% - 6px)' }} />
+          ) : (
+            <div style={{ background: '#fff', border: '2px solid rgba(32,30,29,0.2)', padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 0, maxWidth: isMobile ? '100%' : 'calc(50% - 6px)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#b45309', background: '#fffbeb', padding: '3px 8px' }}>OJK LMS</span>
+              </div>
+              <div style={{ fontSize: isMobile ? 16 : 18, fontWeight: 800, lineHeight: 1.3, marginBottom: 8 }}>
+                Soal Aktual OJK
+              </div>
+              <div style={{ fontSize: 12.5, color: '#7d7979', marginBottom: 20 }}>
+                273 soal tersedia
+              </div>
+              <div style={{ marginTop: 'auto' }}>
+                <Link href="/lms" style={{ ...btnBase, background: '#2F6FED', color: '#fff', display: 'inline-block', padding: '8px 24px' }}>
+                  Lihat Soal
+                </Link>
+              </div>
             </div>
-            <div style={{ fontSize: isMobile ? 16 : 18, fontWeight: 800, lineHeight: 1.3, marginBottom: 8 }}>
-              Soal Aktual OJK
-            </div>
-            <div style={{ fontSize: 12.5, color: '#7d7979', marginBottom: 20 }}>
-              273 soal tersedia
-            </div>
-            <div style={{ marginTop: 'auto' }}>
-              <Link href="/lms" style={{ ...btnBase, background: '#2F6FED', color: '#fff', display: 'inline-block', padding: '8px 24px' }}>
-                Lihat Soal
-              </Link>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Divider */}
@@ -165,17 +184,24 @@ export default function Home() {
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7d7979', marginBottom: 14 }}>
           Tools
         </div>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-          <Link href="/bank" style={{ ...btnBase, background: '#fff', color: '#201e1d', border: '1.5px solid rgba(32,30,29,0.35)', padding: '10px 20px' }}>
-            Question Bank
-          </Link>
-          <span
-            style={{ ...btnBase, background: '#c8c6c6', color: '#7d7979', padding: '10px 20px', cursor: 'not-allowed' }}
-            title="Coming soon"
-          >
-            Exam Simulation
-          </span>
-        </div>
+        {modules.length === 0 ? (
+          <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ width: 130, height: 40, background: '#eae9e9' }} />
+            <div style={{ width: 140, height: 40, background: '#eae9e9' }} />
+          </div>
+        ) : (
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <Link href="/bank" style={{ ...btnBase, background: '#fff', color: '#201e1d', border: '1.5px solid rgba(32,30,29,0.35)', padding: '10px 20px' }}>
+              Question Bank
+            </Link>
+            <span
+              style={{ ...btnBase, background: '#c8c6c6', color: '#7d7979', padding: '10px 20px', cursor: 'not-allowed' }}
+              title="Coming soon"
+            >
+              Exam Simulation
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Footer */}

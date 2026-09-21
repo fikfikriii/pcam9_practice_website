@@ -10,3 +10,33 @@ button {
   font-family: inherit;
   cursor: pointer;
 }
+
+/* Ringkasan content styles — applied to server-rendered markdown HTML */
+.ringkasan-content h1 { font-size: 26px; font-weight: 800; margin: 0 0 6px; line-height: 1.25; }
+.ringkasan-content h2 { font-size: 18px; font-weight: 800; margin: 40px 0 10px; border-bottom: 1.5px solid rgba(32,30,29,0.12); padding-bottom: 6px; }
+.ringkasan-content h3 { font-size: 14px; font-weight: 700; margin: 24px 0 8px; color: #2F6FED; }
+.ringkasan-content p  { font-size: 14px; line-height: 1.75; margin: 0 0 12px; color: #201e1d; }
+.ringkasan-content ul, .ringkasan-content ol { padding-left: 20px; margin: 4px 0 12px; }
+.ringkasan-content li { font-size: 14px; line-height: 1.7; margin-bottom: 4px; color: #201e1d; }
+.ringkasan-content strong { font-weight: 700; color: #201e1d; }
+.ringkasan-content a { color: #2F6FED; }
+.ringkasan-content hr { border: none; border-top: 1px solid rgba(32,30,29,0.12); margin: 32px 0; }
+.ringkasan-content code { background: #eae9e9; padding: 2px 6px; font-size: 12.5px; font-family: monospace; }
+.ringkasan-content pre { background: #eae9e9; padding: 12px 16px; font-size: 12.5px; overflow-x: auto; }
+.ringkasan-content pre code { background: none; padding: 0; }
+.ringkasan-content blockquote { border-left: 3px solid #2F6FED; margin: 16px 0; padding: 10px 16px; background: #eaf1fd; font-size: 13.5px; }
+.ringkasan-content table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.ringkasan-content th { border: 1px solid rgba(32,30,29,0.2); padding: 8px 12px; font-weight: 700; text-align: left; white-space: nowrap; background: #eae9e9; }
+.ringkasan-content td { border: 1px solid rgba(32,30,29,0.2); padding: 8px 12px; vertical-align: top; }
+.ringkasan-content .table-wrapper { overflow-x: auto; margin: 8px 0 20px; }
+
+@keyframes ringkasan-progress {
+  0%   { left: -40%; width: 40%; }
+  50%  { left: 30%; width: 50%; }
+  100% { left: 100%; width: 40%; }
+}
+
+@media (max-width: 640px) {
+  .ringkasan-content h1 { font-size: 22px; }
+  .ringkasan-content h2 { font-size: 16px; }
+}
