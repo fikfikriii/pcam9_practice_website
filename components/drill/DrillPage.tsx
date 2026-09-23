@@ -35,6 +35,7 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
   const [selectedSectionIds, setSelectedSectionIds] = useState<number[]>([]);
   const [selectedSource, setSelectedSource] = useState<'all' | string>('all');
   const [questionCount, setQuestionCount] = useState(5);
+  const [filterOrder, setFilterOrder] = useState<'section-first' | 'source-first'>('section-first');
 
   // Drill state
   const [view, setView] = useState<ViewState>('setup');
@@ -77,21 +78,48 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
   const availableQuestions = selectedSource === 'all'
     ? allQuestionsInSelection
     : allQuestionsInSelection.filter((q) => q.source === selectedSource);
-  const sourcesInPool = questionSources.filter((s) => allQuestionsInSelection.some((q) => q.source === s.id));
+
+  // source-first: pool from all sections; section-first: pool from selected sections
+  const sourcesInPool = filterOrder === 'source-first'
+    ? questionSources.filter((s) => allSections.some((sec) => sec.questions.some((q) => q.source === s.id)))
+    : questionSources.filter((s) => allQuestionsInSelection.some((q) => q.source === s.id));
+
+  // source-first: only show sections that have the selected source
+  const visibleSections = filterOrder === 'source-first' && selectedSource !== 'all'
+    ? allSections.filter((s) => s.questions.some((q) => q.source === selectedSource))
+    : allSections;
+
   const maxCount = availableQuestions.length;
   const minCount = Math.min(5, maxCount);
   const clampedCount = Math.min(Math.max(questionCount, minCount), maxCount);
 
   function handleSectionToggle(id: number) {
     setSelectedSectionIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
-    setSelectedSource('all');
+    if (filterOrder === 'section-first') setSelectedSource('all');
   }
 
   function handleSourceChange(source: 'all' | string) {
     setSelectedSource(source);
-    const pool = selectedSections.flatMap((s) => s.questions);
-    const filtered = source === 'all' ? pool : pool.filter((q) => q.source === source);
-    setQuestionCount((prev) => Math.min(prev, Math.max(filtered.length, 1)));
+    if (filterOrder === 'source-first') {
+      // keep only sections that have the new source
+      const eligible = source === 'all'
+        ? allSections.map((s) => s.id)
+        : allSections.filter((s) => s.questions.some((q) => q.source === source)).map((s) => s.id);
+      setSelectedSectionIds(eligible);
+      const pool = allSections.filter((s) => eligible.includes(s.id)).flatMap((s) => s.questions);
+      const filtered = source === 'all' ? pool : pool.filter((q) => q.source === source);
+      setQuestionCount((prev) => Math.min(prev, Math.max(filtered.length, 1)));
+    } else {
+      const pool = selectedSections.flatMap((s) => s.questions);
+      const filtered = source === 'all' ? pool : pool.filter((q) => q.source === source);
+      setQuestionCount((prev) => Math.min(prev, Math.max(filtered.length, 1)));
+    }
+  }
+
+  function handleFilterOrderChange(order: 'section-first' | 'source-first') {
+    setFilterOrder(order);
+    setSelectedSource('all');
+    setSelectedSectionIds(allSections.map((s) => s.id));
   }
 
   function startDrill() {
@@ -255,24 +283,65 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
         <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '40px 20px 60px' : '60px 32px 80px', display: 'flex', justifyContent: 'center' }}>
           <div style={{ width: '100%', maxWidth: 560 }}>
             <div style={{ fontSize: isMobile ? 22 : 28, fontWeight: 800, marginBottom: 8 }}>{moduleId ? `Modul ${moduleId} — Drill` : 'Section Drill'}</div>
-            <div style={{ fontSize: 14, color: '#605d5d', marginBottom: 36, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 14, color: '#605d5d', marginBottom: 24, lineHeight: 1.6 }}>
               Pick sections, source, and how many questions to practice.
             </div>
+
+            {/* Filter order toggle */}
+            <div style={{ marginBottom: 28 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#7d7979', marginBottom: 8 }}>Filter order</div>
+              <div style={{ display: 'flex', gap: 0 }}>
+                {([['section-first', 'Section → Source'], ['source-first', 'Source → Section']] as const).map(([val, label]) => (
+                  <button key={val} onClick={() => handleFilterOrderChange(val)} style={{
+                    flex: 1, padding: '8px 12px', fontSize: 12.5, fontWeight: 700, fontFamily: 'inherit', borderRadius: 0, cursor: 'pointer',
+                    border: `1.5px solid ${filterOrder === val ? '#2F6FED' : 'rgba(32,30,29,0.2)'}`,
+                    background: filterOrder === val ? '#eaf1fd' : '#fff',
+                    color: filterOrder === val ? '#2F6FED' : '#605d5d',
+                    marginLeft: val === 'source-first' ? -1.5 : 0,
+                  }}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Source filter block — shown before sections in source-first mode */}
+            {filterOrder === 'source-first' && sourcesInPool.length > 0 && (
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#7d7979', marginBottom: 8 }}>Source</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {(['all', ...sourcesInPool.map((s) => s.id)] as string[]).map((id) => {
+                    const label = id === 'all' ? 'All' : (questionSources.find((s) => s.id === id)?.label ?? id);
+                    const { color } = SOURCE_COLORS[id] ?? { color: '#374151' };
+                    const isActive = selectedSource === id;
+                    const activeStyle: React.CSSProperties = id === 'all'
+                      ? { background: '#444141', color: '#fff', border: '1.5px solid #444141' }
+                      : { background: color, color: '#fff', border: `1.5px solid ${color}` };
+                    const baseStyle: React.CSSProperties = { padding: '7px 14px', fontSize: 13, fontWeight: 600, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit', border: '1.5px solid rgba(32,30,29,0.4)', background: 'transparent', color: '#201e1d' };
+                    return (
+                      <button key={id} onClick={() => handleSourceChange(id)} style={isActive ? { ...baseStyle, ...activeStyle } : baseStyle}>
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Section selector */}
             <div style={{ marginBottom: 24 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#7d7979' }}>
-                  Sections <span style={{ color: '#2F6FED', fontWeight: 700 }}>{selectedSectionIds.length}/{allSections.length}</span>
+                  Sections <span style={{ color: '#2F6FED', fontWeight: 700 }}>{selectedSectionIds.length}/{visibleSections.length}</span>
                 </div>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button
-                    onClick={() => { setSelectedSectionIds(allSections.map((s) => s.id)); setSelectedSource('all'); }}
+                    onClick={() => setSelectedSectionIds(visibleSections.map((s) => s.id))}
                     style={{ fontSize: 11.5, fontWeight: 600, color: '#2F6FED', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
                   >All</button>
                   <span style={{ color: '#d7d3d3', fontSize: 11.5 }}>|</span>
                   <button
-                    onClick={() => { setSelectedSectionIds([]); setSelectedSource('all'); }}
+                    onClick={() => setSelectedSectionIds([])}
                     style={{ fontSize: 11.5, fontWeight: 600, color: '#7d7979', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
                   >Clear</button>
                 </div>
@@ -280,7 +349,7 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
 
               {/* Grouped by category */}
               {sectionCategories.map((cat) => {
-                const catSections = allSections.filter((s) => s.category_id === cat.id);
+                const catSections = visibleSections.filter((s) => s.category_id === cat.id);
                 if (catSections.length === 0) return null;
                 const allCatSelected = catSections.every((s) => selectedSectionIds.includes(s.id));
                 return (
@@ -293,7 +362,6 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                           setSelectedSectionIds((prev) => allCatSelected
                             ? prev.filter((x) => !ids.includes(x))
                             : [...prev.filter((x) => !ids.includes(x)), ...ids]);
-                          setSelectedSource('all');
                         }}
                         style={{ fontSize: 11, fontWeight: 600, color: allCatSelected ? '#b91c1c' : '#2F6FED', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
                       >{allCatSelected ? 'Deselect' : 'Select all'}</button>
@@ -301,6 +369,9 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                       {catSections.map((s) => {
                         const isActive = selectedSectionIds.includes(s.id);
+                        const qCount = filterOrder === 'source-first' && selectedSource !== 'all'
+                          ? s.questions.filter((q) => q.source === selectedSource).length
+                          : s.questions.length;
                         return (
                           <button
                             key={s.id}
@@ -316,7 +387,7 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                           >
                             <span style={{ flex: 1, textAlign: 'left' }}>{s.title}</span>
                             <span style={{ fontSize: 11.5, fontWeight: 700, color: isActive ? '#2F6FED' : '#7d7979', whiteSpace: 'nowrap' }}>
-                              {s.questions.length} soal
+                              {qCount} soal
                             </span>
                           </button>
                         );
@@ -326,9 +397,12 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                 );
               })}
 
-              {/* Uncategorized sections (fallback) */}
-              {allSections.filter((s) => !s.category_id).map((s) => {
+              {/* Uncategorized sections */}
+              {visibleSections.filter((s) => !s.category_id).map((s) => {
                 const isActive = selectedSectionIds.includes(s.id);
+                const qCount = filterOrder === 'source-first' && selectedSource !== 'all'
+                  ? s.questions.filter((q) => q.source === selectedSource).length
+                  : s.questions.length;
                 return (
                   <button
                     key={s.id}
@@ -344,15 +418,15 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                   >
                     <span style={{ flex: 1, textAlign: 'left' }}>{s.title}</span>
                     <span style={{ fontSize: 11.5, fontWeight: 700, color: isActive ? '#2F6FED' : '#7d7979', whiteSpace: 'nowrap' }}>
-                      {s.questions.length} soal
+                      {qCount} soal
                     </span>
                   </button>
                 );
               })}
             </div>
 
-            {/* Source filter */}
-            {sourcesInPool.length > 0 && (
+            {/* Source filter block — shown after sections in section-first mode */}
+            {filterOrder === 'section-first' && sourcesInPool.length > 0 && (
               <div style={{ marginBottom: 24 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#7d7979', marginBottom: 8 }}>Source</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -683,7 +757,6 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                       </div>
                     );
                   })()}
-                  )}
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
