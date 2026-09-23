@@ -41,6 +41,7 @@ function ExamBadge({ examDate }: { examDate: string }) {
 const RINGKASAN_LINKS: Record<number, string> = {
   2: 'https://claude.ai/artifact/DUzYXFe26HKDsTrbHE96Fs',
   3: 'https://claude.ai/artifact/DW6UXEcLgJv3No7wQELQjh',
+  4: 'https://claude.ai/artifact/WSz7rLkUy99tyfHuPHMHCz',
 };
 
 export default function Home() {
@@ -163,7 +164,7 @@ export default function Home() {
                 <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#b45309', background: '#fffbeb', padding: '3px 8px' }}>OJK LMS</span>
               </div>
               <div style={{ fontSize: isMobile ? 16 : 18, fontWeight: 800, lineHeight: 1.3, marginBottom: 8 }}>
-                Soal Aktual OJK
+                Kuis Modul 1
               </div>
               <div style={{ fontSize: 12.5, color: '#7d7979', marginBottom: 20 }}>
                 273 soal tersedia
