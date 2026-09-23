@@ -629,14 +629,21 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
                   </div>
 
                   {/* Belajar mode: explanation after confirm */}
-                  {mode === 'belajar' && isCurrentConfirmed && (
-                    <div style={{ marginTop: 16, padding: '14px 18px', background: '#fffbeb', border: '1px solid #d97706' }}>
-                      <div style={{ fontSize: 12, fontWeight: 700, color: '#b45309', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Penjelasan</div>
-                      <div style={{ fontSize: 13.5, lineHeight: 1.6, color: '#201e1d' }}>
-                        {currentQuestion.explanation || `Jawaban yang benar adalah: ${currentQuestion.choices.find((c) => c.is_correct)?.text ?? '—'}`}
+                  {mode === 'belajar' && isCurrentConfirmed && (() => {
+                    const correct = currentQuestion.choices.find((c) => c.is_correct);
+                    const letter = correct ? String.fromCharCode(64 + correct.position) : '?';
+                    const isOk = !!correct && currentChoiceId === correct.id;
+                    return (
+                      <div style={{ marginTop: 16, padding: '14px 18px', background: isOk ? '#f0fdf4' : '#fffbeb', border: `1px solid ${isOk ? '#15803d' : '#d97706'}` }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: isOk ? '#15803d' : '#b45309', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+                          {isOk ? 'Benar' : 'Belum Tepat'} · Kunci {letter}
+                        </div>
+                        <div style={{ fontSize: 13.5, lineHeight: 1.6, color: '#201e1d' }}>
+                          {currentQuestion.explanation || `Jawaban yang benar adalah: ${correct?.text ?? '—'}`}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
