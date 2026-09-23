@@ -705,7 +705,7 @@ function MemePopup({ score }: { score: number }) {
   const caption = isGood
     ? score >= 90 ? 'ezz game 😎' : 'siap jd pengawas 🫡'
     : score >= 50 ? 'faaaahhh 😩' : 'nilai apa ini dawg 💀';
-  const btn = isGood ? 'Ik fr 😌' : 'Noted bestie 😭';
+  const btn = isGood ? 'Ik fr 😌' : 'mari belajar lagi 😭';
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.65)' }}>
       <div style={{ background: '#fff', maxWidth: 400, width: '90%', padding: '24px 24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

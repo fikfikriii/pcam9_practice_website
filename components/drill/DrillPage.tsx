@@ -575,11 +575,19 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
           )}
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 18, paddingBottom: 18, borderBottom: '2px solid rgba(32,30,29,0.4)' }}>
-          {[
-            { bg: '#f8f4f4', border: '1px solid rgba(32,30,29,0.4)', label: 'Unanswered' },
-            { bg: '#15803d', border: 'none', label: 'Answered' },
-            { bg: '#f8f4f4', border: '2px solid #2F6FED', label: 'Active' },
-          ].map(({ bg, border, label }) => (
+          {(mode === 'belajar'
+            ? [
+                { bg: '#f8f4f4', border: '1px solid rgba(32,30,29,0.4)', label: 'Unanswered' },
+                { bg: '#15803d', border: 'none', label: 'Benar' },
+                { bg: '#b91c1c', border: 'none', label: 'Salah' },
+                { bg: '#f8f4f4', border: '2px solid #2F6FED', label: 'Active' },
+              ]
+            : [
+                { bg: '#f8f4f4', border: '1px solid rgba(32,30,29,0.4)', label: 'Unanswered' },
+                { bg: '#15803d', border: 'none', label: 'Answered' },
+                { bg: '#f8f4f4', border: '2px solid #2F6FED', label: 'Active' },
+              ]
+          ).map(({ bg, border, label }) => (
             <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <div style={{ width: 13, height: 13, background: bg, border, flexShrink: 0 }} />
               <span style={{ fontSize: 11.5, color: '#605d5d' }}>{label}</span>
@@ -598,7 +606,15 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
             const isCurrent = idx === current;
             const isFlagged = !!flagged[q.id];
             let tileBg = '#f8f4f4', tileColor = '#444141', tileBorder = '1px solid rgba(32,30,29,0.4)';
-            if (isAnswered) { tileBg = '#15803d'; tileColor = '#fff'; tileBorder = '1px solid transparent'; }
+            if (isAnswered) {
+              if (mode === 'belajar') {
+                const isCorrect = q.choices.find((c) => c.id === answers[q.id])?.is_correct === true;
+                tileBg = isCorrect ? '#15803d' : '#b91c1c';
+              } else {
+                tileBg = '#15803d';
+              }
+              tileColor = '#fff'; tileBorder = '1px solid transparent';
+            }
             if (isCurrent) { tileBorder = '2px solid #2F6FED'; }
             return (
               <div key={q.id} onClick={() => goTo(idx)} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', background: tileBg, color: tileColor, border: tileBorder, cursor: 'pointer', fontSize: 13, fontWeight: 600, position: 'relative' }}>
@@ -812,7 +828,7 @@ function MemePopup({ score }: { score: number }) {
   const caption = isGood
     ? score >= 90 ? 'ezz game 😎' : 'siap jd pengawas 🫡'
     : score >= 50 ? 'faaaahhh 😩' : 'nilai apa ini dawg 💀';
-  const btn = isGood ? 'Ik fr 😌' : 'Noted bestie 😭';
+  const btn = isGood ? 'Ik fr 😌' : 'mari belajar lagi 😭';
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.65)' }}>
       <div style={{ background: '#fff', maxWidth: 400, width: '90%', padding: '24px 24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
