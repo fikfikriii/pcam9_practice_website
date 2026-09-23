@@ -574,11 +574,13 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
           <div onClick={() => setSidebarOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(32,30,29,0.4)' }} />
           <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '85%', maxWidth: 320, background: '#f3f2f2', overflowY: 'auto', padding: '20px 18px', borderRight: '2px solid rgba(32,30,29,0.4)' }}>
             <SidebarGrid onClose={() => setSidebarOpen(false)} />
-            <div style={{ marginTop: 28, paddingTop: 20, borderTop: '2px solid rgba(32,30,29,0.4)' }}>
-              <button onClick={() => { setSidebarOpen(false); handleSubmit(); }} style={{ ...btnPrimary, width: '100%', textAlign: 'center' }}>
-                Submit Drill
-              </button>
-            </div>
+            {mode === 'simulasi' && (
+              <div style={{ marginTop: 28, paddingTop: 20, borderTop: '2px solid rgba(32,30,29,0.4)' }}>
+                <button onClick={() => { setSidebarOpen(false); handleSubmit(); }} style={{ ...btnPrimary, width: '100%', textAlign: 'center' }}>
+                  Submit Drill
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -598,8 +600,8 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
 
       {/* Body */}
       <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
-        {/* Desktop sidebar — simulasi only */}
-        {!isMobile && mode === 'simulasi' && (
+        {/* Desktop sidebar */}
+        {!isMobile && (
           <div style={{ width: 280, flexShrink: 0, borderRight: '2px solid rgba(32,30,29,0.4)', padding: '24px 20px', overflowY: 'auto' }}>
             <SidebarGrid />
           </div>
@@ -686,7 +688,7 @@ export default function DrillPage({ moduleId }: { moduleId: number | null }) {
                     </>
                   ) : (
                     <>
-                      <div />
+                      <button onClick={() => !isFirst && goTo(current - 1)} disabled={isFirst} style={{ ...btnOutline, opacity: isFirst ? 0.45 : 1, cursor: isFirst ? 'not-allowed' : 'pointer' }}>Previous</button>
                       <button
                         onClick={() => { if (!isLast) goTo(current + 1); else setView('submitted'); }}
                         disabled={!isCurrentConfirmed}

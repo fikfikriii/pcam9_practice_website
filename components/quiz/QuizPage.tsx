@@ -649,7 +649,7 @@ export default function QuizPage({ moduleId }: { moduleId: number | null }) {
                     </>
                   ) : (
                     <>
-                      <div />
+                      <button onClick={() => current > 0 && goTo(current - 1)} disabled={isFirst} style={{ ...btnOutline, opacity: isFirst ? 0.45 : 1, cursor: isFirst ? 'not-allowed' : 'pointer' }}>Previous</button>
                       <button
                         onClick={() => { if (current < total - 1) goTo(current + 1); else setView('submitted'); }}
                         disabled={!isCurrentConfirmed}
